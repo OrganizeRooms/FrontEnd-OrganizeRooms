@@ -1,0 +1,76 @@
+<div>
+    <app-page-header [heading]="'Salas'" [icon]="'fa-table'"></app-page-header>
+
+    <div class="col col-xl-9 col-lg-12">
+        <form role="form">
+            <div class="row">
+                <div class="col-xl-4 col-lg-5">
+                    <span>Data:</span>
+                    <input type="date" ng-model="name" class="form-control input-underline input-lg" id=""
+                        placeholder="Data">
+                </div>
+
+                
+                <div class="col-xl-4 col-lg-5">
+                    <span>Hora Inicial:</span>
+                    <input type="time" class="form-control input-underline input-lg" id="" placeholder="Hr Inicial">
+                </div>
+                <div class="col-xl-4 col-lg-5">
+                    <span>Hora Final:</span>
+                    <input type="time" class="form-control input-underline input-lg" id="" placeholder="Hr Final">
+                </div>
+                <a class="btn rounded-btn" (click)="onLoggedin()">Filtrar</a>
+            </div>
+        </form>
+    </div>
+    <div class="col col-xl-9 col-lg-12 content-center">
+        <div class="row">
+            <div class="card mb-3 ">
+                <table class="card-body table table-hover">
+                    <thead>
+                        <tr class=".text-center">
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Localização</th>
+                            <th>Unidade</th>
+                            <th>Capacidade</th>
+                            <th>Agendamentos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class=".text-center">
+                            <th scope="row">1005</th>
+                            <td>Sala de Reunião 3</td>
+                            <td>RH</td>
+                            <td>São Paulo</td>
+                            <td>20</td>
+                            <td>
+                                <a href="">+</a>
+                            </td>
+                        </tr>
+                        <tr class=".text-center">
+                            <th scope="row">1006</th>
+                            <td class=".text-center">Sala de Reunião 3</td>
+                            <td>RH</td>
+                            <td>São Paulo</td>
+                            <td>12</td>
+                            <td>
+                                <a href="">+</a>
+                            </td>
+                        </tr>
+                        <tr class=".text-center">
+                            <th scope="row">1007</th>
+                            <td>Sala Comercial</td>
+                            <td>Auditório</td>
+                            <td>Blumenau</td>
+                            <td>70</td>
+                            <td>
+                                <a href="">+</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
