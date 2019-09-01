@@ -13,6 +13,9 @@ const routes: Routes = [
             { path: 'pessoas', loadChildren: () => import('./pessoas/pessoas.module').then(m => m.PessoasModule) },
             { path: 'salas', loadChildren: () => import('./salas/salas.module').then(m => m.SalasModule) },
             { path: 'equipamentos', loadChildren: () => import('./equipamentos/equipamentos.module').then(m => m.EquipamentosModule) },
+            { path: 'bs-component', loadChildren: () => import('./bs-component/bs-component.module').then(m => m.BsComponentModule) },
+            { path: 'pessoas-adicionar', loadChildren: () => import('./pessoas/pessoas-adicionar/pessoas-adicionar.module').then(m => m.PessoasAdicionarModule) },
+            { path: 'pessoas-importar', loadChildren: () => import('./pessoas/pessoas-importar/pessoas-importar.module').then(m => m.PessoasImportarModule) },
         ]
     }
 ];

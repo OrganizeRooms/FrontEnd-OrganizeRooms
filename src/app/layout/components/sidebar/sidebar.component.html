@@ -20,6 +20,10 @@
             <i class="fa fa-fw fa-table"></i>&nbsp;
             <span>Equipamentos</span>
         </a>
+        <a [routerLink]="['/bs-component']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-table"></i>&nbsp;
+            <span>BS Component</span>
+        </a>
         <div class="header-fields">
             <a (click)="rltAndLtr()" class="list-group-item">
                 <span><i class="fa fa-arrows-h"></i>&nbsp; RTL/LTR</span>
@@ -46,7 +50,7 @@
         </div>
     </div>
     <div class="toggle-button" [ngClass]="{collapsed: collapsed}" (click)="toggleCollapsed()">
-        <i class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></i>&nbsp;
+        <i class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></i>
         <!--<span>{{ 'Collapse Sidebar'}}</span>-->
     </div>
 </nav>

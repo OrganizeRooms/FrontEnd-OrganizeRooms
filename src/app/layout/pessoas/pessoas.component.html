@@ -1,40 +1,67 @@
 <div>
     <app-page-header [heading]="'Pessoas'" [icon]="'fa-table'"></app-page-header>
-    <div class="row">
-        <div class="col col-xl-6 col-lg-12">
-            <div class="card mb-3">
+
+    <br />
+    <div class="row justify-content-md-center">
+        <div class="col-10 col-sm-11 col-md-11 col-lg-11">
+            <form role="form">
+                <div class="row">
+                    <div class="col-10 col-sm-8 col-md-4 col-lg-3">
+                        <input type="text" class="form-control" id="" placeholder="Pesquisar">
+                    </div>
+                    <div class="col-2 col-sm-4 col-md-2 col-lg-2">
+                        <a class="btn">Pesquisar</a>
+                    </div>
+                    <div class="col-sm-11 ml-sm-auto col-md-4 ml-md-auto col-lg-4">
+                        <a class="btn" [routerLink]="['/pessoas-adicionar']"
+                            [routerLinkActive]="['router-link-active']">
+                            Adicionar
+                        </a>
+                        <a class="btn" [routerLink]="['/pessoas-importar']"
+                            [routerLinkActive]="['router-link-active']">
+                            Importar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br />
+    <div class="row justify-content-md-center">
+        <div class="col col-xl-11 col-lg-12">
+            <div class="card">
                 <table class="card-body table table-hover">
                     <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Nome</th>
-                        <th>Função</th>
-                        <th>Setor</th>
-                        <th>Unidade</th>
-                    </tr>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nome</th>
+                            <th>Função</th>
+                            <th>Setor</th>
+                            <th>Unidade</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">5082</th>
-                        <td>João da Silva</td>
-                        <td>Recrutador</td>
-                        <td>RH</td>
-                        <td>São Paulo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">5083</th>
-                        <td>Maria Aparecida</td>
-                        <td>Secretária</td>
-                        <td>RH</td>
-                        <td>São Paulo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">5084</th>
-                        <td>Felipe Haag</td>
-                        <td>Analista</td>
-                        <td>Desenvolvimento</td>
-                        <td>Blumenau</td>
-                    </tr>
+                        <tr>
+                            <th scope="row">5082</th>
+                            <td>João da Silva</td>
+                            <td>Recrutador</td>
+                            <td>RH</td>
+                            <td>São Paulo</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">5083</th>
+                            <td>Maria Aparecida</td>
+                            <td>Secretária</td>
+                            <td>RH</td>
+                            <td>São Paulo</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">5084</th>
+                            <td>Felipe Haag</td>
+                            <td>Analista</td>
+                            <td>Desenvolvimento</td>
+                            <td>Blumenau</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
