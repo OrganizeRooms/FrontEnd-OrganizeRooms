@@ -5,8 +5,26 @@ import { PessoasAdicionarRoutingModule } from './pessoas-adicionar-routing.modul
 import { PessoasAdicionarComponent } from './pessoas-adicionar.component';
 import { PageHeaderModule } from '../../../shared';
 
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// Date Picker
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule} from '@angular/material';
+import { MatInputModule } from '@angular/material';
+
 @NgModule({
-    imports: [CommonModule, PessoasAdicionarRoutingModule, PageHeaderModule],
-    declarations: [PessoasAdicionarComponent]
+    imports: [
+        CommonModule,
+        PessoasAdicionarRoutingModule,
+        PageHeaderModule,
+        MatDatepickerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        ReactiveFormsModule
+    ],
+    declarations: [
+        PessoasAdicionarComponent
+    ]
 })
-export class PessoasAdicionarModule {}
+export class PessoasAdicionarModule { }

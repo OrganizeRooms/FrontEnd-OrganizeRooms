@@ -7,6 +7,8 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 
+import { MessageService } from '../shared/services/MessageService';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -17,6 +19,9 @@ import { HeaderComponent } from './components/header/header.component';
         LayoutComponent,
         SidebarComponent,
         HeaderComponent
+    ],
+    providers: [
+        MessageService
     ]
 })
 export class LayoutModule { }

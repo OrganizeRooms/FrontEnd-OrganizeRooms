@@ -6,7 +6,13 @@ import { PessoasImportarComponent } from './pessoas-importar.component';
 import { PageHeaderModule } from '../../../shared';
 
 @NgModule({
-    imports: [CommonModule, PessoasImportarRoutingModule, PageHeaderModule],
-    declarations: [PessoasImportarComponent]
+    imports: [
+        CommonModule,
+        PessoasImportarRoutingModule,
+        PageHeaderModule
+    ],
+    declarations: [
+        PessoasImportarComponent
+    ]
 })
-export class PessoasImportarModule {}
+export class PessoasImportarModule { }

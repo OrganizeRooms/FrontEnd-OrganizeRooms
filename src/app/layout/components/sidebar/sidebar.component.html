@@ -1,12 +1,8 @@
 <nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
     <div class="list-group">
-        <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-dashboard"></i>&nbsp;
-            <span>Dashboard</span>
-        </a>
-        <a [routerLink]="['/tables']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
-            <span>Tables</span>
+        <a routerLink="/home" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-home"></i>&nbsp;
+            <span>Home</span>
         </a>
         <a [routerLink]="['/pessoas']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-table"></i>&nbsp;
@@ -16,13 +12,13 @@
             <i class="fa fa-fw fa-table"></i>&nbsp;
             <span>Salas</span>
         </a>
+        <a [routerLink]="['/reservar']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-table"></i>&nbsp;
+            <span>Reserva de Sala</span>
+        </a>
         <a [routerLink]="['/equipamentos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-table"></i>&nbsp;
             <span>Equipamentos</span>
-        </a>
-        <a [routerLink]="['/bs-component']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
-            <span>BS Component</span>
         </a>
         <div class="header-fields">
             <a (click)="rltAndLtr()" class="list-group-item">
