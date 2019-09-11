@@ -5,8 +5,20 @@ import { PessoasRoutingModule } from './pessoas-routing.module';
 import { PessoasComponent } from './pessoas.component';
 import { PageHeaderModule } from '../../shared';
 
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, MatSortModule } from '@angular/material';
+
 @NgModule({
-    imports: [CommonModule, PessoasRoutingModule, PageHeaderModule],
-    declarations: [PessoasComponent]
+    imports: [
+        CommonModule,
+        PessoasRoutingModule,
+        PageHeaderModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule
+    ],
+    declarations: [
+        PessoasComponent
+    ]
 })
-export class PessoasModule {}
+export class PessoasModule { }

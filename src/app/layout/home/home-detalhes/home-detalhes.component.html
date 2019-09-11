@@ -1,0 +1,51 @@
+<span mat-dialog-title class="text-center">
+    {{data.sala}} &nbsp; <span class="color-blue">{{data.data}}</span>
+    <hr class="card-divider">
+</span>
+<mat-dialog-content>
+    <div class="page-text">
+        <div class="row">
+            <div class="col-12 col-lg-2">
+                <span class="text-header">Unidade:</span>
+            </div>
+            <div class="col-12 col-lg-10 text-agendamento">
+                {{data.unidade}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-2">
+                <span class="text-header">Responsável:</span>
+            </div>
+            <div class="col-12 col-lg-10 text-agendamento">
+                {{data.responsavel}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-2">
+                <span class="text-header">Período:</span>
+            </div>
+            <div class="col-12 col-lg-10 text-agendamento">
+                {{data.hrInicio}} <span class="text-header">às </span>{{data.hrFim}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-2">
+                <span class="text-header">Assunto:</span>
+            </div>
+            <div class="col-12 col-lg-10 text-agendamento">
+                {{data.assunto}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-12">
+                <span class="text-header">Descrição:</span>
+            </div>
+        </div>
+        <div class="row justify-content-md-center">
+            <div class="col-11 col-lg-11 text-area">
+                {{data.descricao}}
+            </div>
+        </div>
+        <button class="btn" (click)="close()">Fechar</button>
+    </div>
+</mat-dialog-content>

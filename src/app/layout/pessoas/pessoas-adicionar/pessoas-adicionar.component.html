@@ -1,0 +1,76 @@
+<div>
+    <app-page-header [heading]="'Pessoas - Adicionar Pessoas'" [icon]="'fa-table'"></app-page-header>
+
+    <br />
+    <div class="row justify-content-md-center">
+        <div class="col-10 col-sm-8 col-md-8 col-lg-7">
+            <form role="form">
+                <div class="row">
+                    <div class="col-2 col-sm-3 col-md-4 col-lg-2">
+                        <span>Código</span>
+                        <input type="text" class="form-control" id="pesid" autofocus>
+                    </div>
+                    <div class="col-2 col-sm-4 col-md-4 col-lg-4">
+                        <span>Unidade</span>
+                        <select class="custom-select" id="unidade">
+                            <option value="0">Selecione</option>
+                            <option *ngFor="let uni of listUnidades" value="{{uni.id}}">{{uni.unidade}}</option>
+                        </select>
+                    </div>
+                    <div class="col-2 col-sm-4 col-md-4 col-lg-3">
+                        <span>Data Cadastro</span>
+                        <mat-form-field>
+                            <input matInput [matDatepicker]="datePicker" [formControl]="date">
+                            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #datePicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-2 col-sm-4 col-md-4 col-lg-6">
+                        <span>Nome</span>
+                        <input type="text" class="form-control" id="pesnom">
+                    </div>
+                    <div class="col-2 col-sm-4 col-md-4 col-lg-3">
+                        <span>Permissão</span>
+                        <select class="custom-select" id="">
+                            <option value="1">Usuario</option>
+                            <option value="2">Tablet</option>
+                            <option value="3">Administrador</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-2 col-sm-4 col-md-4 col-lg-9">
+                        <span>Email</span>
+                        <input type="email" class="form-control" id="pesemail">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-1 col-sm-1 col-md-2 col-lg-2">
+                        <span>DDD</span>
+                        <input type="number" class="form-control" id="pesddd">
+                    </div>
+                    <div class="col-2 col-sm-2 col-md-3 col-lg-3">
+                        <span>Telefone</span>
+                        <input type="number" class="form-control" id="pestelefone">
+                    </div>
+                </div>
+
+                <br>
+                <div class="row ml-auto">
+                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn" [routerLink]="['/pessoas']"
+                        [routerLinkActive]="['router-link-active']">
+                        Voltar
+                    </a>
+                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn" (click)="adicionarPessoa()">
+                        Adicionar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

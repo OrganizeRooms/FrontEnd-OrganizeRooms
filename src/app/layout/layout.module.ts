@@ -7,12 +7,21 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 
+import { MessageService } from '../shared/services/MessageService';
+
 @NgModule({
     imports: [
         CommonModule,
         LayoutRoutingModule,
         NgbDropdownModule
     ],
-    declarations: [LayoutComponent, SidebarComponent, HeaderComponent]
+    declarations: [
+        LayoutComponent,
+        SidebarComponent,
+        HeaderComponent
+    ],
+    providers: [
+        MessageService
+    ]
 })
-export class LayoutModule {}
+export class LayoutModule { }

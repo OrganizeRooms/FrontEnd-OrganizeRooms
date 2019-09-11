@@ -1,12 +1,8 @@
 <nav class="sidebar" [ngClass]="{sidebarPushRight: isActive, collapsed: collapsed}">
     <div class="list-group">
-        <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-dashboard"></i>&nbsp;
-            <span>Dashboard</span>
-        </a>
-        <a [routerLink]="['/tables']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
-            <span>Tables</span>
+        <a routerLink="/home" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-home"></i>&nbsp;
+            <span>Home</span>
         </a>
         <a [routerLink]="['/pessoas']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-table"></i>&nbsp;
@@ -15,6 +11,10 @@
         <a [routerLink]="['/salas']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-table"></i>&nbsp;
             <span>Salas</span>
+        </a>
+        <a [routerLink]="['/reservar']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-table"></i>&nbsp;
+            <span>Reserva de Sala</span>
         </a>
         <a [routerLink]="['/equipamentos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-table"></i>&nbsp;
@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="toggle-button" [ngClass]="{collapsed: collapsed}" (click)="toggleCollapsed()">
-        <i class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></i>&nbsp;
+        <i class="fa fa-fw fa-angle-double-{{collapsed?'right':'left'}}"></i>
         <!--<span>{{ 'Collapse Sidebar'}}</span>-->
     </div>
 </nav>

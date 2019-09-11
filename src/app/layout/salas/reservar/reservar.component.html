@@ -1,0 +1,42 @@
+<div>
+    <app-page-header [heading]="'Salas'" [icon]="'fa-table'"></app-page-header>
+
+    <div class="col col-xl-9 col-lg-12">
+        <mat-vertical-stepper [linear]="true" labelPosition="bottom" #stepper>
+            <mat-step [stepControl]="firstFormGroup">
+                <form [formGroup]="firstFormGroup">
+                    <ng-template matStepLabel>Verifique a Disponibilidade</ng-template>
+                    <div class="row">
+                        <!--<mat-form-field>-->
+                        <input placeholder="Last name, First name" class="form-control" formControlName="firstCtrl"
+                            required>
+                        <!--</mat-form-field>-->
+                        <div>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup">
+                <form [formGroup]="secondFormGroup">
+                    <ng-template matStepLabel>Faça a Reserva</ng-template>
+                    <!--<mat-form-field>-->
+                    <input matInput placeholder="Address" formControlName="secondCtrl" required>
+                    <!--</mat-form-field>-->
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Reserva realizada!</ng-template>
+                You are now done.
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button (click)="stepper.reset()">Reset</button>
+                </div>
+            </mat-step>
+        </mat-vertical-stepper>
+    </div>
+</div>
