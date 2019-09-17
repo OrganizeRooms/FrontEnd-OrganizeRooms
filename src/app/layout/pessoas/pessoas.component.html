@@ -1,32 +1,37 @@
 <div>
     <app-page-header [heading]="'Pessoas'" [icon]="'fa-table'"></app-page-header>
 
-    <div class="row justify-content-md-center">
-        <div class="col-10 col-sm-11 col-md-11 col-lg-11">
-            <form role="form">
-                <div class="row">
-                    <div class="col-10 col-sm-8 col-md-4 col-lg-3">
-                        <input type="text" class="form-control" id="" placeholder="Pesquisar">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
+            <form>
+                <div class="row justify-content-center">
+                    <div class="col-11 col-sm-6 col-md-6 col-lg-6 col-xl-5">
+                        <input class="form-control" matInput (keyup)="aplicarFiltro($event.target.value)"
+                            placeholder="Pesquisar">
                     </div>
-                    <div class="col-2 col-sm-4 col-md-2 col-lg-2">
-                        <a class="btn">Pesquisar</a>
-                    </div>
-                    <div class="col-sm-11 ml-sm-auto col-md-4 ml-md-auto col-lg-4">
-                        <a class="btn" [routerLink]="['/pessoas-adicionar']"
-                            [routerLinkActive]="['router-link-active']">
-                            Adicionar
-                        </a>
-                        <a class="btn" [routerLink]="['/pessoas-importar']" [routerLinkActive]="['router-link-active']">
-                            Importar
-                        </a>
+                    <div class="col-7 col-sm-5 col-md-4 col-lg-4 col-xl-7">
+                        <div class="row justify-content-sm-end">
+                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-3">
+                                <a class="btn" [routerLink]="['/pessoas-adicionar']"
+                                    [routerLinkActive]="['router-link-active']">
+                                    Adicionar
+                                </a>
+                            </div>
+                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-3">
+                                <a class="btn" [routerLink]="['/pessoas-importar']"
+                                    [routerLinkActive]="['router-link-active']">
+                                    Importar
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-center">
         <!-- Table -->
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-8">
             <!-- Pagination -->
             <mat-paginator></mat-paginator>
 

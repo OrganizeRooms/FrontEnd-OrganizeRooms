@@ -4,11 +4,11 @@
     <br />
     <div class="row justify-content-md-center">
         <div class="col-10 col-sm-8 col-md-8 col-lg-7">
-            <form role="form">
+            <form [formGroup]="formAddPessoa">
                 <div class="row">
                     <div class="col-2 col-sm-3 col-md-4 col-lg-2">
                         <span>Código</span>
-                        <input type="text" class="form-control" id="pesid" autofocus>
+                        <input type="text" class="form-control" formControlName="pesid" id="pesid" autofocus required>
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-4">
                         <span>Unidade</span>
@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="col-2 col-sm-4 col-md-4 col-lg-6">
                         <span>Nome</span>
-                        <input type="text" class="form-control" id="pesnom">
+                        <input type="text" class="form-control" formControlName="pesnome" id="pesnome">
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <span>Permissão</span>
@@ -45,18 +45,18 @@
                 <div class="row">
                     <div class="col-2 col-sm-4 col-md-4 col-lg-9">
                         <span>Email</span>
-                        <input type="email" class="form-control" id="pesemail">
+                        <input type="email" class="form-control" formControlName="pesemail" id="pesemail">
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-1 col-sm-1 col-md-2 col-lg-2">
                         <span>DDD</span>
-                        <input type="number" class="form-control" id="pesddd">
+                        <input type="number" class="form-control" formControlName="pesddd" id="pesddd">
                     </div>
                     <div class="col-2 col-sm-2 col-md-3 col-lg-3">
                         <span>Telefone</span>
-                        <input type="number" class="form-control" id="pestelefone">
+                        <input type="number" class="form-control" formControlName="pestelefone" id="pestelefone">
                     </div>
                 </div>
 
