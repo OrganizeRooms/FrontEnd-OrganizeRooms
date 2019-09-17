@@ -6,7 +6,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
     selector: 'app-pessoas',
     templateUrl: './pessoas.component.html',
     styleUrls: ['./pessoas.component.scss'],
-    //animations: [routerTransition()]
+    animations: [routerTransition()]
 })
 export class PessoasComponent implements OnInit {
 
@@ -45,6 +45,10 @@ export class PessoasComponent implements OnInit {
             { codigo: 5091, nome: 'João da Silva', unidade: 'Rio de Janeiro', dtCadastro: '13/08/2019' },
             { codigo: 5092, nome: 'João da Silva', unidade: 'Rio de Janeiro', dtCadastro: '13/09/2019' },
         ];
+    }
+
+    aplicarFiltro(valor: string) {
+        this.tableData.filter = valor.trim().toLowerCase();
     }
 
     configurarPaginador() {

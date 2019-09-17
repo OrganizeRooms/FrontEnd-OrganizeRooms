@@ -6,7 +6,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
     selector: 'app-equipamentos',
     templateUrl: './equipamentos.component.html',
     styleUrls: ['./equipamentos.component.scss'],
-    //animations: [routerTransition()]
+    animations: [routerTransition()]
 })
 export class EquipamentosComponent implements OnInit {
     listEquipamentos: any[];
@@ -46,6 +46,10 @@ export class EquipamentosComponent implements OnInit {
             { codigo: 63, nome: 'Notebook DELL i5', unidade: 'São Paulo', },
             { codigo: 64, nome: 'Projeto 54', unidade: 'Rio de Janeiro', },
         ];
+    }
+
+    aplicarFiltro(valor: string) {
+        this.tableData.filter = valor.trim().toLowerCase();
     }
 
     configurarPaginador() {
