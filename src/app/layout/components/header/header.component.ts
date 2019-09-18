@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
+import { AuthenticationService } from '../../../shared/_services';
+import { Pessoa } from '../../../shared/_models';
+
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
@@ -8,9 +11,12 @@ import { Router, NavigationEnd } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
     public pushRightClass: string;
+    currentPessoa: Pessoa;
+    
+    constructor(public router: Router,
+        private authenticationService: AuthenticationService) {
 
-    constructor(public router: Router) {
-
+        this.authenticationService.currentPessoa.subscribe(x => this.currentPessoa = x);
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
@@ -41,7 +47,8 @@ export class HeaderComponent implements OnInit {
         dom.classList.toggle('rtl');
     }
 
-    onLoggedout() {
-        localStorage.removeItem('isLoggedin');
+    logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
     }
 }

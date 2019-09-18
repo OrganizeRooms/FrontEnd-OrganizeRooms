@@ -1,6 +1,9 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
+import { AuthenticationService } from '../../../shared/_services';
+import { Pessoa } from '../../../shared/_models';
+
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
@@ -11,10 +14,14 @@ export class SidebarComponent implements OnInit {
     collapsed: boolean;
     showMenu: string;
     pushRightClass: string;
+    currentPessoa: Pessoa;
 
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
-    constructor(public router: Router) {
+    constructor(public router: Router,
+        private authenticationService: AuthenticationService) {
+
+        this.authenticationService.currentPessoa.subscribe(x => this.currentPessoa = x);
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
@@ -66,7 +73,8 @@ export class SidebarComponent implements OnInit {
         dom.classList.toggle('rtl');
     }
 
-    onLoggedout() {
-        localStorage.removeItem('isLoggedin');
+    logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
     }
 }
