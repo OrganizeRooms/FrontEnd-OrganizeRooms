@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { routerTransition } from '../../../router.animations';
+import { routerTransition } from '../../router.animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({

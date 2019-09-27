@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbCarouselModule, NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+import { BrowserModule } from '@angular/platform-browser';
+
 // Modal
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 // Modules
 import { HomeRoutingModule } from './home-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// Date Picker
-import { MatFormFieldModule, MatDatepickerModule, MatInputModule} from '@angular/material';
 
 // Components
 import { HomeComponent } from './home.component';
@@ -16,20 +17,24 @@ import { NotificationComponent } from './components';
 // Modal
 import { HomeDetalhesComponent } from './home-detalhes/home-detalhes.component';
 
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+
+// Date Picker
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule} from '@angular/material';
+import { MatInputModule } from '@angular/material';
 
 @NgModule({
     imports: [
         CommonModule,
-        NgbCarouselModule,
-        NgbAlertModule,
         HomeRoutingModule,
-        MatDatepickerModule,
         FormsModule,
         ReactiveFormsModule,
         MatDialogModule,
+        NgbModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        MatDatepickerModule
     ],
     declarations: [
         HomeComponent,

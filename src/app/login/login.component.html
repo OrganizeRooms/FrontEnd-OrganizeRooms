@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <input type="pesSenha" formControlName="pesSenha" class="form-control input-lg input-underline text-center" placeholder="Senha"
+                    <input type="password" formControlName="pesSenha" class="form-control input-lg input-underline text-center" placeholder="Senha"
                         [ngClass]="{ 'is-invalid': submitted && f.pesSenha.errors }" />
                     <div *ngIf="submitted && !! f.pesSenha.errors" class="invalid-feedback">
                         <div>Informe a Senha</div>

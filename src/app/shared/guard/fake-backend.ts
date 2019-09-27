@@ -3,7 +3,6 @@ import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTT
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 
-import { User } from '../_models';
 import { Pessoa } from '../_models';
 
 const pessoas: Pessoa[] = [
@@ -17,10 +16,6 @@ const pessoas: Pessoa[] = [
         pesPermissao: 'ADM', pesDDD: '047', pesTelefone: '992821333', pesTipoInclusao: '1',
         pesDtCadastro: new Date('18/09/2019'), pesDtAtualizacao: new Date('18/09/2019'),
     }
-];
-
-const users: User[] = [
-    { id: 1, username: 'admin', password: 'admin', nome: 'Administrador' }
 ];
 
 @Injectable()

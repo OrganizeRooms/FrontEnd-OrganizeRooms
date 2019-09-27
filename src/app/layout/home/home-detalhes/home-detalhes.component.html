@@ -1,5 +1,5 @@
 <span mat-dialog-title class="text-center">
-    {{data.sala}} &nbsp; <span class="color-blue">{{data.data}}</span>
+    {{data.sala}} &nbsp; <span class="color-blue">{{data.ageData | date: 'dd/MM/yyyy'}}</span>
     <hr class="card-divider">
 </span>
 <mat-dialog-content>
@@ -17,7 +17,7 @@
                 <span class="text-header">Responsável:</span>
             </div>
             <div class="col-12 col-lg-10 text-agendamento">
-                {{data.responsavel}}
+                {{data.pessoa_responsavel}}
             </div>
         </div>
         <div class="row">
@@ -25,7 +25,7 @@
                 <span class="text-header">Período:</span>
             </div>
             <div class="col-12 col-lg-10 text-agendamento">
-                {{data.hrInicio}} <span class="text-header">às </span>{{data.hrFim}}
+                {{data.ageHoraInicio}} <span class="text-header">às </span>{{data.ageHoraFim}}
             </div>
         </div>
         <div class="row">
@@ -33,7 +33,7 @@
                 <span class="text-header">Assunto:</span>
             </div>
             <div class="col-12 col-lg-10 text-agendamento">
-                {{data.assunto}}
+                {{data.ageAssunto}}
             </div>
         </div>
         <div class="row">
@@ -43,7 +43,7 @@
         </div>
         <div class="row justify-content-md-center">
             <div class="col-11 col-lg-11 text-area">
-                {{data.descricao}}
+                {{data.ageDescricao}}
             </div>
         </div>
         <button class="btn" (click)="close()">Fechar</button>

@@ -2,13 +2,13 @@
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment';
-import { User } from '../_models';
+import { Unidade } from '../_models';
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class UnidadeService {
     constructor(private http: HttpClient) { }
 
-    getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users`);
+    buscarTodos() {
+        return this.http.get<Unidade[]>(`${environment.apiUrl}/unidades`);
     }
 }

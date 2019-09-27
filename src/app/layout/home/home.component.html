@@ -6,7 +6,7 @@
         </div>
         <div class="col-11 col-xl-3 col-lg-6">
             <mat-form-field>
-                <input matInput [matDatepicker]="datePicker" [formControl]="date">
+                <input class="text-center" matInput [matDatepicker]="datePicker" [formControl]="date" > <!--(dateChange)="filtro(date)" >-->
                 <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
                 <mat-datepicker #datePicker></mat-datepicker>
             </mat-form-field>
@@ -14,13 +14,13 @@
     </div>
 
     <hr>
-    <div class="row">
+    <div class="row">   
         <div *ngFor="let agends of listAgendamentos" class="col-12 col-sm-6 col-lg-4 col-xl-3">
 
             <div class="card-agendamento">
                 <div class="card-titulo text-center">
                     <span class="">
-                        {{agends.sala}} &nbsp; <span class="color-blue">{{agends.data}}</span>
+                        {{agends.sala}} &nbsp; <span class="color-blue">{{agends.ageData | date: 'dd/MM/yyyy'}}</span>
                     </span>
                 </div>
                 <hr class="card-divider">
@@ -28,16 +28,16 @@
                     <span><b>Unidade:</b> {{agends.unidade}}</span>
                 </div>
                 <div class="row">
-                    <span><b>Responsável:</b> {{agends.responsavel}}</span>
+                    <span><b>Responsável:</b> {{agends.pessoa_responsavel}}</span>
                 </div>
                 <div class="row">
-                    <span><b>Assunto:</b> {{agends.assunto}}</span>
+                    <span><b>Assunto:</b> {{agends.ageAssunto}}</span>
                 </div>
                 <div class="row">
-                    <span><b>Período:</b> {{agends.hrInicio}} <b>às</b> {{agends.hrFim}}</span>
+                    <span><b>Período:</b> {{agends.ageHoraInicio}} <b>às</b> {{agends.ageHoraFim}}</span>
                 </div>
                 <div class="row">
-                    <span><b>Status:</b> {{agends.status}}</span>
+                    <span><b>Status:</b> {{agends.ageStatus}}</span>
                 </div>
                 <hr class="card-divider">
                 <div class="row justify-content-md-center">

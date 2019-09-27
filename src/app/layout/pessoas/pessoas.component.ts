@@ -2,6 +2,11 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
+import { rangeLabel } from '../../shared/utils/range-label';
+
+import { PessoaService } from '../../shared/_services';
+import { Pessoa } from '../../shared';
+
 @Component({
     selector: 'app-pessoas',
     templateUrl: './pessoas.component.html',
@@ -11,16 +16,16 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 export class PessoasComponent implements OnInit {
 
     listPessoas: any[];
-
+    //listPessoas: Pessoa[];
     displayedColumns: string[] = ['codigo', 'nome', 'unidade', 'dtCadastro'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor() {
-
-    }
+    constructor(
+        private pessoaService: PessoaService
+    ) { }
 
     ngOnInit() {
         this.carregarPessoas();
@@ -31,6 +36,7 @@ export class PessoasComponent implements OnInit {
     }
 
     carregarPessoas() {
+        //this.listPessoas = this.pessoaService.buscarTodos();
         this.listPessoas = [
             { codigo: 5081, nome: 'João da Silva', unidade: 'Rio de Janeiro', dtCadastro: '19/09/2019' },
             { codigo: 5082, nome: 'Maria Aparecida', unidade: 'São Paulo', dtCadastro: '22/10/2019' },
@@ -57,19 +63,4 @@ export class PessoasComponent implements OnInit {
         this.paginator.showFirstLastButtons = true;
         this.paginator.pageSizeOptions = [8, 10, 15, 20, 30];
     }
-}
-
-const rangeLabel = (page: number, pageSize: number, length: number) => {
-    if (length == 0 || pageSize == 0) { return `0 de ${length}`; }
-
-    length = Math.max(length, 0);
-
-    const startIndex = page * pageSize;
-
-    // If the start index exceeds the list length, do not try and fix the end index to the end.
-    const endIndex = startIndex < length ?
-        Math.min(startIndex + pageSize, length) :
-        startIndex + pageSize;
-
-    return `${startIndex + 1} - ${endIndex} de ${length}`;
 }

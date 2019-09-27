@@ -3,16 +3,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export interface DialogData {
-  id: number,
+  ageId: number,
   sala: string,
+  pessoa_responsavel: string,
   unidade: string,
-  responsavel: string,
-  assunto: string,
-  data: string,
-  hrInicio: string,
-  hrFim: string,
-  status: string,
-  descricao: string,
+  ageAssunto: string,
+  ageData: string,
+  ageHoraInicio: string,
+  ageHoraFim: string,
+  ageStatus: string,
+  ageDescricao: string,
 }
 
 @Component({

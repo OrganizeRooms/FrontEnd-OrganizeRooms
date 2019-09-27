@@ -1,31 +1,23 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
+// Dialog
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { HomeDetalhesComponent } from './home-detalhes/home-detalhes.component';
 
 // Date Picker
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MY_FORMATS } from '../../shared/utils/date-formats'
+
 import * as _moment from 'moment';
+import 'moment/locale/pt-br';
+
 import { default as _rollupMoment } from 'moment';
+import { Agendamento } from 'src/app/shared';
 
 const moment = _moment;
-
-// See the Moment.js docs for the meaning of these formats:
-// https://momentjs.com/docs/#/displaying/format/
-export const MY_FORMATS = {
-    parse: {
-        dateInput: 'DD/MM/YYYY',
-    },
-    display: {
-        dateInput: 'DD/MM/YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    }
-};
 
 @Component({
     selector: 'app-home',
@@ -39,11 +31,12 @@ export const MY_FORMATS = {
 })
 export class HomeComponent implements OnInit {
 
-    //public alerts: Array<any> = [];
     date = new FormControl(moment());
+    // listAgendamentos: Agendamento;
     listAgendamentos;
-
+ //   listAgendamentosFiltrado;
     DetalhesAgendamento;
+
 
     constructor(
         private dialog: MatDialog) {
@@ -59,64 +52,100 @@ export class HomeComponent implements OnInit {
         );*/
     }
 
+    ngOnInit() {
+        this.carregarAgendamentos();
+      //  moment.locale('pt-BR');
+    }
+
+    carregarAgendamentos() {
+        this.listAgendamentos = [
+            {
+                ageId: 1, sala: 'Sala de Reunião 3', pessoa_responsavel: 'Lucas Jansen', unidade: 'Rio de Janeiro',
+                ageAssunto: 'Montar Kanban', ageData: new Date('09/08/2019'),
+                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
+                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
+                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
+            },
+            {
+                ageId: 2, sala: 'Sala de Reunião 4', pessoa_responsavel: 'Lucas Jansen', unidade: 'Rio de Janeiro',
+                ageAssunto: 'Montar Kanban', ageData: new Date('08/09/2019'),
+                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
+                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
+                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
+            },
+            {
+                ageId: 2, sala: 'Sala de Reunião 5', pessoa_responsavel: 'Lucas Jansen', unidade: 'Rio de Janeiro',
+                ageAssunto: 'Montar Kanban', ageData: new Date('08/09/2019'),
+                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
+                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
+                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
+            },
+            {
+                ageId: 3, sala: 'Sala Comercial', pessoa_responsavel: 'Éder jean Dias', unidade: 'Blumenau',
+                ageAssunto: 'Montar Kanban', ageData: new Date('08/09/2019'),
+                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
+                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
+                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
+            },
+            {
+                ageId: 4, sala: 'Sala Dos Top', pessoa_responsavel: 'Felipe Haag', unidade: 'Blumenau',
+                ageAssunto: 'Montar Kanban', ageData: new Date('09/26/2019'),
+                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
+                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
+                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
+                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
+            }
+        ]
+
+    }
+
+
+    /*public closeAlert(alert: any) {
+        const index: number = this.alerts.indexOf(alert);
+        this.alerts.splice(index, 1);
+    }
+
+
+    filtro(data: FormControl) {
+        var fdata = new Date(data.value)
+        this.listAgendamentosFiltrado = [];
+        this.listAgendamentos.forEach(element => {
+            if (moment(element.ageData, 'DD/MM/YYYY').toString() == moment(fdata, 'DD/MM/YYYY').toString()) {
+                // console.log('5 - Entrou - data elemento = ' + moment(element.ageData, 'DD/MM/YYYY').toString()
+                //   + ' data escolhida= ' + moment(fdata, 'DD/MM/YYYY').toString())
+                this.listAgendamentosFiltrado.push(element);
+            }
+        });
+    }*/
+
     openDialog(agends) {
         const dialogConfig = new MatDialogConfig();
 
         //dialogConfig.maxHeight = '80%';
         //dialogConfig.maxWidth = '50%';
         dialogConfig.panelClass = 'col-12';
-        dialogConfig.panelClass = 'col-sm-12'; 
+        dialogConfig.panelClass = 'col-sm-12';
         dialogConfig.panelClass = 'col-lg-6';
         dialogConfig.panelClass = 'col-xl-6';
 
         dialogConfig.data = {
-            id: agends.id,
+            ageId: agends.ageId,
             sala: agends.sala,
             unidade: agends.unidade,
-            responsavel: agends.responsavel,
-            assunto: agends.assunto,
-            data: agends.data,
-            hrInicio: agends.hrInicio,
-            hrFim: agends.hrFim,
-            status: agends.status,
-            descricao: agends.descricao,
+            pessoa_responsavel: agends.pessoa_responsavel,
+            ageAssunto: agends.ageAssunto,
+            ageData: agends.ageData,
+            ageHoraInicio: agends.ageHoraInicio,
+            ageHoraFim: agends.ageHoraFim,
+            ageStatus: agends.ageStatus,
+            ageDescricao: agends.ageDescricao,
         };
 
         this.dialog.open(HomeDetalhesComponent, dialogConfig);
     }
-
-    ngOnInit() {
-        this.carregarAgendamentos();
-    }
-
-    carregarAgendamentos() {
-        this.listAgendamentos = [
-            {
-                id: 1, sala: 'Sala de Reunião 3', responsavel: 'Lucas Jansen', unidade: 'Rio de Janeiro', assunto: 'Montar Kanban', data: '08/09/2019',
-                hrInicio: '08:00', hrFim: '08:30', status: 'Agendado',
-                descricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            },
-            {
-                id: 1, sala: 'Sala de Reunião 2', responsavel: 'Eder Jean Dias', unidade: 'São Paulo', assunto: 'Novos preços Kanban', data: '08/09/2019',
-                hrInicio: '10:00', hrFim: '11:30', status: 'Agendado',
-                descricao: 'Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            },
-            {
-                id: 1, sala: 'Sala de Reunião 3', responsavel: 'Felipe Haag', unidade: 'Rio de Janeiro', assunto: 'Montar Kanban', data: '08/09/2019',
-                hrInicio: '08:00', hrFim: '08:30', status: 'Agendado',
-                descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            },
-            {
-                id: 1, sala: 'Sala de Reunião 3', responsavel: 'Felipe Haag', unidade: 'São Paulo', assunto: 'Montar Kanban', data: '08/09/2019',
-                hrInicio: '08:00', hrFim: '08:30', status: 'Agendado',
-                descricao: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            }
-        ]
-    }
-
-    /*public closeAlert(alert: any) {
-        const index: number = this.alerts.indexOf(alert);
-        this.alerts.splice(index, 1);
-    }*/
 
 }
