@@ -2,13 +2,13 @@
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment';
-import { Pessoa } from '../_models';
+import { Sala } from '../_models';
 
 @Injectable({ providedIn: 'root' })
-export class PessoaService {
+export class SalaService {
     constructor(private http: HttpClient) { }
 
     buscarTodos() {
-        return this.http.get<Pessoa[]>(`${environment.apiUrl}/pessoas`);
+        return this.http.get<Sala[]>(`${environment.apiUrl}/salas`);
     }
 }

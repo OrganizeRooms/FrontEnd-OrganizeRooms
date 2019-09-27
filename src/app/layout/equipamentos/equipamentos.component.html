@@ -1,5 +1,5 @@
 <div>
-    <app-page-header [heading]="'Equipamentos'" [icon]="'fa-table'"></app-page-header>
+    <app-page-header [heading]="'Equipamentos'" ></app-page-header>
 
     <div class="row justify-content-center">
         <div class="col-12 col-sm-11 col-md-10 col-lg-10 col-xl-8">
@@ -26,9 +26,6 @@
     <div class="row justify-content-center">
         <!-- Table -->
         <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-8">
-            <!-- Pagination -->
-            <mat-paginator></mat-paginator>
-
             <table mat-table [dataSource]="tableData" matSort class="mat-elevation-z4">
                 <!-- Cóidigo  Column -->
                 <ng-container matColumnDef="codigo">
@@ -51,6 +48,10 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+            <div>
+                <!-- Pagination -->
+                <mat-paginator></mat-paginator>
+            </div>
         </div>
     </div>
 </div>

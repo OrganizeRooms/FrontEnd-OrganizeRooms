@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
-import { User } from '../_models';
 import { Pessoa } from '../_models';
 
 @Injectable({ providedIn: 'root' })

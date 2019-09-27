@@ -1,37 +1,41 @@
 <div>
-    <app-page-header [heading]="'Salas'" [icon]="'fa-table'"></app-page-header>
-
-    <div class="col col-xl-9 col-lg-12">
-        <form role="form">
-            <div class="row">
-
-                <div class="col-xl-4 col-lg-5">
-                    <span>Hora Inicial:</span>
-                    <input type="time" class="form-control input-underline input-lg" id="" placeholder="Hr Inicial">
+    <app-page-header [heading]="'Salas'"></app-page-header>
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
+            <form>
+                <div class="row justify-content-center">
+                    <div class="col-11 col-sm-6 col-md-6 col-lg-6 col-xl-5">
+                        <div class="row">
+                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                <input type="text" class="form-control" placeholder="Hora Inicial">
+                            </div>
+                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                <input type="text" class="form-control" placeholder="Hora Final">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-11 col-sm-6 col-md-6 col-lg-6 col-xl-7">
+                        <div class="row justify-content-sm-end">
+                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-3">
+                                <a class="btn" [routerLink]="['/salas-adicionar']"
+                                    [routerLinkActive]="['router-link-active']">
+                                    Adicionar
+                                </a>
+                            </div>
+                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-3">
+                                <a class="btn" [routerLink]="['/reservar']" [routerLinkActive]="['router-link-active']">
+                                    Reservar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-xl-4 col-lg-5">
-                    <span>Hora Final:</span>
-                    <input type="time" class="form-control input-underline input-lg" id="" placeholder="Hr Final">
-                </div>
-
-                <div class="col-sm-11 ml-sm-auto col-md-4 ml-md-auto col-lg-4">
-                    <a class="btn rounded-btn">Filtrar</a>
-                    <a class="btn" [routerLink]="['/salas']" [routerLinkActive]="['router-link-active']">
-                        Adicionar
-                    </a>
-                    <a class="btn" [routerLink]="['/salas']" [routerLinkActive]="['router-link-active']">
-                        Reservar
-                    </a>
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-center">
         <!-- Table -->
-        <div class="col-12 col-lg-7 col-xl-8">
-            <!-- Pagination -->
-            <mat-paginator></mat-paginator>
-
+        <div class="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-8">
             <table mat-table [dataSource]="tableData" matSort class="mat-elevation-z4">
                 <!-- Nome Column -->
                 <ng-container matColumnDef="nome">
@@ -64,6 +68,10 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
+            <div>
+                <!-- Pagination -->
+                <mat-paginator></mat-paginator>
+            </div>
         </div>
     </div>
 </div>

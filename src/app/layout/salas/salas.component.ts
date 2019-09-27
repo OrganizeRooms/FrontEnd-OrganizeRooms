@@ -2,15 +2,21 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
+import { rangeLabel } from '../../shared/utils/range-label';
+
+import { SalaService } from '../../shared/_services';
+import { Sala } from '../../shared';
+
 @Component({
     selector: 'app-salas',
     templateUrl: './salas.component.html',
     styleUrls: ['./salas.component.scss'],
-    //animations: [routerTransition()]
+    animations: [routerTransition()]
 })
 export class SalasComponent implements OnInit {
 
     listSalas: any[];
+    //listSalas: Sala[];
 
     displayedColumns: string[] = ['nome', 'unidade', 'lotacaoMax', 'agendamentos'];
     tableData = new MatTableDataSource<any>();
@@ -18,7 +24,9 @@ export class SalasComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    constructor() {
+    constructor(
+        private salaService: SalaService
+    ) {
     }
 
     ngOnInit() {
@@ -30,6 +38,7 @@ export class SalasComponent implements OnInit {
     }
 
     carregarSalas() {
+        //this.listSalas = this.salaService.buscarTodos();
         this.listSalas = [
             {
                 codigo: 1005, nome: 'Sala de Reunião 3 Equipe Alpha', unidade: 'Rio de Janeiro', lotacaoMax: 20,
@@ -101,19 +110,4 @@ export class SalasComponent implements OnInit {
         this.paginator.showFirstLastButtons = true;
         this.paginator.pageSizeOptions = [8, 10, 15, 20, 30];
     }
-}
-
-const rangeLabel = (page: number, pageSize: number, length: number) => {
-    if (length == 0 || pageSize == 0) { return `0 de ${length}`; }
-
-    length = Math.max(length, 0);
-
-    const startIndex = page * pageSize;
-
-    // If the start index exceeds the list length, do not try and fix the end index to the end.
-    const endIndex = startIndex < length ?
-        Math.min(startIndex + pageSize, length) :
-        startIndex + pageSize;
-
-    return `${startIndex + 1} - ${endIndex} de ${length}`;
 }
