@@ -1,7 +1,7 @@
 import { Pessoa } from './pessoa';
 import { Unidade } from './unidade';
 
-export class Equipamento {
+export interface Equipamento {
     equId: number;
     equNome: string;
     equDescricao: string;

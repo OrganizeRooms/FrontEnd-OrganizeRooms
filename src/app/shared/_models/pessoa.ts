@@ -1,4 +1,4 @@
-﻿export class Pessoa {
+﻿export interface Pessoa {
     pesId: number;
     pesEmail: string;
     pesSenha: string;
@@ -9,5 +9,4 @@
     pesTipoInclusao: string;
     pesDtCadastro: Date;
     pesDtAtualizacao: Date;
-    token?: string;
 }

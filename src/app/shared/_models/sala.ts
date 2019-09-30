@@ -1,14 +1,14 @@
 import { Pessoa } from './pessoa';
 import { Unidade } from './unidade';
 
-export class Sala {
+export interface Sala {
     salaId: number;
     salaNome: string;
     unidade: Unidade;
     salaLotacao: number;
     salaAtiva: boolean;
-    pessoa_inclusao: Pessoa;
+    pessoaInclusao: Pessoa;
     salaDtCadastro: Date;
-    pessoa_atualizacao: Pessoa;
+    pessoaAtualizacao: Pessoa;
     salaDtAtualizacao: Date;
 }

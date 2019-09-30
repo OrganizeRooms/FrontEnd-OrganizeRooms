@@ -1,11 +1,11 @@
 import { Pessoa } from './pessoa';
 
-export class Unidade {
+export interface Unidade {
     uniId: number;
     uniNome: string;
     uniAtiva: boolean;
-    pessoa_inclusao: Pessoa;
+    pessoaInclusao: Pessoa;
     uniDtCadastro: Date;
-    pessoa_atualizacao: Pessoa;
+    pessoaAtualizacao: Pessoa;
     uniDtAtualizacao: Date;
 }

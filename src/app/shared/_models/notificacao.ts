@@ -1,6 +1,6 @@
 import { Pessoa } from './pessoa';
 
-export class Notificacao {
+export interface Notificacao {
     notId: number;
     notTitulo: String;
     notDescricao: string;

@@ -3,7 +3,7 @@ import { Time } from '@angular/common';
 import { Sala } from './sala';
 import { Unidade } from './unidade';
 
-export class Agendamento {
+export interface Agendamento {
     ageId: number;
     ageAssunto: string;
     ageDescricao: string;
