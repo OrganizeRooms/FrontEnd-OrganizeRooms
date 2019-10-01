@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
 import { AuthenticationService } from '../../../shared/_services';
-import { Pessoa } from '../../../shared/_models';
+import { Pessoa, UsuarioDTO } from '../../../shared/_models';
 
 @Component({
     selector: 'app-header',
@@ -11,12 +11,13 @@ import { Pessoa } from '../../../shared/_models';
 })
 export class HeaderComponent implements OnInit {
     public pushRightClass: string;
-    currentPessoa: Pessoa;
-    
+    //currentPessoa: Pessoa;
+    currentPessoa: UsuarioDTO;
+
     constructor(public router: Router,
         private authenticationService: AuthenticationService) {
 
-        this.authenticationService.currentPessoa.subscribe(x => this.currentPessoa = x);
+        this.authenticationService.usuarioLogado.subscribe(x => this.currentPessoa = x);
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
@@ -48,7 +49,7 @@ export class HeaderComponent implements OnInit {
     }
 
     logout() {
-        this.authenticationService.logout();
+        this.authenticationService.noSuccessfulLogin();//DESLOGAR
         this.router.navigate(['/login']);
     }
 }

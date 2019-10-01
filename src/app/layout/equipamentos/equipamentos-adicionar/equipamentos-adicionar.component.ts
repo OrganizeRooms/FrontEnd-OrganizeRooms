@@ -15,9 +15,9 @@ import { ActivatedRoute } from '@angular/router';
 const moment = _moment;
 
 @Component({
-    selector: 'app-salas-adicionar',
-    templateUrl: './salas-adicionar.component.html',
-    styleUrls: ['./salas-adicionar.component.scss'],
+    selector: 'app-equipamentos-adicionar',
+    templateUrl: './equipamentos-adicionar.component.html',
+    styleUrls: ['./equipamentos-adicionar.component.scss'],
     animations: [routerTransition()],
     providers: [
         { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
@@ -25,19 +25,19 @@ const moment = _moment;
     ],
 })
 
-export class SalasAdicionarComponent implements OnInit {
+export class EquipamentosAdicionarComponent implements OnInit {
 
     salaSelecionada;
     formAddSala: FormGroup;
     salaDtCadastro = new FormControl(moment());
-    listUnidades: Unidade[];
+    listEquipamentos: Unidade[];
 
     constructor(
         private formBuilder: FormBuilder,
         private activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
-        this.carregarUnidades();
+        this.carregarEquipamentos();
 
         let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
         
@@ -47,8 +47,8 @@ export class SalasAdicionarComponent implements OnInit {
 
     }
 
-    carregarUnidades() {
-        this.listUnidades = [
+    carregarEquipamentos() {
+        this.listEquipamentos = [
             {
                 uniId: 1, uniNome: "São Paulo", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), pessoaInclusao: null /*new Pessoa*/, pessoaAtualizacao: null /*new Pessoa*/
             },

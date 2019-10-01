@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { routerTransition } from '../router.animations';
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../shared/_services';
+import { UsuarioDTO } from '../shared';
 
 @Component({
     selector: 'app-login',
@@ -18,52 +19,84 @@ export class LoginComponent implements OnInit {
     submitted = false;
     returnUrl: string;
     error = '';
+    @Input() logarDeslogar: boolean;
 
-    constructor(
+    creds: UsuarioDTO = {
+        id: '',
+        nome: '',
+        email: '',
+        perfil: '',
+        senha: '',
+        dsPerfil: '',
+        nomeContato: '',
+        telefone1: '',
+        telefone2: '',
+        telefoneFixo: '',
+        rg: '',
+        cpf: '',
+        rua: '',
+        numero: '',
+        complemento: '',
+        bairro: '',
+        cidade: '',
+        estado: '',
+        cep: '',
+        dataContrato: ''
+    };
+
+    constructor(private router: Router,
         private formBuilder: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
         private authenticationService: AuthenticationService
-    ) {
-        // redirect to home if already logged in
-        if (this.authenticationService.currentPessoaValue) {
-            this.router.navigate(['/']);
-        }
-    }
+    ) { }
 
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
-            pesEmail: ['', Validators.required],
-            pesSenha: ['', Validators.required]
+            pesEmail: [null],
+            pesSenha: [null]
         });
 
-        // get return url from route parameters or default to '/'
-        this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     }
 
-    // convenience getter for easy access to form fields
-    get f() { return this.loginForm.controls; }
-
     onSubmit() {
-        this.submitted = true;
+        this.creds.email = this.loginForm.value.pesEmail;
+        this.creds.senha = this.loginForm.value.pesSenha;
 
-        // stop here if form is invalid
-        if (this.loginForm.invalid) {
-            return;
-        }
+        this.authenticationService.authenticate(this.creds).subscribe(response => {
+            const aux = JSON.parse(response.body);
+            this.authenticationService.successfulLogin(aux);
+        }, error => {
+            this.authenticationService.noSuccessfulLogin();
+            this.showError();
+        });
+        console.log(this.logarDeslogar);
+    }
 
-        this.loading = true;
-        this.authenticationService.login(this.f.pesEmail.value, this.f.pesSenha.value)
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                    this.error = error;
-                    this.loading = false;
-                });
+    /*onSubmitRegistro() {
+        const userEmail = {
+            remetNome: this.formularioRegistro.value.remetNome,
+            remetEmail: this.formularioRegistro.value.remetEmail,
+            tipoEnvio: 1
+        };
 
+        this.enviarEmailService.EnviarEmail(userEmail).subscribe(ret => {
+            if (ret.data) {
+                alert('Email enviado com sucesso');
+            }
+        });
+    }*/
+
+    showError() {
+        alert('funcionou não');
+    }
+
+    deslogar() {
+        this.authenticationService.noSuccessfulLogin();
+        this.router.navigate(['/login']);
+    }
+
+    logar() {
+
+        this.router.navigate(['/home']);
     }
 
 }

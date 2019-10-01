@@ -15,9 +15,9 @@ import { ActivatedRoute } from '@angular/router';
 const moment = _moment;
 
 @Component({
-    selector: 'app-salas-adicionar',
-    templateUrl: './salas-adicionar.component.html',
-    styleUrls: ['./salas-adicionar.component.scss'],
+    selector: 'app-unidades-adicionar',
+    templateUrl: './unidades-adicionar.component.html',
+    styleUrls: ['./unidades-adicionar.component.scss'],
     animations: [routerTransition()],
     providers: [
         { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
@@ -25,7 +25,7 @@ const moment = _moment;
     ],
 })
 
-export class SalasAdicionarComponent implements OnInit {
+export class UnidadesAdicionarComponent implements OnInit {
 
     salaSelecionada;
     formAddSala: FormGroup;
