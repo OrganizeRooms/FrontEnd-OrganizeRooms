@@ -1,39 +1,51 @@
-﻿import { Injectable } from '@angular/core';
+﻿import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { environment } from '../../../environments/environment';
-import { Pessoa } from '../_models';
+import { API_CONFIG } from '../../shared/_config';
+import { Pessoa, LocalUser, UsuarioDTO } from '../_models';
+import { StorageService } from './storage.service';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
-    private currentPessoaSubject: BehaviorSubject<Pessoa>;
-    public currentPessoa: Observable<Pessoa>;
 
-    constructor(private http: HttpClient) {
-        this.currentPessoaSubject = new BehaviorSubject<Pessoa>(JSON.parse(localStorage.getItem('currentPessoa')));
-        this.currentPessoa = this.currentPessoaSubject.asObservable();
+    usuarioLogado: EventEmitter<Boolean> = new EventEmitter();
+
+
+    constructor(private http: HttpClient,
+      private storageService: StorageService,
+      private router: Router) { }
+  
+    authenticate(creds: UsuarioDTO) {
+      return this.http.post(
+        `${API_CONFIG.baseUrl}/login`,
+          creds, {
+          observe: 'response',
+          responseType: 'text'
+        }
+      );
     }
-
-    public get currentPessoaValue(): Pessoa {
-       return this.currentPessoaSubject.value;
+  
+    successfulLogin(ret) {
+      const user: LocalUser = {
+        token: ret.data.token,
+        email: '',
+        usuario: ret.usuario
+      };
+      this.storageService.setLocalUser(user);
+      this.usuarioLogado.emit(true);
+      this.router.navigate(['/home']);
     }
-
-    login(pesEmail: string, pesSenha: string) {
-        return this.http.post<any>(`${environment.apiUrl}/pessoas/authenticate`, { pesEmail, pesSenha })
-            .pipe(map(pessoa => {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('currentPessoa', JSON.stringify(pessoa));
-                this.currentPessoaSubject.next(pessoa);
-
-                return pessoa;
-            }));
-    }
-
-    logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentPessoa');
-        this.currentPessoaSubject.next(null);
+  
+    noSuccessfulLogin() {
+      const user: LocalUser = {
+        token: '',
+        email: '',
+        usuario: ''
+      };
+      this.storageService.setLocalUser(null);
+      this.usuarioLogado.emit(false);
     }
 }

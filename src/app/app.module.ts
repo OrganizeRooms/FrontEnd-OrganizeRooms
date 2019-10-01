@@ -11,6 +11,10 @@ import { JwtInterceptor, ErrorInterceptor } from './shared/guard';
 // used to create fake backend
 import { fakeBackendProvider } from './shared/guard';
 
+
+// Services
+import { StorageService, AuthenticationService } from './shared/_services';
+
 @NgModule({
     imports: [
         CommonModule,
@@ -23,11 +27,13 @@ import { fakeBackendProvider } from './shared/guard';
         AppComponent,
     ],
     providers: [
+        StorageService,
+        AuthenticationService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+     //   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
 
         // provider used to create fake backend
-        fakeBackendProvider
+       // fakeBackendProvider
     ],
     bootstrap: [
         AppComponent

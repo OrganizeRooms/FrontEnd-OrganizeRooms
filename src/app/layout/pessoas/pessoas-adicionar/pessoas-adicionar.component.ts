@@ -25,6 +25,8 @@ const moment = _moment;
 
 export class PessoasAdicionarComponent implements OnInit {
 
+    pessoa;
+
     date = new FormControl(moment());
     listUnidades: any[];
 

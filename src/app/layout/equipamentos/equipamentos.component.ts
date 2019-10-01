@@ -18,7 +18,7 @@ export class EquipamentosComponent implements OnInit {
     listEquipamentos: any[];
     //listEquipamentos: Equipamento[];
 
-    displayedColumns: string[] = ['codigo', 'nome', 'unidade'];
+    displayedColumns: string[] = ['equiId', 'equiNome', 'unidade', '#'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -39,21 +39,21 @@ export class EquipamentosComponent implements OnInit {
     carregarEquipamentos() {
         //this.listEquipamentos = this.equipamentoService.buscarTodos();
         this.listEquipamentos = [
-            { codigo: 50, nome: 'Notebook Acer AMD', unidade: 'Blumenau', },
-            { codigo: 51, nome: 'Notebook DELL i3', unidade: 'São Paulo', },
-            { codigo: 52, nome: 'Notebook acer AMD', unidade: 'Rio de Janeiro', },
-            { codigo: 53, nome: 'Mochila Grande', unidade: 'Rio de Janeiro', },
-            { codigo: 54, nome: 'Mochila Média', unidade: 'Blumenau', },
-            { codigo: 55, nome: 'Notebook', unidade: 'Blumenau', },
-            { codigo: 56, nome: 'Projeto aH23', unidade: 'São Paulo', },
-            { codigo: 57, nome: 'Projeto aH87', unidade: 'Rio de Janeiro', },
-            { codigo: 58, nome: 'Notebook DELL i3', unidade: 'Blumenau', },
-            { codigo: 59, nome: 'Notebook', unidade: 'Rio de Janeiro', },
-            { codigo: 60, nome: 'Notebook', unidade: 'São Paulo', },
-            { codigo: 61, nome: 'Notebook', unidade: 'Rio de Janeiro', },
-            { codigo: 62, nome: 'Notebook', unidade: 'Rio de Janeiro', },
-            { codigo: 63, nome: 'Notebook DELL i5', unidade: 'São Paulo', },
-            { codigo: 64, nome: 'Projeto 54', unidade: 'Rio de Janeiro', },
+            { equiId: 50, equiNome: 'Notebook Acer AMD', unidade: 'Blumenau', },
+            { equiId: 51, equiNome: 'Notebook DELL i3', unidade: 'São Paulo', },
+            { equiId: 52, equiNome: 'Notebook acer AMD', unidade: 'Rio de Janeiro', },
+            { equiId: 53, equiNome: 'Mochila Grande', unidade: 'Rio de Janeiro', },
+            { equiId: 54, equiNome: 'Mochila Média', unidade: 'Blumenau', },
+            { equiId: 55, equiNome: 'Notebook', unidade: 'Blumenau', },
+            { equiId: 56, equiNome: 'Projeto aH23', unidade: 'São Paulo', },
+            { equiId: 57, equiNome: 'Projeto aH87', unidade: 'Rio de Janeiro', },
+            { equiId: 58, equiNome: 'Notebook DELL i3', unidade: 'Blumenau', },
+            { equiId: 59, equiNome: 'Notebook', unidade: 'Rio de Janeiro', },
+            { equiId: 60, equiNome: 'Notebook', unidade: 'São Paulo', },
+            { equiId: 61, equiNome: 'Notebook', unidade: 'Rio de Janeiro', },
+            { equiId: 62, equiNome: 'Notebook', unidade: 'Rio de Janeiro', },
+            { equiId: 63, equiNome: 'Notebook DELL i5', unidade: 'São Paulo', },
+            { equiId: 64, equiNome: 'Projeto 54', unidade: 'Rio de Janeiro', },
         ];
     }
 

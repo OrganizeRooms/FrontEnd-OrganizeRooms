@@ -18,14 +18,14 @@ export class SalasComponent implements OnInit {
     listSalas: any[];
     //listSalas: Sala[];
 
-    displayedColumns: string[] = ['nome', 'unidade', 'lotacaoMax', 'agendamentos'];
+    displayedColumns: string[] = ['salaNome', 'unidade', 'salaLotacao', '#'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(
-        private salaService: SalaService
+        private salaService: SalaService,
     ) {
     }
 
@@ -41,67 +41,55 @@ export class SalasComponent implements OnInit {
         //this.listSalas = this.salaService.buscarTodos();
         this.listSalas = [
             {
-                codigo: 1005, nome: 'Sala de Reunião 3 Equipe Alpha', unidade: 'Rio de Janeiro', lotacaoMax: 20,
+                salaId: 1005, salaNome: 'Sala de Reunião 3 Equipe Alpha', salaLotacao: 20, salaAtiva: true, salaDtCadastro: new Date("27/09/2019"),
+                unidade: {
+                    uniId: 3,
+                    uniNome: 'Rio de Janeiro',
+                    uniAtiva: true,
+                    pessoaInclusao: '',
+                    uniDtCadastro: new Date("27/09/2019"),
+                    pessoaAtualizacao: '',
+                    uniDtAtualizacao: new Date("27/09/2019"),
+                },
                 agendamentos: {
-                    código: 1, assunto: 'Reunião Kanban', descricao: 'Conversar sobre Kanban', responsavel: 'Lucas Jansen',
+                    salaId: 1, assunto: 'Reunião Kanban', descricao: 'Conversar sobre Kanban', responsavel: 'Lucas Jansen',
                     status: 'Em Andamento', data: '20/10/2019', hrInicial: '08:00', hrFinal: '08:30'
                 }
             },
             {
-                código: 1005, nome: 'Sala de Reunião 4', unidade: 'Rio de Janeiro', lotacaoMax: 20,
+                salaId: 1005, salaNome: 'Sala de Reunião 4', salaLotacao: 20, salaAtiva: false, salaDtCadastro: new Date("27/09/2019"),
+                unidade: {
+                    uniId: 2,
+                    uniNome: 'Blumenau',
+                    pessoaInclusao: '',
+                    uniDtCadastro: new Date("27/09/2019"),
+                    pessoaAtualizacao: '',
+                    uniDtAtualizacao: new Date("27/09/2019"),
+                },
                 agendamentos: {
-                    código: 1, assunto: 'Reunião Kanban Equipe Beta', descricao: 'Montar Kanban', responsavel: 'Éder Jean Dias',
+                    salaId: 1, assunto: 'Reunião Kanban Equipe Beta', descricao: 'Montar Kanban', responsavel: 'Éder Jean Dias',
                     status: 'Agendado', data: '20/10/2019', hrInicial: '08:35', hrFinal: '09:15'
                 }
             }, {
-                código: 1005, nome: 'Sala Comercial', unidade: 'Blumenau', lotacaoMax: 10,
+                salaId: 1005, salaNome: 'Sala Comercial', salaLotacao: 10, salaAtiva: true, salaDtCadastro: new Date("27/09/2019"),
+                unidade: {
+                    uniId: 1,
+                    uniNome: 'São Paulo',
+                    pessoaInclusao: '',
+                    uniDtCadastro: new Date("27/09/2019"),
+                    pessoaAtualizacao: '',
+                    uniDtAtualizacao: new Date("27/09/2019"),
+                },
                 agendamentos: {
-                    código: 1, assunto: 'Reunião Ajustes', descricao: 'Ajustes que serao feitos', responsavel: 'Felipe Haag',
+                    salaId: 1, assunto: 'Reunião Ajustes', descricao: 'Ajustes que serao feitos', responsavel: 'Felipe Haag',
                     status: 'Agendado', data: '20/11/2019', hrInicial: '09:30', hrFinal: '10:30'
                 }
-            }, {
-                código: 1005, nome: 'Reuniões com Fornecedores SA-02', unidade: 'São Paulo', lotacaoMax: 22,
-                agendamentos: {
-                    código: 1, assunto: 'Novos valores', descricao: 'Discutir sobre novos valores', responsavel: 'Patricio Souza',
-                    status: 'Finalizado', data: '12/08/2019', hrInicial: '08:00', hrFinal: '08:30'
-                }
-            },
-            {
-                código: 1005, nome: 'Reuniões com Fornecedores SA-02', unidade: 'São Paulo', lotacaoMax: 22,
-                agendamentos: {
-                    código: 1, assunto: 'Novos valores', descricao: 'Discutir sobre novos valores', responsavel: 'Patricio Souza',
-                    status: 'Finalizado', data: '12/08/2019', hrInicial: '08:00', hrFinal: '08:30'
-                }
-            },
-            {
-                código: 1005, nome: 'Reuniões com Fornecedores SA-02', unidade: 'São Paulo', lotacaoMax: 22,
-                agendamentos: {
-                    código: 1, assunto: 'Novos valores', descricao: 'Discutir sobre novos valores', responsavel: 'Patricio Souza',
-                    status: 'Finalizado', data: '12/08/2019', hrInicial: '08:00', hrFinal: '08:30'
-                }
-            },
-            {
-                código: 1005, nome: 'Reuniões com Fornecedores SA-02', unidade: 'São Paulo', lotacaoMax: 22,
-                agendamentos: {
-                    código: 1, assunto: 'Novos valores', descricao: 'Discutir sobre novos valores', responsavel: 'Patricio Souza',
-                    status: 'Finalizado', data: '12/08/2019', hrInicial: '08:00', hrFinal: '08:30'
-                }
-            },
-            {
-                código: 1005, nome: 'Reuniões com Fornecedores SA-02', unidade: 'São Paulo', lotacaoMax: 22,
-                agendamentos: {
-                    código: 1, assunto: 'Novos valores', descricao: 'Discutir sobre novos valores', responsavel: 'Patricio Souza',
-                    status: 'Finalizado', data: '12/08/2019', hrInicial: '08:00', hrFinal: '08:30'
-                }
-            },
-            {
-                código: 1005, nome: 'Reuniões com Fornecedores SA-02', unidade: 'São Paulo', lotacaoMax: 22,
-                agendamentos: {
-                    código: 1, assunto: 'Novos valores', descricao: 'Discutir sobre novos valores', responsavel: 'Patricio Souza',
-                    status: 'Finalizado', data: '12/08/2019', hrInicial: '08:00', hrFinal: '08:30'
-                }
-            },
+            }
         ];
+    }
+
+    salaSelecionada(rec) {
+
     }
 
     configurarPaginador() {

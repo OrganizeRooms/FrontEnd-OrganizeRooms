@@ -1,0 +1,57 @@
+<div>
+    <app-page-header [heading]="'Equipamentos - Adicionar Equipamento'"></app-page-header>
+
+    <br />
+    <div class="row justify-content-md-center">
+        <div class="col-10 col-sm-8 col-md-8 col-lg-7">
+            <form [formGroup]="formAddSala">
+                <div class="row">
+                    <div class="col-2 col-sm-3 col-md-4 col-lg-2">
+                        <span>Código</span>
+                        <input type="text" class="form-control" formControlName="salaId">
+                    </div>
+                    <div class="col-2 col-sm-4 col-md-4 col-lg-3">
+                        <span>Data Cadastro</span>
+                        <input type="text" class="form-control" formControlName="salaDtCadastro" disabled="true">
+                    </div>
+                    <div id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
+                        <mat-checkbox formControlName="salaAtiva" checked="formAddSala.salaAtiva">Ativa?</mat-checkbox>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-8 col-md-7 col-lg-7">
+                        <span>Nome</span>
+                        <input type="text" class="form-control" formControlName="salaNome" autofocus required>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-7 col-sm-4 col-md-4 col-lg-4">
+                        <span>Unidade</span>
+                        <select class="custom-select">
+                            <option value="0">Selecione</option>
+                            <option *ngFor="let uni of listUnidades" value="{{uni.uniId}}">{{uni.uniNome}}</option>
+                        </select>
+                    </div>
+                    <div class="col-5 col-sm-4 col-md-4 col-lg-3">
+                        <span>Lotação</span>
+                        <input type="text" class="form-control" formControlName="salaLotacao">
+                    </div>
+                </div>
+                <br>
+
+                <div class="row ml-auto">
+                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn" [routerLink]="['/salas']"
+                        [routerLinkActive]="['router-link-active']">
+                        Voltar
+                    </a>
+                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn" (click)="adicionarSala()">
+                        Adicionar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
