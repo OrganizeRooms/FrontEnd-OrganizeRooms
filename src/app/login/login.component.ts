@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
     }
 
     logar() {
-
+        this.authenticationService.fakelogin();
         this.router.navigate(['/home']);
     }
 
