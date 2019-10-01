@@ -48,4 +48,15 @@ export class AuthenticationService {
       this.storageService.setLocalUser(null);
       this.usuarioLogado.emit(false);
     }
+
+
+    fakelogin(){
+      const user: LocalUser = {
+        token: '234',
+        email: 'admin@admin.com',
+        usuario: 'Administrador'
+      };
+      this.storageService.setLocalUser(user);
+      this.usuarioLogado.emit(true);
+    }
 }
