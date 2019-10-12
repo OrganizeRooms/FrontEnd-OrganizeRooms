@@ -5,7 +5,7 @@
             <span>Home</span>
         </a>
         <a [routerLink]="['/reservar']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
+            <i class="fa fa-fw fa-calendar-check-o"></i>&nbsp;
             <span>Reserva de Sala</span>
         </a>
         <a [routerLink]="['/pessoas']" [routerLinkActive]="['router-link-active']" class="list-group-item">
@@ -13,15 +13,15 @@
             <span>Pessoas</span>
         </a>
         <a [routerLink]="['/salas']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
+            <i class="fa fa-fw fa-window-restore"></i>
             <span>Salas</span>
         </a>
         <a [routerLink]="['/equipamentos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
+            <i class="fa fa-fw fa-desktop"></i>&nbsp;
             <span>Equipamentos</span>
         </a>
         <a [routerLink]="['/unidades']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-table"></i>&nbsp;
+            <i class="fa fa-fw fa-map-marker"></i>&nbsp;
             <span>Unidades</span>
         </a>
         <div class="header-fields">
@@ -30,7 +30,8 @@
             </a>-->
             <div class="nested-menu">
                 <a class="list-group-item" (click)="addExpandClass('profile')">
-                    <span><i class="fa fa-user"></i>&nbsp; Lucas Jansen</span>
+                    <!--<span><i class="fa fa-user"></i>&nbsp; Lucas Jansen</span>-->
+                    <span><i class="fa fa-user"></i>&nbsp; {{currentPessoa.pesNome}}</span>
                 </a>
                 <li class="nested" [class.expand]="showMenu === 'profile'">
                     <ul class="submenu">

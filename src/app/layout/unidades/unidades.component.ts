@@ -4,8 +4,9 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { UnidadeService } from '../../shared/_services';
-import { Sala } from '../../shared';
+import { UnidadeService, OrganizeRoomsService } from '../../shared/_services';
+import { Sala, Unidade } from '../../shared';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-unidades',
@@ -15,10 +16,9 @@ import { Sala } from '../../shared';
 })
 export class UnidadesComponent implements OnInit {
 
-    listUnidades: any[];
-    //listUnidades: Sala[];
+    listUnidades;
 
-    displayedColumns: string[] = ['uniId', 'uniNome', 'uniAtiva', '#'];
+    displayedColumns: string[] = ['uniId', 'uniNome', 'uniAtiva', 'detalhes'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -26,48 +26,24 @@ export class UnidadesComponent implements OnInit {
 
     constructor(
         private unidadeService: UnidadeService,
-    ) {
-    }
+        private organizeRoomsService: OrganizeRoomsService
+    ) { }
 
     ngOnInit() {
         this.carregarUnidades();
         this.configurarPaginador();
-        this.tableData.data = this.listUnidades;
-        this.tableData.paginator = this.paginator;
-        this.tableData.sort = this.sort;
     }
 
     carregarUnidades() {
-        //this.listUnidades = this.unidadeService.buscarTodos();
-        this.listUnidades = [
-            {
-                uniId: 1,
-                uniNome: 'Rio de Janeiro',
-                uniAtiva: true,
-                pessoaInclusao: '',
-                uniDtCadastro: new Date("27/09/2019"),
-                pessoaAtualizacao: '',
-                uniDtAtualizacao: new Date("27/09/2019"),
-            },
-            {
-                uniId: 2,
-                uniNome: 'Blumenau',
-                uniAtiva: true,
-                pessoaInclusao: '',
-                uniDtCadastro: new Date("27/09/2019"),
-                pessoaAtualizacao: '',
-                uniDtAtualizacao: new Date("27/09/2019"),
-            },
-            {
-                uniId: 3,
-                uniNome: 'São Paulo',
-                uniAtiva: true,
-                pessoaInclusao: '',
-                uniDtCadastro: new Date("27/09/2019"),
-                pessoaAtualizacao: '',
-                uniDtAtualizacao: new Date("27/09/2019"),
-            },
-        ];
+        this.unidadeService.buscarTodasUnidades().subscribe(ret => {
+            this.tableData.data = ret.data;
+            this.tableData.paginator = this.paginator;
+            this.tableData.sort = this.sort;
+        });
+    }
+
+    editarUnidade(registro) {
+        this.organizeRoomsService.setValue(registro);
     }
 
     aplicarFiltro(valor: string) {

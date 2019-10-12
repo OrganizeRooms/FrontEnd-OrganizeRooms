@@ -18,7 +18,7 @@ export class SalasComponent implements OnInit {
     listSalas: any[];
     //listSalas: Sala[];
 
-    displayedColumns: string[] = ['salaNome', 'unidade', 'salaLotacao', '#'];
+    displayedColumns: string[] = ['salaNome', 'unidade', 'salaLotacao', 'detalhes'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

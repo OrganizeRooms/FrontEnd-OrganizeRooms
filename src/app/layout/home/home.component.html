@@ -1,20 +1,21 @@
 <div [@routerTransition]>
 
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-center">
         <div class="col-11 col-xl-3 col-lg-6">
             <h2 class="text-center">Agendamentos</h2>
         </div>
         <div class="col-11 col-xl-3 col-lg-6">
-            <mat-form-field>
-                <input class="text-center" matInput [matDatepicker]="datePicker" [formControl]="date" > <!--(dateChange)="filtro(date)" >-->
-                <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-                <mat-datepicker #datePicker></mat-datepicker>
-            </mat-form-field>
+            <div class="input-group datepicker-home">
+                <input class="form-control text-center" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="model"
+                    ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                </div>
+            </div>
         </div>
     </div>
-
     <hr>
-    <div class="row">   
+    <div class="row">
         <div *ngFor="let agends of listAgendamentos" class="col-12 col-sm-6 col-lg-4 col-xl-3">
 
             <div class="card-agendamento">
@@ -41,7 +42,8 @@
                 </div>
                 <hr class="card-divider">
                 <div class="row justify-content-md-center">
-                    <button class="btn" (click)="openDialog(agends)">Detalhes</button>
+                    <!--- <button class="btn btn-padrao" (click)="openDialog(agends)">Detalhes</button>-->
+                    <button class="btn btn-padrao" (click)="abrirDetalhes(agends, modalDetalhes)">Detalhes</button>
                 </div>
             </div>
 

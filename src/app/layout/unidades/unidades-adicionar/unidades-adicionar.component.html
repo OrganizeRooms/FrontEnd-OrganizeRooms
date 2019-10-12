@@ -4,54 +4,54 @@
     <br />
     <div class="row justify-content-md-center">
         <div class="col-10 col-sm-8 col-md-8 col-lg-7">
-            <form [formGroup]="formAddSala">
+            <form [formGroup]="formAddUnidade">
                 <div class="row">
                     <div class="col-2 col-sm-3 col-md-4 col-lg-2">
                         <span>Código</span>
-                        <input type="text" class="form-control" formControlName="salaId">
+                        <input type="text" class="form-control" formControlName="uniId">
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <span>Data Cadastro</span>
-                        <input type="text" class="form-control" formControlName="salaDtCadastro" disabled="true">
+                        <input type="text" class="form-control" formControlName="uniDtCadastro" disabled="true">
                     </div>
                     <div id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
-                        <mat-checkbox formControlName="salaAtiva" checked="formAddSala.salaAtiva">Ativa?</mat-checkbox>
+                        <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva">Ativa?
+                        </mat-checkbox>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12 col-sm-8 col-md-7 col-lg-7">
                         <span>Nome</span>
-                        <input type="text" class="form-control" formControlName="salaNome" autofocus required>
-                    </div>
-                </div>
-                <br>
-
-                <div class="row">
-                    <div class="col-7 col-sm-4 col-md-4 col-lg-4">
-                        <span>Unidade</span>
-                        <select class="custom-select">
-                            <option value="0">Selecione</option>
-                            <option *ngFor="let uni of listUnidades" value="{{uni.uniId}}">{{uni.uniNome}}</option>
-                        </select>
-                    </div>
-                    <div class="col-5 col-sm-4 col-md-4 col-lg-3">
-                        <span>Lotação</span>
-                        <input type="text" class="form-control" formControlName="salaLotacao">
+                        <input type="text" class="form-control" formControlName="uniNome" autofocus required>
                     </div>
                 </div>
                 <br>
 
                 <div class="row ml-auto">
-                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn" [routerLink]="['/salas']"
+                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/unidades']"
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn" (click)="adicionarSala()">
+                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarUnidade()">
                         Adicionar
                     </a>
                 </div>
+                <div class="row text-muted">
+                    <span>Última Atualização por <span class="text-bolder">{{pesAtualizacao | uppercase}}</span>
+                        no dia <span class="text-bolder">{{dtAtualizacao | date: "dd/MM/yyyy"}}</span></span>
+                </div>
             </form>
+
         </div>
+
     </div>
+    <!--<ng-template #alertModal let-modal>
+        <div class="alert alert-success" role="alert">
+            Unidade Adicionada com Sucesso!
+            <a class="close" aria-label="Close" (click)="modal.dismiss()">
+                <span aria-hidden="true">&times;</span>
+            </a>
+        </div>
+    </ng-template>-->
 </div>

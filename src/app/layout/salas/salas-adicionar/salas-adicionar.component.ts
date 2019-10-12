@@ -41,7 +41,6 @@ export class SalasAdicionarComponent implements OnInit {
 
         let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
         
-        console.log('1 - ' + this.salaSelecionada)
 
         this.criarFormularioVazio();
 
@@ -50,13 +49,13 @@ export class SalasAdicionarComponent implements OnInit {
     carregarUnidades() {
         this.listUnidades = [
             {
-                uniId: 1, uniNome: "São Paulo", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), pessoaInclusao: null /*new Pessoa*/, pessoaAtualizacao: null /*new Pessoa*/
+                uniId: 1, uniNome: "São Paulo", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
             },
             {
-                uniId: 2, uniNome: "Blumenau", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), pessoaInclusao: null /*new Pessoa*/, pessoaAtualizacao: null /*new Pessoa*/
+                uniId: 2, uniNome: "Blumenau", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
             },
             {
-                uniId: 3, uniNome: "Rio de Janeiro", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), pessoaInclusao: null /*new Pessoa*/, pessoaAtualizacao: null /*new Pessoa*/
+                uniId: 3, uniNome: "Rio de Janeiro", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
             }
         ]
     }
@@ -71,7 +70,6 @@ export class SalasAdicionarComponent implements OnInit {
     }
 
     criarFormulario(sala) {
-        console.log(sala)
         /*this.formAddSala = this.formBuilder.group({
             salaId: [this.sala.ageId],
             salaNome: [this.sala.salaNome], //, Validators.compose([Validators.required])],

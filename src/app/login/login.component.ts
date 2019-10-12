@@ -5,7 +5,7 @@ import { routerTransition } from '../router.animations';
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../shared/_services';
-import { UsuarioDTO } from '../shared';
+import { Pessoa } from '../shared';
 
 @Component({
     selector: 'app-login',
@@ -19,29 +19,22 @@ export class LoginComponent implements OnInit {
     submitted = false;
     returnUrl: string;
     error = '';
-    @Input() logarDeslogar: boolean;
+    @Input() pessoaLogada: boolean;
 
-    creds: UsuarioDTO = {
-        id: '',
-        nome: '',
-        email: '',
-        perfil: '',
-        senha: '',
-        dsPerfil: '',
-        nomeContato: '',
-        telefone1: '',
-        telefone2: '',
-        telefoneFixo: '',
-        rg: '',
-        cpf: '',
-        rua: '',
-        numero: '',
-        complemento: '',
-        bairro: '',
-        cidade: '',
-        estado: '',
-        cep: '',
-        dataContrato: ''
+    creds: Pessoa = {
+        pesId: 0,
+        pesEmail: '',
+        pesSenha: '',
+        pesNome: '',
+        pesPermissao: '',
+        pesUnidade: null,
+        pesDDD: '',
+        pesTelefone: '',
+        pesTipoInclusao: '',
+        pesCadastro: null,
+        pesDtCadastro: null,
+        pesAtualizacao: null,
+        pesDtAtualizacao: null,
     };
 
     constructor(private router: Router,
@@ -58,8 +51,8 @@ export class LoginComponent implements OnInit {
     }
 
     onSubmit() {
-        this.creds.email = this.loginForm.value.pesEmail;
-        this.creds.senha = this.loginForm.value.pesSenha;
+        this.creds.pesEmail = this.loginForm.value.pesEmail;
+        this.creds.pesSenha = this.loginForm.value.pesSenha;
 
         this.authenticationService.authenticate(this.creds).subscribe(response => {
             const aux = JSON.parse(response.body);
@@ -68,7 +61,7 @@ export class LoginComponent implements OnInit {
             this.authenticationService.noSuccessfulLogin();
             this.showError();
         });
-        console.log(this.logarDeslogar);
+        console.log(this.pessoaLogada);
     }
 
     /*onSubmitRegistro() {

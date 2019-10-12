@@ -2,13 +2,23 @@
 import { HttpClient } from '@angular/common/http';
 
 import { API_CONFIG } from '../../shared/_config';
-import { Unidade } from '../_models';
+import { Response, Unidade } from '../_models';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UnidadeService {
     constructor(private http: HttpClient) { }
 
-    buscarTodos() {
-        return this.http.get<Unidade[]>(`${API_CONFIG.baseUrl}/unidades`);
+    buscarTodasUnidades(): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/unidades`);
     }
+
+    buscarUnidadePorId(id: String): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/unidades/` + id);
+    }
+
+    adicionarAtualizarUnidade(unidade: Unidade): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/unidades`, unidade);
+    }
+
 }

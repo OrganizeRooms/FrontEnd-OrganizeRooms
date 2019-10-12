@@ -18,7 +18,7 @@ export class EquipamentosComponent implements OnInit {
     listEquipamentos: any[];
     //listEquipamentos: Equipamento[];
 
-    displayedColumns: string[] = ['equiId', 'equiNome', 'unidade', '#'];
+    displayedColumns: string[] = ['equiId', 'equiNome', 'unidade', 'detalhes'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

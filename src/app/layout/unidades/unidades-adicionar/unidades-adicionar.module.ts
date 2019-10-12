@@ -7,6 +7,8 @@ import { PageHeaderModule } from '../../../shared';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 // Date Picker
 import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerModule } from '@angular/material';
 
@@ -15,7 +17,6 @@ import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerMod
         CommonModule,
         UnidadesAdicionarRoutingModule,
         PageHeaderModule,
-        MatDatepickerModule,
         MatFormFieldModule,
         MatInputModule,
         MatCheckboxModule,
@@ -24,6 +25,9 @@ import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerMod
     ],
     declarations: [
         UnidadesAdicionarComponent
+    ],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
     ]
 })
 export class UnidadesAdicionarModule { }

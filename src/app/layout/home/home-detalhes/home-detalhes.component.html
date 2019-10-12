@@ -1,51 +1,63 @@
-<span mat-dialog-title class="text-center">
-    {{data.sala}} &nbsp; <span class="color-blue">{{data.ageData | date: 'dd/MM/yyyy'}}</span>
-    <hr class="card-divider">
-</span>
-<mat-dialog-content>
-    <div class="page-text">
-        <div class="row">
-            <div class="col-12 col-lg-2">
-                <span class="text-header">Unidade:</span>
-            </div>
-            <div class="col-12 col-lg-10 text-agendamento">
-                {{data.unidade}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-lg-2">
-                <span class="text-header">Responsável:</span>
-            </div>
-            <div class="col-12 col-lg-10 text-agendamento">
-                {{data.pessoa_responsavel}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-lg-2">
-                <span class="text-header">Período:</span>
-            </div>
-            <div class="col-12 col-lg-10 text-agendamento">
-                {{data.ageHoraInicio}} <span class="text-header">às </span>{{data.ageHoraFim}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-lg-2">
-                <span class="text-header">Assunto:</span>
-            </div>
-            <div class="col-12 col-lg-10 text-agendamento">
-                {{data.ageAssunto}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-lg-12">
-                <span class="text-header">Descrição:</span>
-            </div>
-        </div>
-        <div class="row justify-content-md-center">
-            <div class="col-11 col-lg-11 text-area">
-                {{data.ageDescricao}}
-            </div>
-        </div>
-        <button class="btn" (click)="close()">Fechar</button>
+<!--- Modal  -->
+<ng-template #modalDetalhes let-modal>
+    <div class="modal-header">
+        <span class="text-center">
+            {{agendamentoSelecionado.sala}} &nbsp;
+            <span class="color-blue">
+                {{agendamentoSelecionado.ageData | date: 'dd/MM/yyyy'}}
+            </span>
+        </span>
+        <a class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </a>
     </div>
-</mat-dialog-content>
+
+    <div class="modal-body">
+        <div class="page-text">
+            <div class="row">
+                <div class="col-12 col-lg-2">
+                    <span class="text-header">Unidade:</span>
+                </div>
+                <div class="col-12 col-lg-10 text-agendamento">
+                    {{agendamentoSelecionado.unidade}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-2">
+                    <span class="text-header">Responsável:</span>
+                </div>
+                <div class="col-12 col-lg-10 text-agendamento">
+                    {{agendamentoSelecionado.pessoa_responsavel}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-2">
+                    <span class="text-header">Período:</span>
+                </div>
+                <div class="col-12 col-lg-10 text-agendamento">
+                    {{agendamentoSelecionado.ageHoraInicio}} <span class="text-header">às
+                    </span>{{agendamentoSelecionado.ageHoraFim}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-2">
+                    <span class="text-header">Assunto:</span>
+                </div>
+                <div class="col-12 col-lg-10 text-agendamento">
+                    {{agendamentoSelecionado.ageAssunto}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <span class="text-header">Descrição:</span>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col-11 col-lg-11 text-area">
+                    {{agendamentoSelecionado.ageDescricao}}
+                </div>
+            </div>
+            <button class="btn btn-padrao" (click)="modal.dismiss()">Fechar</button>
+        </div>
+    </div>
+</ng-template>

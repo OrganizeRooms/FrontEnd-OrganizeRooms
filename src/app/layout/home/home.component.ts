@@ -2,22 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
+import { Agendamento } from 'src/app/shared';
+
 // Dialog
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { HomeDetalhesComponent } from './home-detalhes/home-detalhes.component';
-
 // Date Picker
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MY_FORMATS } from '../../shared/utils/date-formats'
-
-import * as _moment from 'moment';
-import 'moment/locale/pt-br';
-
-import { default as _rollupMoment } from 'moment';
-import { Agendamento } from 'src/app/shared';
-
-const moment = _moment;
+import { NgbDateStruct, NgbDatepickerI18n, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { I18n, CustomDatepickerI18n } from 'src/app/shared/utils';
+import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
     selector: 'app-home',
@@ -25,21 +18,20 @@ const moment = _moment;
     styleUrls: ['./home.component.scss'],
     animations: [routerTransition()],
     providers: [
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        I18n, { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n } // define custom NgbDatepickerI18n provider
     ],
 })
 export class HomeComponent implements OnInit {
 
-    date = new FormControl(moment());
     // listAgendamentos: Agendamento;
     listAgendamentos;
- //   listAgendamentosFiltrado;
     DetalhesAgendamento;
-
+    model: NgbDateStruct;
+    agendamentoSelecionado;
 
     constructor(
-        private dialog: MatDialog) {
+        private dialog: MatDialog,
+        private modal: NgbModal) {
         /*this.alerts.push(
             {
                 id: 1,
@@ -54,7 +46,6 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         this.carregarAgendamentos();
-      //  moment.locale('pt-BR');
     }
 
     carregarAgendamentos() {
@@ -146,6 +137,19 @@ export class HomeComponent implements OnInit {
         };
 
         this.dialog.open(HomeDetalhesComponent, dialogConfig);
+    }
+
+
+    // this.open(content);
+
+    abrirDetalhes(agend, modalDetalhes){
+        this.agendamentoSelecionado = agend
+
+        this.abrirModal(modalDetalhes);
+    }
+
+    abrirModal(modalDetalhes) {
+        this.modal.open(modalDetalhes)
     }
 
 }
