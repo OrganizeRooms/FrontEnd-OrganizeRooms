@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Unidade, Pessoa, UnidadeService, STORAGE_KEYS, OrganizeRoomsService, StorageService } from 'src/app/shared';
+import { Unidade, Pessoa, UnidadeService, OrganizeRoomsService, StorageService } from 'src/app/shared';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -15,12 +15,13 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 
 export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
+    labelPosition = 'before';
 
     selUnidade;
     formAddUnidade: FormGroup;
 
-    dtAtualizacao;
-    pesAtualizacao;
+    uniDtAtualizacao;
+    uniPesAtualizacao;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -31,12 +32,12 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.selUnidade = this.organizeRoomsService.getValue()
-        console.log(this.selUnidade)
-        if (this.selUnidade != null) {
-            this.pesAtualizacao = this.selUnidade.uniPesAtualizacao.pesNome;
-            this.dtAtualizacao = this.selUnidade.uniDtAtualizacao
+
+        if (this.selUnidade != null && this.selUnidade.uniPesAtualizacao != null) {
+            this.uniPesAtualizacao = this.selUnidade.uniPesAtualizacao.pesNome;
+            this.uniDtAtualizacao = this.selUnidade.uniDtAtualizacao
         }
-        
+
         this.criarFormulario();
     }
 
@@ -85,12 +86,12 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
         };
 
         this.unidadeService.adicionarAtualizarUnidade(unidade).subscribe(ret => {
-            if(ret.data != null){
-                alert('Unidade '+ret.data.uniNome+' Adicionada com Sucesso!');
+            if (ret.data != null) {
+                alert('Unidade ' + ret.data.uniNome + ' Adicionada com Sucesso!');
             }
         });
 
-       
+
         // this.open(content);
     }
 

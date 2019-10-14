@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit {
         pesSenha: '',
         pesNome: '',
         pesPermissao: '',
+        pesDescricaoPermissao: '',
         pesUnidade: null,
         pesDDD: '',
         pesTelefone: '',

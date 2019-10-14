@@ -5,8 +5,6 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { rangeLabel } from '../../shared/utils/range-label';
 
 import { UnidadeService, OrganizeRoomsService } from '../../shared/_services';
-import { Sala, Unidade } from '../../shared';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-unidades',
@@ -15,7 +13,7 @@ import { Router } from '@angular/router';
     animations: [routerTransition()]
 })
 export class UnidadesComponent implements OnInit {
-
+    
     listUnidades;
 
     displayedColumns: string[] = ['uniId', 'uniNome', 'uniAtiva', 'detalhes'];

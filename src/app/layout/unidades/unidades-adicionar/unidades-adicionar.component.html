@@ -8,15 +8,15 @@
                 <div class="row">
                     <div class="col-2 col-sm-3 col-md-4 col-lg-2">
                         <span>Código</span>
-                        <input type="text" class="form-control" formControlName="uniId">
+                        <input type="text" class="form-control" formControlName="uniId" disabled>
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <span>Data Cadastro</span>
                         <input type="text" class="form-control" formControlName="uniDtCadastro" disabled="true">
                     </div>
                     <div id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
-                        <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva">Ativa?
-                        </mat-checkbox>
+                        <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva" [labelPosition]='labelPosition'>
+                            Ativa?</mat-checkbox>
                     </div>
                 </div>
 
@@ -26,8 +26,8 @@
                         <input type="text" class="form-control" formControlName="uniNome" autofocus required>
                     </div>
                 </div>
-                <br>
 
+                <br>
                 <div class="row ml-auto">
                     <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/unidades']"
                         [routerLinkActive]="['router-link-active']">
@@ -37,9 +37,10 @@
                         Adicionar
                     </a>
                 </div>
-                <div class="row text-muted">
-                    <span>Última Atualização por <span class="text-bolder">{{pesAtualizacao | uppercase}}</span>
-                        no dia <span class="text-bolder">{{dtAtualizacao | date: "dd/MM/yyyy"}}</span></span>
+                <br>
+                <div class="row text-muted ml-auto">
+                    <span>Última Atualização por <span class="text-bolder">{{uniPesAtualizacao | uppercase}}</span>
+                        no dia <span class="text-bolder">{{uniDtAtualizacao | date: "dd/MM/yyyy"}}</span></span>
                 </div>
             </form>
 

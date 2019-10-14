@@ -6,6 +6,7 @@ export interface Pessoa {
     pesSenha: string;
     pesNome: string;
     pesPermissao: string;
+    pesDescricaoPermissao: string;
     pesUnidade: Unidade;
     pesDDD: String;
     pesTelefone: string;

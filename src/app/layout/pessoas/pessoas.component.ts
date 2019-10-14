@@ -17,7 +17,7 @@ export class PessoasComponent implements OnInit {
 
     listPessoas;
 
-    displayedColumns: string[] = ['pesId', 'pesNome', 'unidade', 'pesDtCadastro', 'detalhes'];
+    displayedColumns: string[] = ['pesId', 'pesNome', 'pesDescricaoPermissao', 'unidade', 'pesDtCadastro', 'detalhes'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
