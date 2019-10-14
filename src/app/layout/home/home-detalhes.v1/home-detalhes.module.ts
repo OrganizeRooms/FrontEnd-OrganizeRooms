@@ -2,11 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Components
-import { HomeDetalhesComponent } from './home-detalhes.component';
+import { HomeDetalhesv1Component } from './home-detalhes.component';
 
 // Modules
 import { FormsModule } from '@angular/forms';
-
 import {MatDialogModule, MatToolbarModule} from '@angular/material';
 
 
@@ -18,7 +17,7 @@ import {MatDialogModule, MatToolbarModule} from '@angular/material';
         MatToolbarModule
     ],
     declarations: [
-        HomeDetalhesComponent
+        HomeDetalhesv1Component
     ]
 })
-export class HomeDetalhesModule { }
+export class HomeDetalhesv1Module { }

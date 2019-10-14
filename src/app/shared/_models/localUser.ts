@@ -1,5 +1,5 @@
 export interface LocalUser {
-    token?: string;
-    email: string;
-    usuario: any;
+    token: string;
+    pesEmail: string;
+    pessoa: any;
 }

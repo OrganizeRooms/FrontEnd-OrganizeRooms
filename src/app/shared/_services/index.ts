@@ -6,3 +6,4 @@ export * from './sala.service';
 export * from './unidade.service';
 export * from './notificacao.service';
 export * from './storage.service';
+export * from './organizerooms.service';

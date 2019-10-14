@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -8,12 +10,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { JwtInterceptor, ErrorInterceptor } from './shared/guard';
-// used to create fake backend
-import { fakeBackendProvider } from './shared/guard';
-
 
 // Services
-import { StorageService, AuthenticationService } from './shared/_services';
+import { StorageService, AuthenticationService, OrganizeRoomsService } from './shared/_services';
 
 @NgModule({
     imports: [
@@ -21,7 +20,8 @@ import { StorageService, AuthenticationService } from './shared/_services';
         BrowserModule,
         BrowserAnimationsModule,
         HttpClientModule,
-        AppRoutingModule
+        AppRoutingModule,
+        NgbModule
     ],
     declarations: [
         AppComponent,
@@ -29,11 +29,9 @@ import { StorageService, AuthenticationService } from './shared/_services';
     providers: [
         StorageService,
         AuthenticationService,
+        OrganizeRoomsService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-     //   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-
-        // provider used to create fake backend
-       // fakeBackendProvider
+        //   { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ],
     bootstrap: [
         AppComponent

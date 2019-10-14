@@ -3,8 +3,8 @@
         <div class="col-md-4">
             <img src="assets/images/logo.png" width="150px" class="user-avatar" />
             <h1>Organize Rooms</h1>
-            <!-- <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">-->
-            <form [formGroup]="loginForm" (ngSubmit)="logar()">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <!-- <form [formGroup]="loginForm" (ngSubmit)="logar()">-->
                 <div class="form-group">
                     <input type="text" formControlName="pesEmail"
                         class="form-control input-lg input-underline text-center" placeholder="E-mail"
@@ -21,7 +21,7 @@
                         <div>Informe a Senha</div>
                     </div>
                 </div>
-                <button [disabled]="loading" class="btn rounded-btn">
+                <button [disabled]="loading" class="btn btn-padrao rounded-btn btn-padrao">
                     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                     Login
                 </button>

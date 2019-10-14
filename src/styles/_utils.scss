@@ -3,8 +3,9 @@
 }
 
 .text-center{ text-align: center !important;}
+.text-bolder{font-weight: 800;}
 
-.btn{
+.btn-padrao{
     padding-top: 7px;
     padding-left: 12px;
     padding-right: 12px;
@@ -21,6 +22,22 @@
 table {
     width: 100%;
     margin: 0 auto; 
+}
+
+.input-group-append {
+    align-items: unset;}
+
+
+.table-content{
+ margin-top: 10px;
+}
+
+#checkbox{
+    margin-top: 30px !important;
+}
+
+mat-form-field {
+    margin-top: -8px;
 }
 
 mat-paginator{

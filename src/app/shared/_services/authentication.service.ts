@@ -4,59 +4,58 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { API_CONFIG } from '../../shared/_config';
-import { Pessoa, LocalUser, UsuarioDTO } from '../_models';
+import { LocalUser, Pessoa } from '../_models';
 import { StorageService } from './storage.service';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
-    usuarioLogado: EventEmitter<Boolean> = new EventEmitter();
+  pessoaLogada: EventEmitter<Boolean> = new EventEmitter();
 
+  constructor(private http: HttpClient,
+    private storageService: StorageService,
+    private router: Router) { }
 
-    constructor(private http: HttpClient,
-      private storageService: StorageService,
-      private router: Router) { }
-  
-    authenticate(creds: UsuarioDTO) {
-      return this.http.post(
-        `${API_CONFIG.baseUrl}/login`,
-          creds, {
-          observe: 'response',
-          responseType: 'text'
-        }
-      );
+  authenticate(creds: Pessoa) {
+    return this.http.post(
+      `${API_CONFIG.baseUrl}/login`,
+      creds, {
+      observe: 'response',
+      responseType: 'text'
     }
-  
-    successfulLogin(ret) {
-      const user: LocalUser = {
-        token: ret.data.token,
-        email: '',
-        usuario: ret.usuario
-      };
-      this.storageService.setLocalUser(user);
-      this.usuarioLogado.emit(true);
-      this.router.navigate(['/home']);
-    }
-  
-    noSuccessfulLogin() {
-      const user: LocalUser = {
-        token: '',
-        email: '',
-        usuario: ''
-      };
-      this.storageService.setLocalUser(null);
-      this.usuarioLogado.emit(false);
-    }
+    );
+  }
 
+  successfulLogin(ret) {
+    const user: LocalUser = {
+      token: ret.data.token,
+      pesEmail: ret.pessoa.pesEmail,
+      pessoa: ret.pessoa
+    };
+    this.storageService.setLocalUser(user);
+    this.pessoaLogada.emit(true);
+    this.router.navigate(['/home']);
+  }
 
-    fakelogin(){
-      const user: LocalUser = {
-        token: '234',
-        email: 'admin@admin.com',
-        usuario: 'Administrador'
-      };
-      this.storageService.setLocalUser(user);
-      this.usuarioLogado.emit(true);
-    }
+  noSuccessfulLogin() {
+    const user: LocalUser = {
+      token: '',
+      pesEmail: '',
+      pessoa: ''
+    };
+    this.storageService.setLocalUser(null);
+    this.pessoaLogada.emit(false);
+  }
+
+  // Logar sem utilizar o WebService
+  fakelogin() {
+    const user: LocalUser = {
+      token: '234',
+      pesEmail: 'admin@admin.com',
+      pessoa: 'Administrador'
+    };
+    this.storageService.setLocalUser(user);
+    this.pessoaLogada.emit(true);
+  }
 }

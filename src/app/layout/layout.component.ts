@@ -11,7 +11,9 @@ export class LayoutComponent implements OnInit {
 
     constructor() {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        
+    }
 
     receiveCollapsed($event) {
         this.collapedSideBar = $event;

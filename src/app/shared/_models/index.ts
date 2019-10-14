@@ -6,4 +6,4 @@ export * from './sala';
 export * from './unidade';
 export * from './localUser';
 export * from './response';
-export * from './usuarioDTO';
+export * from './dialogdata';

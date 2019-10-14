@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PessoasAdicionarRoutingModule } from './pessoas-adicionar-routing.module';
@@ -7,10 +7,8 @@ import { PageHeaderModule } from '../../../shared';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// Date Picker
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDatepickerModule} from '@angular/material';
-import { MatInputModule } from '@angular/material';
+// Component Material Angular
+import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerModule, MatSelectModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -21,10 +19,15 @@ import { MatInputModule } from '@angular/material';
         MatFormFieldModule,
         MatInputModule,
         FormsModule,
-        ReactiveFormsModule
+        MatCheckboxModule,
+        ReactiveFormsModule,
+        MatSelectModule
     ],
     declarations: [
         PessoasAdicionarComponent
+    ],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
     ]
 })
 export class PessoasAdicionarModule { }

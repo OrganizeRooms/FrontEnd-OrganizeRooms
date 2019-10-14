@@ -31,6 +31,7 @@ export class EquipamentosAdicionarComponent implements OnInit {
     formAddSala: FormGroup;
     salaDtCadastro = new FormControl(moment());
     listEquipamentos: Unidade[];
+    listUnidades: any[];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -40,26 +41,34 @@ export class EquipamentosAdicionarComponent implements OnInit {
         this.carregarEquipamentos();
 
         let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
-        
-        console.log('1 - ' + this.salaSelecionada)
 
         this.criarFormularioVazio();
+        this.carregarUnidades();
 
     }
 
     carregarEquipamentos() {
         this.listEquipamentos = [
             {
-                uniId: 1, uniNome: "São Paulo", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), pessoaInclusao: null /*new Pessoa*/, pessoaAtualizacao: null /*new Pessoa*/
+                uniId: 1, uniNome: "São Paulo", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
             },
             {
-                uniId: 2, uniNome: "Blumenau", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), pessoaInclusao: null /*new Pessoa*/, pessoaAtualizacao: null /*new Pessoa*/
+                uniId: 2, uniNome: "Blumenau", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
             },
             {
-                uniId: 3, uniNome: "Rio de Janeiro", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), pessoaInclusao: null /*new Pessoa*/, pessoaAtualizacao: null /*new Pessoa*/
+                uniId: 3, uniNome: "Rio de Janeiro", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
             }
         ]
     }
+
+    carregarUnidades() {
+        this.listUnidades = [
+            { id: 1, unidade: "São Paulo" },
+            { id: 2, unidade: "Blumenau" },
+            { id: 3, unidade: "Rio de Janeiro" }
+        ]
+    }
+
     criarFormularioVazio() {
         this.formAddSala = this.formBuilder.group({
             salaId: [null],
@@ -71,7 +80,6 @@ export class EquipamentosAdicionarComponent implements OnInit {
     }
 
     criarFormulario(sala) {
-        console.log(sala)
         /*this.formAddSala = this.formBuilder.group({
             salaId: [this.sala.ageId],
             salaNome: [this.sala.salaNome], //, Validators.compose([Validators.required])],

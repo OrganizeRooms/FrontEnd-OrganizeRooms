@@ -2,13 +2,15 @@
 import { HttpClient } from '@angular/common/http';
 
 import { API_CONFIG } from '../../shared/_config';
-import { Pessoa } from '../_models';
+import { Pessoa, Response } from '../_models';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PessoaService {
     constructor(private http: HttpClient) { }
 
-    buscarTodos() {
-        return this.http.get<Pessoa[]>(`${API_CONFIG.baseUrl}/pessoas`);
+    buscarTodasPessoas(): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/pessoas`);
     }
+
 }

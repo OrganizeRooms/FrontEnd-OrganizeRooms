@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PessoasRoutingModule } from './pessoas-routing.module';
 import { PessoasComponent } from './pessoas.component';
 import { PageHeaderModule } from '../../shared';
 
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, MatSortModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatCheckboxModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -15,10 +15,16 @@ import { MatPaginatorModule, MatSortModule } from '@angular/material';
         PageHeaderModule,
         MatTableModule,
         MatPaginatorModule,
-        MatSortModule
+        FormsModule,
+        ReactiveFormsModule,
+        MatSortModule,
+        MatCheckboxModule
     ],
     declarations: [
         PessoasComponent
+    ],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
     ]
 })
 export class PessoasModule { }
