@@ -1,5 +1,6 @@
 <div>
-    <app-page-header [heading]="'Pessoas - Adicionar Pessoa'"></app-page-header>
+    <app-page-header *ngIf="selPessoa != null" [heading]="'Pessoas - Detalhes da Pessoa'"></app-page-header>
+    <app-page-header *ngIf="selPessoa == null" [heading]="'Pessoas - Adicionar Pessoa'"></app-page-header>
 
     <br />
     <div class="row justify-content-md-center">
@@ -32,7 +33,8 @@
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
                         <span>Unidade</span>
                         <mat-select class="form-control" [formControl]="selUnidade">
-                            <mat-option *ngFor="let unidade of listUnidades" [value]="unidade">
+                            <mat-option *ngFor="let unidade of listUnidades" [value]="unidade"
+                                (onSelectionChange)="log(unidade)">
                                 {{unidade.uniNome}}
                             </mat-option>
                         </mat-select>
@@ -50,7 +52,7 @@
                 <div class="row">
                     <div class="col-1 col-sm-1 col-md-2 col-lg-2 col-xl-2">
                         <span>DDD</span>
-                        <input type="number" class="form-control" formControlName="pesDdd">
+                        <input type="text" class="form-control" formControlName="pesDDD">
                     </div>
                     <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3">
                         <span>Telefone</span>
@@ -64,7 +66,8 @@
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarPessoa()">
+                    <a *ngIf="permissao == 'ROLE_ADMIN'"
+                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarPessoa()">
                         Adicionar
                     </a>
                 </div>

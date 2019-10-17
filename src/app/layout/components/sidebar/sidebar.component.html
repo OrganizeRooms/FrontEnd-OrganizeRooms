@@ -4,23 +4,28 @@
             <i class="fa fa-fw fa-home"></i>&nbsp;
             <span>Home</span>
         </a>
-        <a [routerLink]="['/reservar']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <a *ngIf="permissao == 'ROLE_ADMIN' || permissao == 'ROLE_USUARIO'" [routerLink]="['/reservar']"
+            [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-calendar-check-o"></i>&nbsp;
             <span>Reserva de Sala</span>
         </a>
-        <a [routerLink]="['/pessoas']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <a *ngIf="permissao == 'ROLE_ADMIN' || permissao == 'ROLE_USUARIO'" [routerLink]="['/pessoas']"
+            [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-users"></i>&nbsp;
             <span>Pessoas</span>
         </a>
-        <a [routerLink]="['/salas']" [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-window-restore"></i>
+        <a *ngIf="permissao == 'ROLE_ADMIN' || permissao == 'ROLE_USUARIO'" [routerLink]="['/salas']"
+            [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-window-restore"></i>&nbsp;
             <span>Salas</span>
         </a>
-        <a [routerLink]="['/equipamentos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <a *ngIf="permissao == 'ROLE_ADMIN' || permissao == 'ROLE_USUARIO'" [routerLink]="['/equipamentos']"
+            [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-desktop"></i>&nbsp;
             <span>Equipamentos</span>
         </a>
-        <a [routerLink]="['/unidades']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+        <a *ngIf="permissao == 'ROLE_ADMIN' || permissao == 'ROLE_USUARIO'" [routerLink]="['/unidades']"
+            [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-map-marker"></i>&nbsp;
             <span>Unidades</span>
         </a>
@@ -41,6 +46,9 @@
                             </a>
                         </li>-->
                         <li>
+                            <a class="dropdown-item" (click)="resetarSenha()">
+                                <i class="fa fa-fw fa-power-off"></i> Resetar Senha
+                            </a>
                             <a [routerLink]="['/login']" (click)="logout()">
                                 <span><i class="fa fa-fw fa-power-off"></i> Sair</span>
                             </a>

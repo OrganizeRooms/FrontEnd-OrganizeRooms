@@ -1,5 +1,6 @@
 <div>
-    <app-page-header [heading]="'Unidades - Adicionar Unidade'"></app-page-header>
+    <app-page-header *ngIf="selUnidade != null" [heading]="'Unidades - Detalhes da Unidade'"></app-page-header>
+    <app-page-header *ngIf="selUnidade == null" [heading]="'Unidades - Adicionar Unidade'"></app-page-header>
 
     <br />
     <div class="row justify-content-md-center">
@@ -15,7 +16,8 @@
                         <input type="text" class="form-control" formControlName="uniDtCadastro" disabled="true">
                     </div>
                     <div id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
-                        <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva" [labelPosition]='labelPosition'>
+                        <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
+                            [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
                 </div>
@@ -33,7 +35,8 @@
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarUnidade()">
+                    <a *ngIf="permissao == 'ROLE_ADMIN'" class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao"
+                        (click)="adicionarUnidade()">
                         Adicionar
                     </a>
                 </div>

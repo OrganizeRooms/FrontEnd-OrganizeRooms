@@ -3,12 +3,12 @@
 export interface Pessoa {
     pesId: number;
     pesEmail: string;
-    pesSenha: string;
+    //pesSenha: string;
     pesNome: string;
     pesPermissao: string;
     pesDescricaoPermissao: string;
     pesUnidade: Unidade;
-    pesDDD: String;
+    pesDdd: String;
     pesTelefone: string;
 
     // SIS = Cadastro manual

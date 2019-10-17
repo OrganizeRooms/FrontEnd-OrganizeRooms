@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { AuthenticationService, StorageService } from '../../../shared/_services';
+import { AuthenticationService, StorageService, PessoaService } from '../../../shared/_services';
 import { Pessoa } from '../../../shared/_models';
 
 @Component({
@@ -16,11 +16,15 @@ export class SidebarComponent implements OnInit {
     pushRightClass: string;
     currentPessoa;
 
+    permissao;
+
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
     constructor(public router: Router,
         private storageService: StorageService,
-        private authenticationService: AuthenticationService) {
+        private authenticationService: AuthenticationService,
+        private pessoaService: PessoaService
+    ) {
 
         this.currentPessoa = this.storageService.getLocalUser().pessoa;
         this.router.events.subscribe(val => {
@@ -39,8 +43,19 @@ export class SidebarComponent implements OnInit {
         this.collapsed = false;
         this.showMenu = '';
         this.pushRightClass = 'push-right';
+
+        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
+    resetarSenha() {
+        this.pessoaService.resetarSenha(this.currentPessoa).subscribe(ret => {
+            if (ret.data != 'false') {
+                alert("Senha Resetada com Sucesso!")
+            } else {
+                alert("Erro ao Resetar Senha!")
+            }
+        });
+    }
 
     eventCalled() {
         this.isActive = !this.isActive;

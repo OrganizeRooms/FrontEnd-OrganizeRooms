@@ -12,7 +12,8 @@
                     <div class="col-4 col-sm-2 col-md-5 col-lg-6 col-xl-7">
                         <div class="row justify-content-end">
                             <div class="col-12 col-sm-12 col-md-5 col-lg-4 col-xl-3">
-                                <a class="btn btn-padrao" [routerLink]="['/equipamentos-adicionar', 0]"
+                                <a *ngIf="permissao == 'ROLE_ADMIN'"
+                                    class="btn btn-padrao" [routerLink]="['/equipamentos-adicionar']"
                                     [routerLinkActive]="['router-link-active']">
                                     Adicionar
                                 </a>
@@ -49,7 +50,7 @@
                 <ng-container matColumnDef="detalhes">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalhes </th>
                     <td mat-cell *matCellDef="let equipamento">
-                        <a [routerLink]="['/equipamentos-adicionar', equipamento.equiId]"
+                        <a [routerLink]="['/equipamentos-adicionar']"
                             [routerLinkActive]="['router-link-active']">
                             <i class="fa fa-fw fa-plus"></i>
                         </a>

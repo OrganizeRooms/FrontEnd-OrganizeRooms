@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { UnidadeService, OrganizeRoomsService } from '../../shared/_services';
+import { UnidadeService, OrganizeRoomsService, StorageService } from '../../shared/_services';
 
 @Component({
     selector: 'app-unidades',
@@ -13,7 +13,8 @@ import { UnidadeService, OrganizeRoomsService } from '../../shared/_services';
     animations: [routerTransition()]
 })
 export class UnidadesComponent implements OnInit {
-    
+    permissao;
+
     listUnidades;
 
     displayedColumns: string[] = ['uniId', 'uniNome', 'uniAtiva', 'detalhes'];
@@ -24,12 +25,15 @@ export class UnidadesComponent implements OnInit {
 
     constructor(
         private unidadeService: UnidadeService,
-        private organizeRoomsService: OrganizeRoomsService
+        private organizeRoomsService: OrganizeRoomsService,
+        private storageService: StorageService
     ) { }
 
     ngOnInit() {
         this.carregarUnidades();
         this.configurarPaginador();
+
+        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
     carregarUnidades() {
