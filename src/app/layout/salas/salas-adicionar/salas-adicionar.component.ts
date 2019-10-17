@@ -8,7 +8,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 
 import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
-import { Unidade, Pessoa, Sala } from 'src/app/shared';
+import { Unidade, Pessoa, Sala, StorageService } from 'src/app/shared';
 import { MY_FORMATS } from '../../../shared/utils';
 import { ActivatedRoute } from '@angular/router';
 
@@ -26,6 +26,7 @@ const moment = _moment;
 })
 
 export class SalasAdicionarComponent implements OnInit {
+    permissao;
 
     salaSelecionada;
     formAddSala: FormGroup;
@@ -34,15 +35,17 @@ export class SalasAdicionarComponent implements OnInit {
 
     constructor(
         private formBuilder: FormBuilder,
-        private activatedRoute: ActivatedRoute) { }
+        private activatedRoute: ActivatedRoute,
+        private storageService: StorageService,) { }
 
     ngOnInit() {
         this.carregarUnidades();
 
         let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
-        
 
         this.criarFormularioVazio();
+
+        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
 
     }
 

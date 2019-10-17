@@ -13,4 +13,12 @@ export class PessoaService {
         return this.http.get<Response>(`${API_CONFIG.baseUrl}/pessoas`);
     }
 
+    adicionarAtualizarPessoa(pessoa: Pessoa): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/pessoas`, pessoa);
+    }
+
+    resetarSenha(pessoa: Pessoa): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/pessoas/resetarSenha`, pessoa);
+    }
+
 }

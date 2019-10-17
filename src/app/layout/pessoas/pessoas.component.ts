@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { PessoaService, OrganizeRoomsService } from '../../shared/_services';
+import { PessoaService, OrganizeRoomsService, StorageService } from '../../shared/_services';
 import { Pessoa } from '../../shared';
 
 @Component({
@@ -14,10 +14,10 @@ import { Pessoa } from '../../shared';
     animations: [routerTransition()]
 })
 export class PessoasComponent implements OnInit {
-
+    permissao;
     listPessoas;
 
-    displayedColumns: string[] = ['pesId', 'pesNome', 'pesDescricaoPermissao', 'unidade', 'pesDtCadastro', 'detalhes'];
+    displayedColumns: string[] = ['pesId', 'pesNome', 'pesDescricaoPermissao', 'pesUnidade', 'pesDtCadastro', 'detalhes'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -25,12 +25,15 @@ export class PessoasComponent implements OnInit {
 
     constructor(
         private pessoaService: PessoaService,
-        private organizeRoomsService: OrganizeRoomsService
+        private organizeRoomsService: OrganizeRoomsService,
+        private storageService: StorageService,
     ) { }
 
     ngOnInit() {
         this.carregarPessoas();
         this.configurarPaginador();
+
+        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
     carregarPessoas() {

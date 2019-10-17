@@ -1,12 +1,11 @@
 ﻿import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { API_CONFIG } from '../../shared/_config';
-import { LocalUser, Pessoa } from '../_models';
+import { LocalUser, JwtAuthentication, Response } from '../_models';
 import { StorageService } from './storage.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -17,7 +16,7 @@ export class AuthenticationService {
     private storageService: StorageService,
     private router: Router) { }
 
-  authenticate(creds: Pessoa) {
+  authenticate(creds: JwtAuthentication) {
     return this.http.post(
       `${API_CONFIG.baseUrl}/login`,
       creds, {
@@ -27,10 +26,20 @@ export class AuthenticationService {
     );
   }
 
+  verificarEmail(email: JwtAuthentication): Observable<Response> {
+    return this.http.post<Response>(`${API_CONFIG.baseUrl}/login/verificarEmail`,email);
+  }
+
+  novaSenha(novaSenha: JwtAuthentication): Observable<Response> {
+    return this.http.post<Response>(`${API_CONFIG.baseUrl}/login/novaSenha`,novaSenha);
+  }
+
+
   successfulLogin(ret) {
     const user: LocalUser = {
       token: ret.data.token,
       pesEmail: ret.pessoa.pesEmail,
+      logado: true,
       pessoa: ret.pessoa
     };
     this.storageService.setLocalUser(user);
@@ -42,6 +51,7 @@ export class AuthenticationService {
     const user: LocalUser = {
       token: '',
       pesEmail: '',
+      logado: false,
       pessoa: ''
     };
     this.storageService.setLocalUser(null);
@@ -53,6 +63,7 @@ export class AuthenticationService {
     const user: LocalUser = {
       token: '234',
       pesEmail: 'admin@admin.com',
+      logado: true,
       pessoa: 'Administrador'
     };
     this.storageService.setLocalUser(user);

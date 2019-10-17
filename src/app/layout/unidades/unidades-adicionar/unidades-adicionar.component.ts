@@ -16,7 +16,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
     labelPosition = 'before';
-
+    permissao;
+    
     selUnidade;
     formAddUnidade: FormGroup;
 
@@ -37,8 +38,9 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
             this.uniPesAtualizacao = this.selUnidade.uniPesAtualizacao.pesNome;
             this.uniDtAtualizacao = this.selUnidade.uniDtAtualizacao
         }
-
         this.criarFormulario();
+
+        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
     ngOnDestroy() {
@@ -87,7 +89,11 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
 
         this.unidadeService.adicionarAtualizarUnidade(unidade).subscribe(ret => {
             if (ret.data != null) {
-                alert('Unidade ' + ret.data.uniNome + ' Adicionada com Sucesso!');
+                if (this.selUnidade == null) {
+                    alert('Unidade ' + ret.data.uniNome + ' Adicionada com Sucesso!');
+                } else {
+                    alert('Unidade ' + ret.data.uniNome + ' Atualizada com Sucesso!');
+                }
             }
         });
 

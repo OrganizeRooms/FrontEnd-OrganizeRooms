@@ -47,7 +47,8 @@
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarSala()">
+                    <a *ngIf="permissao == 'ROLE_ADMIN'"
+                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarSala()">
                         Adicionar
                     </a>
                 </div>

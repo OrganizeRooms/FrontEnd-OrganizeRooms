@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { SalaService } from '../../shared/_services';
+import { SalaService, StorageService } from '../../shared/_services';
 import { Sala } from '../../shared';
 
 @Component({
@@ -14,6 +14,7 @@ import { Sala } from '../../shared';
     animations: [routerTransition()]
 })
 export class SalasComponent implements OnInit {
+    permissao;
 
     listSalas: any[];
     //listSalas: Sala[];
@@ -26,6 +27,7 @@ export class SalasComponent implements OnInit {
 
     constructor(
         private salaService: SalaService,
+        private storageService: StorageService,
     ) {
     }
 
@@ -35,6 +37,8 @@ export class SalasComponent implements OnInit {
         this.tableData.data = this.listSalas;
         this.tableData.paginator = this.paginator;
         this.tableData.sort = this.sort;
+        
+        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
     carregarSalas() {

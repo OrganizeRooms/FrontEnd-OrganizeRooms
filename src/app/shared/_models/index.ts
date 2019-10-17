@@ -7,3 +7,4 @@ export * from './unidade';
 export * from './localUser';
 export * from './response';
 export * from './dialogdata';
+export * from './jwtAuthentication';

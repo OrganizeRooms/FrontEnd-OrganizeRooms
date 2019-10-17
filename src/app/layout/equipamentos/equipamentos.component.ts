@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { EquipamentoService } from '../../shared/_services';
+import { EquipamentoService, StorageService } from '../../shared/_services';
 import { Equipamento } from '../../shared';
 
 @Component({
@@ -14,7 +14,8 @@ import { Equipamento } from '../../shared';
     animations: [routerTransition()]
 })
 export class EquipamentosComponent implements OnInit {
-    
+    permissao;
+
     listEquipamentos: any[];
     //listEquipamentos: Equipamento[];
 
@@ -25,7 +26,8 @@ export class EquipamentosComponent implements OnInit {
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     constructor(
-        private equipamentoService: EquipamentoService
+        private equipamentoService: EquipamentoService,
+        private storageService: StorageService,
     ) { }
 
     ngOnInit() {
@@ -34,6 +36,8 @@ export class EquipamentosComponent implements OnInit {
         this.tableData.data = this.listEquipamentos;
         this.tableData.paginator = this.paginator;
         this.tableData.sort = this.sort;
+
+        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
     carregarEquipamentos() {
