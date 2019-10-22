@@ -87,7 +87,6 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
             });
             this.selPermissao = 'ROLE_USUARIO';
         }
-
     }
 
     adicionarPessoa() {

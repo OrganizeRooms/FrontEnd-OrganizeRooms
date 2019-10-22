@@ -59,7 +59,7 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
             this.formAddUnidade = this.formBuilder.group({
                 uniId: [0],
                 uniNome: [null, Validators.compose([Validators.required])],
-                uniAtiva: [false],
+                uniAtiva: [true],
                 uniDtCadastro: [new Date()]
             });
         }

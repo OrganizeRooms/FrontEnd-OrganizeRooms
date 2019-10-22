@@ -13,10 +13,15 @@
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <span>Data Cadastro</span>
-                        <input type="text" class="form-control" formControlName="uniDtCadastro" disabled="true">
+                        <input type="text" class="form-control" formControlName="uniDtCadastro" disabled>
                     </div>
-                    <div id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
+                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
+                            [labelPosition]='labelPosition'>
+                            Ativa?</mat-checkbox>
+                    </div>
+                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
+                        <mat-checkbox [disabled]="true" formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
@@ -28,7 +33,6 @@
                         <input type="text" class="form-control" formControlName="uniNome" autofocus required>
                     </div>
                 </div>
-
                 <br>
                 <div class="row ml-auto">
                     <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/unidades']"
@@ -41,21 +45,11 @@
                     </a>
                 </div>
                 <br>
-                <div class="row text-muted ml-auto">
+                <div *ngIf="selUnidade != null" class="row text-muted ml-auto">
                     <span>Última Atualização por <span class="text-bolder">{{uniPesAtualizacao | uppercase}}</span>
                         no dia <span class="text-bolder">{{uniDtAtualizacao | date: "dd/MM/yyyy"}}</span></span>
                 </div>
             </form>
-
         </div>
-
     </div>
-    <!--<ng-template #alertModal let-modal>
-        <div class="alert alert-success" role="alert">
-            Unidade Adicionada com Sucesso!
-            <a class="close" aria-label="Close" (click)="modal.dismiss()">
-                <span aria-hidden="true">&times;</span>
-            </a>
-        </div>
-    </ng-template>-->
 </div>

@@ -4,8 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { EquipamentoService, StorageService } from '../../shared/_services';
-import { Equipamento } from '../../shared';
+import { EquipamentoService, StorageService, OrganizeRoomsService } from '../../shared/_services';
 
 @Component({
     selector: 'app-equipamentos',
@@ -17,9 +16,8 @@ export class EquipamentosComponent implements OnInit {
     permissao;
 
     listEquipamentos: any[];
-    //listEquipamentos: Equipamento[];
 
-    displayedColumns: string[] = ['equiId', 'equiNome', 'unidade', 'detalhes'];
+    displayedColumns: string[] = ['equId', 'equNome', 'equUnidade', 'equAtiva', 'detalhes'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -27,38 +25,27 @@ export class EquipamentosComponent implements OnInit {
 
     constructor(
         private equipamentoService: EquipamentoService,
+        private organizeRoomsService: OrganizeRoomsService,
         private storageService: StorageService,
     ) { }
 
     ngOnInit() {
         this.carregarEquipamentos();
         this.configurarPaginador();
-        this.tableData.data = this.listEquipamentos;
-        this.tableData.paginator = this.paginator;
-        this.tableData.sort = this.sort;
 
         this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
     carregarEquipamentos() {
-        //this.listEquipamentos = this.equipamentoService.buscarTodos();
-        this.listEquipamentos = [
-            { equiId: 50, equiNome: 'Notebook Acer AMD', unidade: 'Blumenau', },
-            { equiId: 51, equiNome: 'Notebook DELL i3', unidade: 'São Paulo', },
-            { equiId: 52, equiNome: 'Notebook acer AMD', unidade: 'Rio de Janeiro', },
-            { equiId: 53, equiNome: 'Mochila Grande', unidade: 'Rio de Janeiro', },
-            { equiId: 54, equiNome: 'Mochila Média', unidade: 'Blumenau', },
-            { equiId: 55, equiNome: 'Notebook', unidade: 'Blumenau', },
-            { equiId: 56, equiNome: 'Projeto aH23', unidade: 'São Paulo', },
-            { equiId: 57, equiNome: 'Projeto aH87', unidade: 'Rio de Janeiro', },
-            { equiId: 58, equiNome: 'Notebook DELL i3', unidade: 'Blumenau', },
-            { equiId: 59, equiNome: 'Notebook', unidade: 'Rio de Janeiro', },
-            { equiId: 60, equiNome: 'Notebook', unidade: 'São Paulo', },
-            { equiId: 61, equiNome: 'Notebook', unidade: 'Rio de Janeiro', },
-            { equiId: 62, equiNome: 'Notebook', unidade: 'Rio de Janeiro', },
-            { equiId: 63, equiNome: 'Notebook DELL i5', unidade: 'São Paulo', },
-            { equiId: 64, equiNome: 'Projeto 54', unidade: 'Rio de Janeiro', },
-        ];
+        this.equipamentoService.buscarTodosEquipamentos().subscribe(ret => {
+            this.tableData.data = ret.data;
+            this.tableData.paginator = this.paginator;
+            this.tableData.sort = this.sort;
+        });
+    }
+
+    editarEquipamento(registro) {
+        this.organizeRoomsService.setValue(registro);
     }
 
     aplicarFiltro(valor: string) {

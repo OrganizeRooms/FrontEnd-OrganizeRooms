@@ -5,7 +5,6 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { rangeLabel } from '../../shared/utils/range-label';
 
 import { PessoaService, OrganizeRoomsService, StorageService } from '../../shared/_services';
-import { Pessoa } from '../../shared';
 
 @Component({
     selector: 'app-pessoas',
@@ -47,7 +46,6 @@ export class PessoasComponent implements OnInit {
     editarPessoa(registro) {
         this.organizeRoomsService.setValue(registro);
     }
-
 
     aplicarFiltro(valor: string) {
         this.tableData.filter = valor.trim().toLowerCase();
