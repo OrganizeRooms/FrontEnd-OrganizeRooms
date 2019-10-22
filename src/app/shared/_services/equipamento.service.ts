@@ -2,13 +2,18 @@
 import { HttpClient } from '@angular/common/http';
 
 import { API_CONFIG } from '../../shared/_config';
-import { Equipamento } from '../_models';
+import { Equipamento, Response } from '../_models';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class EquipamentoService {
     constructor(private http: HttpClient) { }
 
-    buscarTodos() {
-        return this.http.get<Equipamento[]>(`${API_CONFIG.baseUrl}/equipamentos`);
+    buscarTodosEquipamentos(): Observable<Response>  {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/equipamentos`);
+    }
+
+    adicionarAtualizarEquipamento(equipamento: Equipamento): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/equipamentos`, equipamento);
     }
 }

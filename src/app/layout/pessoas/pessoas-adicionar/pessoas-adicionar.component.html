@@ -16,7 +16,7 @@
                         <mat-select class="form-control" [(value)]="selPermissao">
                             <mat-option value="ROLE_USUARIO">Usuario</mat-option>
                             <mat-option value="ROLE_ADMIN">Administrador</mat-option>
-                            <!--<mat-option value="ROLE_TABLET">Tablet</mat-option>-->
+                            <mat-option value="ROLE_TABLET">Tablet</mat-option>
                         </mat-select>
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
@@ -59,20 +59,19 @@
                         <input type="text" class="form-control" formControlName="pesTelefone">
                     </div>
                 </div>
-
                 <br>
                 <div class="row ml-auto">
                     <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/pessoas']"
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a *ngIf="permissao == 'ROLE_ADMIN'"
-                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarPessoa()">
+                    <a *ngIf="permissao == 'ROLE_ADMIN'" class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao"
+                        (click)="adicionarPessoa()">
                         Adicionar
                     </a>
                 </div>
                 <br>
-                <div class="row text-muted ml-auto">
+                <div *ngIf="selPessoa != null" class="row text-muted ml-auto">
                     <span>Última Atualização por <span class="text-bolder">{{pesAtualizacao | uppercase}}</span>
                         no dia <span class="text-bolder">{{pesDtAtualizacao | date: "dd/MM/yyyy"}}</span></span>
                 </div>

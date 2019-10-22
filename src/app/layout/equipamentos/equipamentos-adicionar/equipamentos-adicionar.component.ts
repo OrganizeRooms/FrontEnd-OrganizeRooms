@@ -1,102 +1,128 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-
-import * as _moment from 'moment';
-import { default as _rollupMoment } from 'moment';
-import { Unidade, Pessoa, Sala, StorageService } from 'src/app/shared';
-import { MY_FORMATS } from '../../../shared/utils';
-import { ActivatedRoute } from '@angular/router';
-
-const moment = _moment;
+import {
+    StorageService, EquipamentoService, UnidadeService, OrganizeRoomsService, Pessoa, Equipamento
+} from 'src/app/shared';
 
 @Component({
     selector: 'app-equipamentos-adicionar',
     templateUrl: './equipamentos-adicionar.component.html',
     styleUrls: ['./equipamentos-adicionar.component.scss'],
-    animations: [routerTransition()],
-    providers: [
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ],
+    animations: [routerTransition()]
 })
 
-export class EquipamentosAdicionarComponent implements OnInit {
+export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
+    labelPosition = 'before';
     permissao;
 
-    salaSelecionada;
-    formAddSala: FormGroup;
-    salaDtCadastro = new FormControl(moment());
-    listEquipamentos: Unidade[];
-    listUnidades: any[];
+    formAddEquipamento: FormGroup;
+    listUnidades;
+
+    selEquipamento;
+    selUnidade = new FormControl();
+
+    equPesDtAtualizacao;
+    equPesAtualizacao;
 
     constructor(
         private formBuilder: FormBuilder,
-        private activatedRoute: ActivatedRoute,
+        private equipamentoService: EquipamentoService,
+        private unidadeService: UnidadeService,
+        private organizeRoomsService: OrganizeRoomsService,
         private storageService: StorageService,
-        ) { }
+    ) { }
 
     ngOnInit() {
-        this.carregarEquipamentos();
+        this.selEquipamento = this.organizeRoomsService.getValue();
 
-        let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
+        if (this.selEquipamento != null && this.selEquipamento.equPesAtualizacao != null) {
+            this.equPesAtualizacao = this.selEquipamento.equPesAtualizacao.pesNome;
+            this.equPesDtAtualizacao = this.selEquipamento.equPesDtAtualizacao;
+        }
 
-        this.criarFormularioVazio();
         this.carregarUnidades();
+        this.criarFormulario();
 
         this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
-
     }
 
-    carregarEquipamentos() {
-        this.listEquipamentos = [
-            {
-                uniId: 1, uniNome: "São Paulo", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
-            },
-            {
-                uniId: 2, uniNome: "Blumenau", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
-            },
-            {
-                uniId: 3, uniNome: "Rio de Janeiro", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
-            }
-        ]
+    ngOnDestroy() {
+        this.organizeRoomsService.setValue(null)
     }
 
     carregarUnidades() {
-        this.listUnidades = [
-            { id: 1, unidade: "São Paulo" },
-            { id: 2, unidade: "Blumenau" },
-            { id: 3, unidade: "Rio de Janeiro" }
-        ]
-    }
-
-    criarFormularioVazio() {
-        this.formAddSala = this.formBuilder.group({
-            salaId: [null],
-            salaNome: [null], //, Validators.compose([Validators.required])],
-            salaLotacao: [null],
-            salaAtiva: [null],
-            salaDtCadastro: [null]
+        this.unidadeService.buscarTodasUnidades().subscribe(ret => {
+            this.listUnidades = ret.data;
         });
     }
 
-    criarFormulario(sala) {
-        /*this.formAddSala = this.formBuilder.group({
-            salaId: [this.sala.ageId],
-            salaNome: [this.sala.salaNome], //, Validators.compose([Validators.required])],
-            salaLotacao: [this.sala.salaLotacao],
-            salaAtiva: [this.sala.salaAtiva],
-            salaDtCadastro: [this.sala.salaDtCadastro],
-            //unidade: [this.sala.unidade]
-        });*/
+    criarFormulario() {
+        if (this.selEquipamento != null) {
+            this.formAddEquipamento = this.formBuilder.group({
+                equId: [this.selEquipamento.equId],
+                equNome: [this.selEquipamento.equNome],
+                equDescricao: [this.selEquipamento.equDescricao],
+                equAtiva: [this.selEquipamento.equAtiva],
+                equDtCadastro: [this.selEquipamento.equDtCadastro]
+            });
+            console.log(this.selUnidade)
+            this.selUnidade.setValue = this.selEquipamento.equUnidade
+            console.log(this.selUnidade)
+        } else {
+            this.formAddEquipamento = this.formBuilder.group({
+                equId: [0],
+                equNome: [null],
+                equDescricao: [null],
+                equAtiva: [true],
+                equDtCadastro: [new Date()]
+            });
+        }
     }
 
-    adicionarSala() {
+    adicionarEquipamento() {
 
+        var cEquPesCadastro: Pessoa;
+        var cEquPesDtCadastro;
+        if (this.selEquipamento != null) {
+            cEquPesCadastro = this.selEquipamento.equPesCadastro;
+            cEquPesDtCadastro = this.selEquipamento.equPesDtCadastro;
+        } else {
+            cEquPesCadastro = this.storageService.getLocalUser().pessoa;
+            cEquPesDtCadastro = new Date();
+        }
+
+        const equipamento: Equipamento = {
+            equId: this.formAddEquipamento.value.equId,
+            equNome: this.formAddEquipamento.value.equNome,
+            equDescricao: this.formAddEquipamento.value.equDescricao,
+            equAtiva: this.formAddEquipamento.value.equAtiva,
+            equUnidade: this.selUnidade.value,
+            equPesCadastro: cEquPesCadastro,
+            equDtCadastro: cEquPesDtCadastro,
+            equPesAtualizacao: this.storageService.getLocalUser().pessoa,
+            equDtAtualizacao: new Date(),
+        };
+        console.log(equipamento)
+        this.equipamentoService.adicionarAtualizarEquipamento(equipamento).subscribe(ret => {
+            console.log("retorno")
+            console.log(ret.data)
+            if (ret.data != null) {
+                if (this.selEquipamento != null) {
+                    alert('Equipamento ' + ret.data.equNome + ' Atualizada com Sucesso!');
+                } else {
+                    alert('Equipamento ' + ret.data.equNome + ' Adicionada com Sucesso!');
+                }
+            }
+        });
+    }
+
+    log(unidade) {
+        console.log(unidade)
+        console.log("----")
+        console.log(this.selUnidade)
     }
 
 }

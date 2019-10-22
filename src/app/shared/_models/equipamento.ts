@@ -5,9 +5,10 @@ export interface Equipamento {
     equId: number;
     equNome: string;
     equDescricao: string;
-    unidade: Unidade;
-    pes_inclusao: Pessoa;
+    equAtiva: String;
+    equUnidade: Unidade;
+    equPesCadastro: Pessoa;
     equDtCadastro: Date;
-    pes_atualizacao: Pessoa;
+    equPesAtualizacao: Pessoa;
     equDtAtualizacao: Date;
 }
