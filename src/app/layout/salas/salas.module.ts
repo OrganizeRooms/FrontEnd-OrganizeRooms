@@ -1,12 +1,12 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SalasRoutingModule } from './salas-routing.module';
 import { SalasComponent } from './salas.component';
 import { PageHeaderModule } from '../../shared';
 
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule, MatSortModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule, MatPaginatorModule, MatSortModule, MatCheckboxModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -15,10 +15,16 @@ import { MatPaginatorModule, MatSortModule } from '@angular/material';
         PageHeaderModule,
         MatTableModule,
         MatPaginatorModule,
+        MatCheckboxModule,
+        FormsModule,
+        ReactiveFormsModule,
         MatSortModule
     ],
     declarations: [
         SalasComponent
+    ],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
     ]
 })
 export class SalasModule { }

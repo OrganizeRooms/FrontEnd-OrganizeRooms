@@ -13,6 +13,10 @@ export class UnidadeService {
         return this.http.get<Response>(`${API_CONFIG.baseUrl}/unidades`);
     }
 
+    buscarUnidadesAtivas(): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/unidades/ativo`);
+    }
+
     buscarUnidadePorId(id: String): Observable<Response> {
         return this.http.get<Response>(`${API_CONFIG.baseUrl}/unidades/` + id);
     }

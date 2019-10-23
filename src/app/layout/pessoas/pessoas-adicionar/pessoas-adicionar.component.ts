@@ -53,7 +53,7 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
     }
 
     carregarUnidades() {
-        this.unidadeService.buscarTodasUnidades().subscribe(ret => {
+        this.unidadeService.buscarUnidadesAtivas().subscribe(ret => {
             this.listUnidades = ret.data;
         });
     }
@@ -72,7 +72,7 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
             });
             this.selPermissao = this.selPessoa.pesPermissao
             console.log(this.selUnidade)
-            this.selUnidade.setValue = this.selPessoa.pesUnidade
+            this.selUnidade = new FormControl(this.selPessoa.pesUnidade)
             console.log(this.selUnidade)
         } else {
             this.formAddPessoa = this.formBuilder.group({

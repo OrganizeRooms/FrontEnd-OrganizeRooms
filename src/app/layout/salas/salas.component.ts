@@ -4,8 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { SalaService, StorageService } from '../../shared/_services';
-import { Sala } from '../../shared';
+import { SalaService, OrganizeRoomsService, StorageService } from '../../shared/_services';
 
 @Component({
     selector: 'app-salas',
@@ -16,10 +15,9 @@ import { Sala } from '../../shared';
 export class SalasComponent implements OnInit {
     permissao;
 
-    listSalas: any[];
-    //listSalas: Sala[];
+    listSalas;
 
-    displayedColumns: string[] = ['salaNome', 'unidade', 'salaLotacao', 'detalhes'];
+    displayedColumns: string[] = ['salaNome', 'salaUnidade', 'salaLotacao', 'salaAtiva', 'detalhes'];
     tableData = new MatTableDataSource<any>();
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -28,72 +26,30 @@ export class SalasComponent implements OnInit {
     constructor(
         private salaService: SalaService,
         private storageService: StorageService,
-    ) {
-    }
+        private organizeRoomsService: OrganizeRoomsService,
+    ) { }
 
     ngOnInit() {
         this.carregarSalas();
         this.configurarPaginador();
-        this.tableData.data = this.listSalas;
-        this.tableData.paginator = this.paginator;
-        this.tableData.sort = this.sort;
-        
+
         this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
     }
 
     carregarSalas() {
-        //this.listSalas = this.salaService.buscarTodos();
-        this.listSalas = [
-            {
-                salaId: 1005, salaNome: 'Sala de Reunião 3 Equipe Alpha', salaLotacao: 20, salaAtiva: true, salaDtCadastro: new Date("27/09/2019"),
-                unidade: {
-                    uniId: 3,
-                    uniNome: 'Rio de Janeiro',
-                    uniAtiva: true,
-                    pessoaInclusao: '',
-                    uniDtCadastro: new Date("27/09/2019"),
-                    pessoaAtualizacao: '',
-                    uniDtAtualizacao: new Date("27/09/2019"),
-                },
-                agendamentos: {
-                    salaId: 1, assunto: 'Reunião Kanban', descricao: 'Conversar sobre Kanban', responsavel: 'Lucas Jansen',
-                    status: 'Em Andamento', data: '20/10/2019', hrInicial: '08:00', hrFinal: '08:30'
-                }
-            },
-            {
-                salaId: 1005, salaNome: 'Sala de Reunião 4', salaLotacao: 20, salaAtiva: false, salaDtCadastro: new Date("27/09/2019"),
-                unidade: {
-                    uniId: 2,
-                    uniNome: 'Blumenau',
-                    pessoaInclusao: '',
-                    uniDtCadastro: new Date("27/09/2019"),
-                    pessoaAtualizacao: '',
-                    uniDtAtualizacao: new Date("27/09/2019"),
-                },
-                agendamentos: {
-                    salaId: 1, assunto: 'Reunião Kanban Equipe Beta', descricao: 'Montar Kanban', responsavel: 'Éder Jean Dias',
-                    status: 'Agendado', data: '20/10/2019', hrInicial: '08:35', hrFinal: '09:15'
-                }
-            }, {
-                salaId: 1005, salaNome: 'Sala Comercial', salaLotacao: 10, salaAtiva: true, salaDtCadastro: new Date("27/09/2019"),
-                unidade: {
-                    uniId: 1,
-                    uniNome: 'São Paulo',
-                    pessoaInclusao: '',
-                    uniDtCadastro: new Date("27/09/2019"),
-                    pessoaAtualizacao: '',
-                    uniDtAtualizacao: new Date("27/09/2019"),
-                },
-                agendamentos: {
-                    salaId: 1, assunto: 'Reunião Ajustes', descricao: 'Ajustes que serao feitos', responsavel: 'Felipe Haag',
-                    status: 'Agendado', data: '20/11/2019', hrInicial: '09:30', hrFinal: '10:30'
-                }
-            }
-        ];
+        this.salaService.buscarTodasSalas().subscribe(ret => {
+            this.tableData.data = ret.data;
+            this.tableData.paginator = this.paginator;
+            this.tableData.sort = this.sort;
+        });
     }
 
-    salaSelecionada(rec) {
+    editarSala(registro) {
+        this.organizeRoomsService.setValue(registro);
+    }
 
+    aplicarFiltro(valor: string) {
+        this.tableData.filter = valor.trim().toLowerCase();
     }
 
     configurarPaginador() {
