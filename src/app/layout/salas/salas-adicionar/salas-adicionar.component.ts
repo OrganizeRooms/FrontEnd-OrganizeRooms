@@ -3,88 +3,122 @@ import { routerTransition } from '../../../router.animations';
 
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-
-import * as _moment from 'moment';
-import { default as _rollupMoment } from 'moment';
-import { Unidade, Pessoa, Sala, StorageService } from 'src/app/shared';
-import { MY_FORMATS } from '../../../shared/utils';
-import { ActivatedRoute } from '@angular/router';
-
-const moment = _moment;
+import { Sala, OrganizeRoomsService, StorageService, SalaService, UnidadeService, Pessoa } from 'src/app/shared';
 
 @Component({
     selector: 'app-salas-adicionar',
     templateUrl: './salas-adicionar.component.html',
     styleUrls: ['./salas-adicionar.component.scss'],
     animations: [routerTransition()],
-    providers: [
-        { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
-    ],
 })
 
 export class SalasAdicionarComponent implements OnInit {
+    labelPosition = 'before';
     permissao;
 
-    salaSelecionada;
     formAddSala: FormGroup;
-    salaDtCadastro = new FormControl(moment());
-    listUnidades: Unidade[];
+    listUnidades;
+
+    selSala;
+    selUnidade = new FormControl();
+
+    salaDtAtualizacao;
+    salaPesAtualizacao;
 
     constructor(
         private formBuilder: FormBuilder,
-        private activatedRoute: ActivatedRoute,
-        private storageService: StorageService,) { }
+        private salaService: SalaService,
+        private unidadeService: UnidadeService,
+        private organizeRoomsService: OrganizeRoomsService,
+        private storageService: StorageService
+    ) { }
 
     ngOnInit() {
+        this.selSala = this.organizeRoomsService.getValue();
+
+        if (this.selSala != null && this.selSala.salaPesAtualizacao != null) {
+            this.salaPesAtualizacao = this.selSala.salaPesAtualizacao.pesNome;
+            this.salaDtAtualizacao = this.selSala.salaDtAtualizacao;
+        }
+
+        console.log(this.selUnidade)
         this.carregarUnidades();
-
-        let id = parseInt(this.activatedRoute.snapshot.paramMap.get('id'));
-
-        this.criarFormularioVazio();
+        this.criarFormulario();
 
         this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
-
     }
 
     carregarUnidades() {
-        this.listUnidades = [
-            {
-                uniId: 1, uniNome: "São Paulo", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
-            },
-            {
-                uniId: 2, uniNome: "Blumenau", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
-            },
-            {
-                uniId: 3, uniNome: "Rio de Janeiro", uniAtiva: true, uniDtCadastro: new Date("20/09/2019"), uniDtAtualizacao: new Date("20/09/2019"), uniPesCadastro: null /*new Pessoa*/, uniPesAtualizacao: null /*new Pessoa*/
-            }
-        ]
-    }
-    criarFormularioVazio() {
-        this.formAddSala = this.formBuilder.group({
-            salaId: [null],
-            salaNome: [null], //, Validators.compose([Validators.required])],
-            salaLotacao: [null],
-            salaAtiva: [null],
-            salaDtCadastro: [null]
+        this.unidadeService.buscarUnidadesAtivas().subscribe(ret => {
+            this.listUnidades = ret.data;
         });
     }
 
-    criarFormulario(sala) {
-        /*this.formAddSala = this.formBuilder.group({
-            salaId: [this.sala.ageId],
-            salaNome: [this.sala.salaNome], //, Validators.compose([Validators.required])],
-            salaLotacao: [this.sala.salaLotacao],
-            salaAtiva: [this.sala.salaAtiva],
-            salaDtCadastro: [this.sala.salaDtCadastro],
-            //unidade: [this.sala.unidade]
-        });*/
+    criarFormulario() {
+        if (this.selSala != null) {
+            this.formAddSala = this.formBuilder.group({
+                salaId: [this.selSala.salaId],
+                salaNome: [this.selSala.salaNome],
+                salaLotacao: [this.selSala.salaLotacao],
+                salaAtiva: [this.selSala.salaAtiva],
+                salaDtCadastro: [this.selSala.salaDtCadastro]
+            });
+            console.log('criar form 1')
+            console.log(this.selUnidade)
+            this.selUnidade = new FormControl(this.selSala.salaUnidade)
+            console.log('criar form 2')
+            console.log(this.selUnidade)
+        } else {
+            this.formAddSala = this.formBuilder.group({
+                salaId: [0],
+                salaNome: [null],
+                salaLotacao: [null],
+                salaAtiva: [true],
+                salaDtCadastro: [new Date()]
+            });
+        }
     }
 
     adicionarSala() {
 
+        var cSalaPesCadastro: Pessoa;
+        var cSalaDtCadastro;
+        if (this.selSala != null) {
+            cSalaPesCadastro = this.selSala.salaPesCadastro;
+            cSalaDtCadastro = this.selSala.salaDtCadastro;
+        } else {
+            cSalaPesCadastro = this.storageService.getLocalUser().pessoa;
+            cSalaDtCadastro = new Date();
+        }
+
+        const sala: Sala = {
+            salaId: this.formAddSala.value.salaId,
+            salaNome: this.formAddSala.value.salaNome,
+            salaLotacao: this.formAddSala.value.salaLotacao,
+            salaAtiva: this.formAddSala.value.salaAtiva,
+            salaPesCadastro: cSalaPesCadastro,
+            salaDtCadastro: cSalaDtCadastro,
+            salaPesAtualizacao: this.storageService.getLocalUser().pessoa,
+            salaDtAtualizacao: new Date(),
+            salaUnidade: this.selUnidade.value
+        };
+        console.log(sala)
+        this.salaService.adicionarAtualizarSala(sala).subscribe(ret => {
+            console.log("retorno")
+            console.log(ret.data)
+            if (ret.data != null) {
+                if (this.selSala != null) {
+                    alert('Sala ' + ret.data.salaNome + ' Atualizada com Sucesso!');
+                } else {
+                    alert('Sala ' + ret.data.salaNome + ' Adicionada com Sucesso!');
+                }
+            }
+        });
     }
 
+    log(sala) {
+        console.log(sala)
+        console.log("----")
+        console.log(this.selUnidade)
+    }
 }

@@ -4,11 +4,11 @@ import { Unidade } from './unidade';
 export interface Sala {
     salaId: number;
     salaNome: string;
-    unidade: Unidade;
     salaLotacao: number;
     salaAtiva: boolean;
-    pessoaInclusao: Pessoa;
+    salaPesCadastro: Pessoa;
     salaDtCadastro: Date;
-    pessoaAtualizacao: Pessoa;
+    salaPesAtualizacao: Pessoa;
     salaDtAtualizacao: Date;
+    salaUnidade: Unidade;
 }

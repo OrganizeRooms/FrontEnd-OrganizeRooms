@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SalasAdicionarRoutingModule } from './salas-adicionar-routing.module';
@@ -7,8 +7,8 @@ import { PageHeaderModule } from '../../../shared';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// Date Picker
-import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerModule } from '@angular/material';
+// Component Material Angular
+import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerModule, MatSelectModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -20,10 +20,14 @@ import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerMod
         MatInputModule,
         MatCheckboxModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatSelectModule
     ],
     declarations: [
         SalasAdicionarComponent
+    ],
+    schemas: [
+        CUSTOM_ELEMENTS_SCHEMA
     ]
 })
 export class SalasAdicionarModule { }

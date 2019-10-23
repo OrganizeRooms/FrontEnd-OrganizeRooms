@@ -24,7 +24,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
     selEquipamento;
     selUnidade = new FormControl();
 
-    equPesDtAtualizacao;
+    equDtAtualizacao;
     equPesAtualizacao;
 
     constructor(
@@ -40,7 +40,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
 
         if (this.selEquipamento != null && this.selEquipamento.equPesAtualizacao != null) {
             this.equPesAtualizacao = this.selEquipamento.equPesAtualizacao.pesNome;
-            this.equPesDtAtualizacao = this.selEquipamento.equPesDtAtualizacao;
+            this.equDtAtualizacao = this.selEquipamento.equDtAtualizacao;
         }
 
         this.carregarUnidades();
@@ -54,7 +54,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
     }
 
     carregarUnidades() {
-        this.unidadeService.buscarTodasUnidades().subscribe(ret => {
+        this.unidadeService.buscarUnidadesAtivas().subscribe(ret => {
             this.listUnidades = ret.data;
         });
     }
@@ -69,7 +69,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
                 equDtCadastro: [this.selEquipamento.equDtCadastro]
             });
             console.log(this.selUnidade)
-            this.selUnidade.setValue = this.selEquipamento.equUnidade
+            this.selUnidade = new FormControl(this.selEquipamento.equUnidade)
             console.log(this.selUnidade)
         } else {
             this.formAddEquipamento = this.formBuilder.group({
