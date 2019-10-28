@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { PessoaService, OrganizeRoomsService, UnidadeService, StorageService, Pessoa } from 'src/app/shared';
+import { PessoaService, OrganizeRoomsService, UnidadeService, StorageService, Pessoa, SessionStorageService } from 'src/app/shared';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-pessoas-adicionar',
@@ -14,7 +15,7 @@ import { PessoaService, OrganizeRoomsService, UnidadeService, StorageService, Pe
 export class PessoasAdicionarComponent implements OnInit, OnDestroy {
     labelPosition = 'before';
     permissao;
-    
+
     formAddPessoa: FormGroup;
     listUnidades;
 
@@ -30,22 +31,22 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
         private pessoaService: PessoaService,
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
-        private storageService: StorageService,
+        private sessionService: SessionStorageService
     ) { }
 
     ngOnInit() {
         this.selPessoa = this.organizeRoomsService.getValue();
 
-        if (this.selPessoa != null && this.selPessoa.pesAtualizacao != null) {
+        /*if (this.selPessoa != null && this.selPessoa.pesAtualizacao != null) {
             this.pesAtualizacao = this.selPessoa.pesAtualizacao.pesNome;
             this.pesDtAtualizacao = this.selPessoa.pesDtAtualizacao;
-        }
+        }*/
 
         console.log(this.selUnidade)
         this.carregarUnidades();
         this.criarFormulario();
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
     ngOnDestroy() {
@@ -62,8 +63,8 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
         if (this.selPessoa != null) {
             this.formAddPessoa = this.formBuilder.group({
                 pesId: [this.selPessoa.pesId],
-                pesNome: [this.selPessoa.pesNome], //, Validators.compose([Validators.required])],
-                pesEmail: [this.selPessoa.pesEmail],
+                pesNome: [this.selPessoa.pesNome, Validators.compose([Validators.required])],
+                pesEmail: [this.selPessoa.pesEmail, Validators.compose([Validators.required])],
                 // pesPermissao: [this.selPessoa.pesPermissao],
                 pesDDD: [this.selPessoa.pesDdd],
                 pesTelefone: [this.selPessoa.pesTelefone],
@@ -77,8 +78,8 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
         } else {
             this.formAddPessoa = this.formBuilder.group({
                 pesId: [0],
-                pesNome: [null], //, Validators.compose([Validators.required])],
-                pesEmail: [null],
+                pesNome: [null, Validators.compose([Validators.required])],
+                pesEmail: [null, Validators.compose([Validators.required])],
                 // pesPermissao: [null],
                 pesDDD: [null],
                 pesTelefone: [null],
@@ -91,13 +92,13 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarPessoa() {
 
-        var cPesCadastro: Pessoa;
+        var cPesCadastro: Number;
         var cPesDtCadastro;
         if (this.selPessoa != null) {
             cPesCadastro = this.selPessoa.pesCadastro;
             cPesDtCadastro = this.selPessoa.pesDtCadastro;
         } else {
-            cPesCadastro = this.storageService.getLocalUser().pessoa;
+            cPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
             cPesDtCadastro = new Date();
         }
 
@@ -113,7 +114,7 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
             pesTipoInclusao: 'SIS',
             pesCadastro: cPesCadastro,
             pesDtCadastro: cPesDtCadastro,
-            pesAtualizacao: this.storageService.getLocalUser().pessoa,
+            pesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             pesDtAtualizacao: new Date(),
         };
         console.log(pessoa)
@@ -122,12 +123,23 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
             console.log(ret.data)
             if (ret.data != null) {
                 if (this.selPessoa != null) {
-                    alert('Pessoa ' + ret.data.pesNome + ' Adicionada com Sucesso!');
-                } else {
                     alert('Pessoa ' + ret.data.pesNome + ' Atualizada com Sucesso!');
+                } else {
+                    alert('Pessoa ' + ret.data.pesNome + ' Adiconada com Sucesso!');
                 }
             }
         });
+    }
+
+    resetarSenha(){
+        this.pessoaService.resetarSenha(this.selPessoa).subscribe(ret => {
+            if(ret.data != 'false'){
+                alert("Senha Resetada com Sucesso!")
+            }else{
+                alert("Erro ao Resetar Senha!")
+            }
+        });
+    
     }
 
     log(unidade) {

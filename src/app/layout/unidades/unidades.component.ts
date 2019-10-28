@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { UnidadeService, OrganizeRoomsService, StorageService } from '../../shared/_services';
+import { UnidadeService, OrganizeRoomsService, SessionStorageService } from '../../shared/_services';
 
 @Component({
     selector: 'app-unidades',
@@ -26,14 +26,14 @@ export class UnidadesComponent implements OnInit {
     constructor(
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
-        private storageService: StorageService
+        private sessionService: SessionStorageService
     ) { }
 
     ngOnInit() {
         this.carregarUnidades();
         this.configurarPaginador();
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
     carregarUnidades() {

@@ -13,7 +13,8 @@
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <span>Data Cadastro</span>
-                        <input type="text" class="form-control" formControlName="uniDtCadastro" disabled>
+                        <span
+                            class="form-control disabled">{{formAddUnidade.value.uniDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
                     <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
@@ -39,10 +40,10 @@
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a *ngIf="permissao == 'ROLE_ADMIN'" class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao"
-                        (click)="adicionarUnidade()">
-                        Adicionar
-                    </a>
+                    <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddUnidade.valid"
+                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarUnidade()">
+                        Confirmar
+                    </button>
                 </div>
                 <br>
                 <div *ngIf="selUnidade != null" class="row text-muted ml-auto">

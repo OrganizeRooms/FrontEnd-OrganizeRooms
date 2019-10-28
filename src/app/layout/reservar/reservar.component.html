@@ -1,38 +1,117 @@
 <div>
-    <app-page-header [heading]="'Reserva de Sala'" ></app-page-header>
+    <app-page-header [heading]="'Reserva de Sala'"></app-page-header>
 
-    <div class="col col-xl-9 col-lg-12">
-        <mat-vertical-stepper [linear]="true" labelPosition="bottom" #stepper>
-            <mat-step [stepControl]="firstFormGroup">
-                <form [formGroup]="firstFormGroup">
-                    <ng-template matStepLabel>Verifique a Disponibilidade</ng-template>
+    <div class="row justify-content-center">
+        <div class="col col-lg-8 col-xl-8">
+            <mat-vertical-stepper [linear]="false" labelPosition="bottom" #stepper>
+
+                <!--- PRIMEIRO PASSO - INICIO -->
+                <mat-step [stepControl]="formUnidade">
+                    <ng-template matStepLabel>Verificando a Disponibilidade</ng-template>
+
                     <div class="row">
-                        <input placeholder="Last name, First name" class="form-control" formControlName="firstCtrl"
-                            required>
-                        <div>
-                            <button mat-button matStepperNext>Next</button>
+                        <div class="col-2 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                            <span>Unidade</span>
+                            <mat-select class="form-control" [(ngModel)]="selUnidade">
+                                <mat-option *ngFor="let unidade of listUnidades" [value]="unidade"
+                                    (onSelectionChange)="log(unidade)">
+                                    {{unidade.uniNome}}
+                                </mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="col-11 col-lg-6 col-xl-3">
+                            <span>Data</span>
+                            <div class="input-group datepicker-home">
+                                <input class="form-control text-center" placeholder="yyyy-mm-dd" name="dp"
+                                    [(ngModel)]="data" ngbDatepicker #d="ngbDatepicker" required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
+                                        type="button"></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </form>
-            </mat-step>
-            <mat-step [stepControl]="secondFormGroup">
-                <form [formGroup]="secondFormGroup">
-                    <ng-template matStepLabel>Faça a Reserva</ng-template>
-                    <input matInput placeholder="Address" formControlName="secondCtrl" required>
+
+                    <div class="row">
+                        <div class="col-2 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+                            <span>Lotação</span>
+                            <input type="text" class="form-control text-center" [(ngModel)]="lotacao">
+                        </div>
+                        <div class="row">
+                            <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-6">
+                                <span>Hora Inicial</span>
+                                <ngb-timepicker [spinners]="false" [(ngModel)]="horaInicio"></ngb-timepicker>
+                            </div>
+                            <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-6">
+                                <span>Hora Final</span>
+                                <ngb-timepicker [spinners]="false" [(ngModel)]="horaFim"></ngb-timepicker>
+                            </div>
+                        </div>
+                        <div class="col-2 col-sm-4 col-md-4 col-lg- col-xl-2">
+                            <a class="btn btn-padrao btn-filtrar"
+                                (click)="filtrarSalas()">
+                                Filtrar
+                            </a>
+                        </div>
+                    </div>
+
+                    <mat-radio-group *ngIf="listSalas != null" [(ngModel)]="selSala">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Sala</th>
+                                    <th>Unidade</th>
+                                    <th>Lotação</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="listSalas != null || listSalas != '' ">
+                                <tr *ngFor="let sala of listSalas">
+                                    <td>
+                                        <mat-radio-button [value]="sala">{{sala.salaNome}}</mat-radio-button>
+                                    </td>
+                                    <td>{{sala.salaUnidade.uniNome}}</td>
+                                    <td>{{sala.salaLotacao}}</td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="listSalas == null || listSalas == '' ">
+                                <tr>
+                                    <td colspan="3">Não existem Salas Disponíveis para os filtros informados!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </mat-radio-group>
+
+                    <div *ngIf="selSala !=null" class="row ml-auto">
+                        <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="next(stepper)">
+                            Confirmar
+                        </a>
+                    </div>
+                </mat-step>
+                <!--- PRIMEIRO PASSO - FIM -->
+
+                <!--- SEGUNDO PASSO - INICIO -->
+                <mat-step [stepControl]="formAgendar">
+                    <form>
+                        <ng-template matStepLabel>Faça a Reserva</ng-template>
+                        <!---<input matInput placeholder="Address" formControlName="secondCtrl" required>-->
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <!--- SEGUNDO PASSO - FIM -->
+
+                <!--- TERCEIRO PASSO -->
+                <mat-step>
+                    <ng-template matStepLabel>Reserva realizada!</ng-template>
+                    You are now done.
                     <div>
                         <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button matStepperNext>Next</button>
+                        <button mat-button (click)="stepper.reset()">Reset</button>
                     </div>
-                </form>
-            </mat-step>
-            <mat-step>
-                <ng-template matStepLabel>Reserva realizada!</ng-template>
-                You are now done.
-                <div>
-                    <button mat-button matStepperPrevious>Back</button>
-                    <button mat-button (click)="stepper.reset()">Reset</button>
-                </div>
-            </mat-step>
-        </mat-vertical-stepper>
+                </mat-step>
+            </mat-vertical-stepper>
+        </div>
     </div>
 </div>

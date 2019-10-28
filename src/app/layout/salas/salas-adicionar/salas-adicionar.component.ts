@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Sala, OrganizeRoomsService, StorageService, SalaService, UnidadeService, Pessoa } from 'src/app/shared';
+import { Sala, OrganizeRoomsService, SalaService, UnidadeService, SessionStorageService } from 'src/app/shared';
 
 @Component({
     selector: 'app-salas-adicionar',
@@ -12,7 +12,7 @@ import { Sala, OrganizeRoomsService, StorageService, SalaService, UnidadeService
     animations: [routerTransition()],
 })
 
-export class SalasAdicionarComponent implements OnInit {
+export class SalasAdicionarComponent implements OnInit, OnDestroy {
     labelPosition = 'before';
     permissao;
 
@@ -30,22 +30,26 @@ export class SalasAdicionarComponent implements OnInit {
         private salaService: SalaService,
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
-        private storageService: StorageService
+        private sessionService: SessionStorageService
     ) { }
 
     ngOnInit() {
         this.selSala = this.organizeRoomsService.getValue();
 
-        if (this.selSala != null && this.selSala.salaPesAtualizacao != null) {
+        /*if (this.selSala != null && this.selSala.salaPesAtualizacao != null) {
             this.salaPesAtualizacao = this.selSala.salaPesAtualizacao.pesNome;
             this.salaDtAtualizacao = this.selSala.salaDtAtualizacao;
-        }
+        }*/
 
         console.log(this.selUnidade)
         this.carregarUnidades();
         this.criarFormulario();
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
+    }
+
+    ngOnDestroy() {
+        this.organizeRoomsService.setValue(null)
     }
 
     carregarUnidades() {
@@ -58,8 +62,8 @@ export class SalasAdicionarComponent implements OnInit {
         if (this.selSala != null) {
             this.formAddSala = this.formBuilder.group({
                 salaId: [this.selSala.salaId],
-                salaNome: [this.selSala.salaNome],
-                salaLotacao: [this.selSala.salaLotacao],
+                salaNome: [this.selSala.salaNome, Validators.compose([Validators.required])],
+                salaLotacao: [this.selSala.salaLotacao, Validators.compose([Validators.required])],
                 salaAtiva: [this.selSala.salaAtiva],
                 salaDtCadastro: [this.selSala.salaDtCadastro]
             });
@@ -71,8 +75,8 @@ export class SalasAdicionarComponent implements OnInit {
         } else {
             this.formAddSala = this.formBuilder.group({
                 salaId: [0],
-                salaNome: [null],
-                salaLotacao: [null],
+                salaNome: [null, Validators.compose([Validators.required])],
+                salaLotacao: [null, Validators.compose([Validators.required])],
                 salaAtiva: [true],
                 salaDtCadastro: [new Date()]
             });
@@ -81,13 +85,13 @@ export class SalasAdicionarComponent implements OnInit {
 
     adicionarSala() {
 
-        var cSalaPesCadastro: Pessoa;
+        var cSalaPesCadastro: Number;
         var cSalaDtCadastro;
         if (this.selSala != null) {
             cSalaPesCadastro = this.selSala.salaPesCadastro;
             cSalaDtCadastro = this.selSala.salaDtCadastro;
         } else {
-            cSalaPesCadastro = this.storageService.getLocalUser().pessoa;
+            cSalaPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
             cSalaDtCadastro = new Date();
         }
 
@@ -98,7 +102,7 @@ export class SalasAdicionarComponent implements OnInit {
             salaAtiva: this.formAddSala.value.salaAtiva,
             salaPesCadastro: cSalaPesCadastro,
             salaDtCadastro: cSalaDtCadastro,
-            salaPesAtualizacao: this.storageService.getLocalUser().pessoa,
+            salaPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             salaDtAtualizacao: new Date(),
             salaUnidade: this.selUnidade.value
         };

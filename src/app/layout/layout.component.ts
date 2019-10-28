@@ -11,17 +11,9 @@ export class LayoutComponent implements OnInit {
 
     collapedSideBar: boolean;
 
-    constructor(
-        private storageServide: StorageService,
-        private router: Router
-    ) { }
+    constructor() { }
 
     ngOnInit() {
-        if (this.storageServide.getLocalUser().logado == false
-            || this.storageServide.getLocalUser().pessoa == ''
-            || this.storageServide.getLocalUser().pessoa == null) {
-            this.router.navigate(['/login']);
-        }
     }
 
     receiveCollapsed($event) {

@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { SalaService, OrganizeRoomsService, StorageService } from '../../shared/_services';
+import { SalaService, OrganizeRoomsService, StorageService, SessionStorageService } from '../../shared/_services';
 
 @Component({
     selector: 'app-salas',
@@ -25,15 +25,15 @@ export class SalasComponent implements OnInit {
 
     constructor(
         private salaService: SalaService,
-        private storageService: StorageService,
         private organizeRoomsService: OrganizeRoomsService,
+        private sessionService: SessionStorageService
     ) { }
 
     ngOnInit() {
         this.carregarSalas();
         this.configurarPaginador();
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
     carregarSalas() {

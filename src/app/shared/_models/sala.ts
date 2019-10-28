@@ -6,9 +6,9 @@ export interface Sala {
     salaNome: string;
     salaLotacao: number;
     salaAtiva: boolean;
-    salaPesCadastro: Pessoa;
+    salaPesCadastro: Number;
     salaDtCadastro: Date;
-    salaPesAtualizacao: Pessoa;
+    salaPesAtualizacao: Number;
     salaDtAtualizacao: Date;
     salaUnidade: Unidade;
 }

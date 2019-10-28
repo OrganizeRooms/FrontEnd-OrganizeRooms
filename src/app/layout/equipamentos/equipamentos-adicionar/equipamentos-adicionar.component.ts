@@ -4,7 +4,7 @@ import { routerTransition } from '../../../router.animations';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import {
-    StorageService, EquipamentoService, UnidadeService, OrganizeRoomsService, Pessoa, Equipamento
+    EquipamentoService, UnidadeService, OrganizeRoomsService, Equipamento, SessionStorageService
 } from 'src/app/shared';
 
 @Component({
@@ -32,21 +32,21 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
         private equipamentoService: EquipamentoService,
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
-        private storageService: StorageService,
+        private sessionService: SessionStorageService,
     ) { }
 
     ngOnInit() {
         this.selEquipamento = this.organizeRoomsService.getValue();
 
-        if (this.selEquipamento != null && this.selEquipamento.equPesAtualizacao != null) {
+        /*if (this.selEquipamento != null && this.selEquipamento.equPesAtualizacao != null) {
             this.equPesAtualizacao = this.selEquipamento.equPesAtualizacao.pesNome;
             this.equDtAtualizacao = this.selEquipamento.equDtAtualizacao;
-        }
+        }*/
 
         this.carregarUnidades();
         this.criarFormulario();
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
     ngOnDestroy() {
@@ -63,8 +63,8 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
         if (this.selEquipamento != null) {
             this.formAddEquipamento = this.formBuilder.group({
                 equId: [this.selEquipamento.equId],
-                equNome: [this.selEquipamento.equNome],
-                equDescricao: [this.selEquipamento.equDescricao],
+                equNome: [this.selEquipamento.equNome, Validators.compose([Validators.required])],
+                equDescricao: [this.selEquipamento.equDescricao, Validators.compose([Validators.required])],
                 equAtiva: [this.selEquipamento.equAtiva],
                 equDtCadastro: [this.selEquipamento.equDtCadastro]
             });
@@ -74,8 +74,8 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
         } else {
             this.formAddEquipamento = this.formBuilder.group({
                 equId: [0],
-                equNome: [null],
-                equDescricao: [null],
+                equNome: [null, Validators.compose([Validators.required])],
+                equDescricao: [null, Validators.compose([Validators.required])],
                 equAtiva: [true],
                 equDtCadastro: [new Date()]
             });
@@ -84,13 +84,13 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarEquipamento() {
 
-        var cEquPesCadastro: Pessoa;
+        var cEquPesCadastro: Number;
         var cEquPesDtCadastro;
         if (this.selEquipamento != null) {
             cEquPesCadastro = this.selEquipamento.equPesCadastro;
-            cEquPesDtCadastro = this.selEquipamento.equPesDtCadastro;
+            cEquPesDtCadastro = this.selEquipamento.equDtCadastro;
         } else {
-            cEquPesCadastro = this.storageService.getLocalUser().pessoa;
+            cEquPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
             cEquPesDtCadastro = new Date();
         }
 
@@ -102,7 +102,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
             equUnidade: this.selUnidade.value,
             equPesCadastro: cEquPesCadastro,
             equDtCadastro: cEquPesDtCadastro,
-            equPesAtualizacao: this.storageService.getLocalUser().pessoa,
+            equPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             equDtAtualizacao: new Date(),
         };
         console.log(equipamento)

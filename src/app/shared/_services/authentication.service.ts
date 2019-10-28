@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 
 import { API_CONFIG } from '../../shared/_config';
 import { LocalUser, JwtAuthentication, Response } from '../_models';
-import { StorageService } from './storage.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SessionStorageService } from './sessionStorage.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
@@ -13,7 +13,7 @@ export class AuthenticationService {
   pessoaLogada: EventEmitter<Boolean> = new EventEmitter();
 
   constructor(private http: HttpClient,
-    private storageService: StorageService,
+    private sessionService: SessionStorageService,
     private router: Router) { }
 
   authenticate(creds: JwtAuthentication) {
@@ -42,7 +42,8 @@ export class AuthenticationService {
       logado: true,
       pessoa: ret.pessoa
     };
-    this.storageService.setLocalUser(user);
+    //this.storageService.setLocalUser(user);
+    this.sessionService.setSessionUser(user);
     this.pessoaLogada.emit(true);
     this.router.navigate(['/home']);
   }
@@ -54,7 +55,8 @@ export class AuthenticationService {
       logado: false,
       pessoa: ''
     };
-    this.storageService.setLocalUser(null);
+    //this.storageService.setLocalUser(null);
+    this.sessionService.setSessionUser(null);
     this.pessoaLogada.emit(false);
   }
 
@@ -66,7 +68,8 @@ export class AuthenticationService {
       logado: true,
       pessoa: 'Administrador'
     };
-    this.storageService.setLocalUser(user);
+    //this.storageService.setLocalUser(user);
+    this.sessionService.setSessionUser(user);
     this.pessoaLogada.emit(true);
   }
 }

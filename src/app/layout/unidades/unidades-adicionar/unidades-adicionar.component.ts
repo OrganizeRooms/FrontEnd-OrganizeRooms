@@ -3,9 +3,7 @@ import { routerTransition } from '../../../router.animations';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Unidade, Pessoa, UnidadeService, OrganizeRoomsService, StorageService } from 'src/app/shared';
-
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Unidade, UnidadeService, OrganizeRoomsService, SessionStorageService } from 'src/app/shared';
 
 @Component({
     selector: 'app-unidades-adicionar',
@@ -28,19 +26,19 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
-        private storageService: StorageService,
-        private modal: NgbModal) { }
+        private sessionService: SessionStorageService
+        ) { }
 
     ngOnInit() {
         this.selUnidade = this.organizeRoomsService.getValue()
 
-        if (this.selUnidade != null && this.selUnidade.uniPesAtualizacao != null) {
+        /*if (this.selUnidade != null && this.selUnidade.uniPesAtualizacao != null) {
             this.uniPesAtualizacao = this.selUnidade.uniPesAtualizacao.pesNome;
             this.uniDtAtualizacao = this.selUnidade.uniDtAtualizacao
-        }
+        }*/
         this.criarFormulario();
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
     ngOnDestroy() {
@@ -67,13 +65,13 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarUnidade() {
 
-        var cUniPesCadastro: Pessoa;
+        var cUniPesCadastro;
         var cUniDtCadastro;
         if (this.selUnidade != null) {
             cUniPesCadastro = this.selUnidade.uniPesCadastro;
             cUniDtCadastro = this.selUnidade.uniDtCadastro;
         } else {
-            cUniPesCadastro = this.storageService.getLocalUser().pessoa;
+            cUniPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
             cUniDtCadastro = new Date();
         }
 
@@ -83,7 +81,7 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
             uniAtiva: this.formAddUnidade.value.uniAtiva,
             uniPesCadastro: cUniPesCadastro,
             uniDtCadastro: cUniDtCadastro,
-            uniPesAtualizacao: this.storageService.getLocalUser().pessoa,
+            uniPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             uniDtAtualizacao: new Date(),
         };
 

@@ -4,8 +4,8 @@ export interface Unidade {
     uniId: number;
     uniNome: string;
     uniAtiva: boolean;
-    uniPesCadastro: Pessoa;
+    uniPesCadastro: Number;
     uniDtCadastro: Date;
-    uniPesAtualizacao: Pessoa;
+    uniPesAtualizacao: Number;
     uniDtAtualizacao: Date;
 }

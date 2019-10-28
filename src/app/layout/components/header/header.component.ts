@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { AuthenticationService, StorageService, PessoaService } from '../../../shared/_services';
-import { Pessoa } from '../../../shared/_models';
+import { AuthenticationService, PessoaService, SessionStorageService } from '../../../shared/_services';
 
 @Component({
     selector: 'app-header',
@@ -14,11 +13,11 @@ export class HeaderComponent implements OnInit {
     currentPessoa;
     
     constructor(public router: Router,
-        private storageService: StorageService,
+        private sessionService: SessionStorageService,
         private authenticationService: AuthenticationService,
         private pessoaService: PessoaService) {
         
-        this.currentPessoa = this.storageService.getLocalUser().pessoa;
+        this.currentPessoa = this.sessionService.getSessionUser().pessoa;
 
         this.router.events.subscribe(val => {
             if (
