@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 
-import { AuthenticationService, StorageService, PessoaService } from '../../../shared/_services';
+import { AuthenticationService, PessoaService, SessionStorageService } from '../../../shared/_services';
 import { Pessoa } from '../../../shared/_models';
 
 @Component({
@@ -21,12 +21,12 @@ export class SidebarComponent implements OnInit {
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
     constructor(public router: Router,
-        private storageService: StorageService,
+        private sessionService: SessionStorageService,
         private authenticationService: AuthenticationService,
         private pessoaService: PessoaService
     ) {
 
-        this.currentPessoa = this.storageService.getLocalUser().pessoa;
+        this.currentPessoa = this.sessionService.getSessionUser().pessoa;
         this.router.events.subscribe(val => {
             if (
                 val instanceof NavigationEnd &&
@@ -44,7 +44,7 @@ export class SidebarComponent implements OnInit {
         this.showMenu = '';
         this.pushRightClass = 'push-right';
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
     resetarSenha() {

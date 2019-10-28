@@ -1,8 +1,8 @@
 <div class="login-page" [@routerTransition]>
+    <br/>
     <div class="row justify-content-md-center">
         <div class="col-md-4">
-            <img src="assets/images/logo.png" width="150px" class="user-avatar" />
-            <h1>Organize Rooms</h1>
+            <img id="imagem" src="assets/images/logo_organizerooms_branco.png" />
             <form [formGroup]="loginForm" (ngSubmit)="verificarCredenciais(modalNovaSenha)">
                 <!-- <form [formGroup]="loginForm" (ngSubmit)="logar()">-->
                 <div class="form-group">

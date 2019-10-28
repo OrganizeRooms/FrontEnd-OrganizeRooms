@@ -1,0 +1,25 @@
+#step1{
+    min-height: 20em;
+}
+
+.datepicker-home{
+    //margin-top: 24px;
+    max-width: 180px;
+}
+
+.btn-filtrar{
+    margin-top: 24px;
+    width: 100px;
+}
+
+.table-salas{
+    margin: 0 auto;
+    padding: 10px;
+    border: black solid;
+}
+
+mat-radio-group{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}

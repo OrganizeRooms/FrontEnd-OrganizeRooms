@@ -15,7 +15,8 @@
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <span>Data Cadastro</span>
-                        <input type="text" class="form-control" formControlName="equDtCadastro" disabled>
+                        <span
+                            class="form-control disabled">{{formAddEquipamento.value.equDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
                     <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <mat-checkbox formControlName="equAtiva" checked="formAddEquipamento.equAtiva"
@@ -23,8 +24,8 @@
                             Ativa?</mat-checkbox>
                     </div>
                     <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
-                        <mat-checkbox [disabled]="true" formControlName="equAtiva"
-                            checked="formAddEquipamento.equAtiva" [labelPosition]='labelPosition'>
+                        <mat-checkbox [disabled]="true" formControlName="equAtiva" checked="formAddEquipamento.equAtiva"
+                            [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
                 </div>
@@ -49,7 +50,7 @@
                 <div class="row">
                     <div class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-8">
                         <span>Descrição</span>
-                        <textarea class="form-control" formControlName="equDescricao"></textarea>
+                        <textarea class="form-control" formControlName="equDescricao" required></textarea>
                     </div>
                 </div>
                 <br>
@@ -58,10 +59,10 @@
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a *ngIf="permissao == 'ROLE_ADMIN'" class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao"
-                        (click)="adicionarEquipamento()">
-                        Adicionar
-                    </a>
+                    <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddEquipamento.valid"
+                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarEquipamento()">
+                        Confirmar
+                    </button>
                 </div>
                 <br>
                 <div *ngIf="selEquipamento != null" class="row text-muted ml-auto">

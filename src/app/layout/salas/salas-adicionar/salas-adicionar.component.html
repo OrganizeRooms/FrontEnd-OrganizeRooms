@@ -13,7 +13,8 @@
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <span>Data Cadastro</span>
-                        <input type="text" class="form-control" formControlName="salaDtCadastro" disabled>
+                        <span
+                            class="form-control disabled">{{formAddSala.value.salaDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
                     <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
                         <mat-checkbox formControlName="salaAtiva" checked="formAddSala.salaAtiva"
@@ -47,7 +48,7 @@
                     </div>
                     <div class="col-5 col-sm-4 col-md-4 col-lg-2">
                         <span>Lotação</span>
-                        <input type="text" class="form-control" formControlName="salaLotacao">
+                        <input type="text" class="form-control" formControlName="salaLotacao" required>
                     </div>
                 </div>
                 <br>
@@ -56,10 +57,10 @@
                         [routerLinkActive]="['router-link-active']">
                         Voltar
                     </a>
-                    <a *ngIf="permissao == 'ROLE_ADMIN'" class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao"
-                        (click)="adicionarSala()">
-                        Adicionar
-                    </a>
+                    <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddSala.valid"
+                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarSala()">
+                        Confirmar
+                    </button>
                 </div>
                 <br>
                 <div *ngIf="selSala != null" class="row text-muted ml-auto">

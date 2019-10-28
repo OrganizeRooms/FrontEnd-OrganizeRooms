@@ -8,16 +8,16 @@ export interface Pessoa {
     pesPermissao: string;
     pesDescricaoPermissao: string;
     pesUnidade: Unidade;
-    pesDdd: String;
+    pesDdd: string;
     pesTelefone: string;
 
     // SIS = Cadastro manual
     // IMP = Por Importação
     pesTipoInclusao: string;
 
-    pesCadastro: Pessoa;
+    pesCadastro: Number;
     pesDtCadastro: Date;
 
-    pesAtualizacao: Pessoa;
+    pesAtualizacao: Number;
     pesDtAtualizacao: Date;
 }

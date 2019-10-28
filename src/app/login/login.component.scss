@@ -2,6 +2,11 @@ $topnav-background-color: #222;
 :host {
     display: block;
 }
+
+#imagem{
+    max-width: 500px;
+}
+
 .login-page {
     position: absolute;
     top: 0;

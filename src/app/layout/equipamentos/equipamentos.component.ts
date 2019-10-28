@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { EquipamentoService, StorageService, OrganizeRoomsService } from '../../shared/_services';
+import { EquipamentoService, StorageService, OrganizeRoomsService, SessionStorageService } from '../../shared/_services';
 
 @Component({
     selector: 'app-equipamentos',
@@ -26,14 +26,14 @@ export class EquipamentosComponent implements OnInit {
     constructor(
         private equipamentoService: EquipamentoService,
         private organizeRoomsService: OrganizeRoomsService,
-        private storageService: StorageService,
+        private sessionService: SessionStorageService
     ) { }
 
     ngOnInit() {
         this.carregarEquipamentos();
         this.configurarPaginador();
 
-        this.permissao = this.storageService.getLocalUser().pessoa.pesPermissao;
+        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
     carregarEquipamentos() {

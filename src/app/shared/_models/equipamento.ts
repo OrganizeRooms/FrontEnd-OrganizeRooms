@@ -7,8 +7,8 @@ export interface Equipamento {
     equDescricao: string;
     equAtiva: String;
     equUnidade: Unidade;
-    equPesCadastro: Pessoa;
+    equPesCadastro: Number;
     equDtCadastro: Date;
-    equPesAtualizacao: Pessoa;
+    equPesAtualizacao: Number;
     equDtAtualizacao: Date;
 }
