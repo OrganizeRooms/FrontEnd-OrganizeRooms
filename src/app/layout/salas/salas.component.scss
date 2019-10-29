@@ -1,12 +1,15 @@
 /* Column Widths */
 .mat-column-salaNome {
-    max-width: 55px;
+    max-width: 46px;
 }
 .mat-column-salaUnidade {
-    max-width: 30px;
+    max-width: 35px;
 }
- .mat-column-detalhes,
- .mat-column-salaAtiva,
- .mat-column-salaLotacao {
+.mat-column-salaLotacao {
+    max-width: 19px;
+}
+.mat-column-detalhes,
+.mat-column-salaAtiva {
     max-width: 15px;
- }
+}
+ 

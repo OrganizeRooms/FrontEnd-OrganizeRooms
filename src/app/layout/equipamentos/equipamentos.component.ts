@@ -4,7 +4,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 import { rangeLabel } from '../../shared/utils/range-label';
 
-import { EquipamentoService, StorageService, OrganizeRoomsService, SessionStorageService } from '../../shared/_services';
+import { EquipamentoService, OrganizeRoomsService, SessionStorageService } from '../../shared/_services';
 
 @Component({
     selector: 'app-equipamentos',

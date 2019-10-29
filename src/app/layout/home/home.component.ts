@@ -8,8 +8,8 @@ import { Agendamento } from 'src/app/shared';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { HomeDetalhesComponent } from './home-detalhes/home-detalhes.component';
 // Date Picker
-import { NgbDateStruct, NgbDatepickerI18n, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { I18n, CustomDatepickerI18n } from 'src/app/shared/utils';
+import { NgbDateStruct, NgbDatepickerI18n, NgbModal, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/app/shared/utils';
 import { TouchSequence } from 'selenium-webdriver';
 
 @Component({
@@ -18,8 +18,10 @@ import { TouchSequence } from 'selenium-webdriver';
     styleUrls: ['./home.component.scss'],
     animations: [routerTransition()],
     providers: [
-        I18n, { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n } // define custom NgbDatepickerI18n provider
-    ],
+        I18n,
+        { provide: NgbDatepickerI18n, useClass: CustomDatepickerI18n }, // define custom NgbDatepickerI18n provider
+        { provide: NgbDateParserFormatter, useClass: NgbDateCustomParserFormatter } // define custom Date Format provider
+    ]
 })
 export class HomeComponent implements OnInit {
 
@@ -142,7 +144,7 @@ export class HomeComponent implements OnInit {
 
     // this.open(content);
 
-    abrirDetalhes(agend, modalDetalhes){
+    abrirDetalhes(agend, modalDetalhes) {
         this.agendamentoSelecionado = agend
 
         this.abrirModal(modalDetalhes);

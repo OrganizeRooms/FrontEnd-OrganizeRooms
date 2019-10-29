@@ -4,39 +4,38 @@
     <app-page-header *ngIf="selEquipamento == null" [heading]="'Equipamentos - Adicionar Equipamento'">
     </app-page-header>
 
-    <br />
-    <div class="row justify-content-md-center">
-        <div class="col-10 col-sm-8 col-md-8 col-lg-7">
+    <div class="row ml-auto justify-content-md-center">
+        <div class="col-10 col-sm-10 col-md-8 col-lg-7 col-xl-7">
             <form [formGroup]="formAddEquipamento">
                 <div class="row">
-                    <div class="col-2 col-sm-3 col-md-4 col-lg-2">
+                    <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-2">
                         <span>Código</span>
                         <input type="text" class="form-control" formControlName="equId" disabled>
                     </div>
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-3">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                         <span>Data Cadastro</span>
                         <span class="form-control disabled">
                             {{formAddEquipamento.value.equDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
-                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
+                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-1 col-sm-1 col-md-2 col-lg-3 col-xl-7">
                         <mat-checkbox formControlName="equAtiva" checked="formAddEquipamento.equAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
-                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
-                        <mat-checkbox [disabled]="true" formControlName="equAtiva" checked="formAddEquipamento.equAtiva"
+                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-1 col-sm-1 col-md-2 col-lg-3 col-xl-7">
+                        <mat-checkbox [disabled] formControlName="equAtiva" checked="formAddEquipamento.equAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
-                        <span>Nome</span>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-5">
+                        <span>Nome <span style="color: red;">*</span></span>
                         <input type="text" class="form-control" formControlName="equNome" autofocus required>
                     </div>
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
-                        <span>Unidade</span>
+                    <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-3">
+                        <span>Unidade <span style="color: red;">*</span></span>
                         <mat-select class="form-control" [formControl]="selUnidade">
                             <mat-option *ngFor="let unidade of listUnidades" [value]="unidade"
                                 (onSelectionChange)="log(unidade)">
@@ -48,27 +47,29 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-8">
-                        <span>Descrição</span>
+                    <div class="col-12 col-sm-12 col-md-11 col-lg-11 col-xl-8">
+                        <span>Descrição <span style="color: red;">*</span></span>
                         <textarea class="form-control" formControlName="equDescricao" required></textarea>
                     </div>
                 </div>
                 <br>
-                <div class="row ml-auto">
-                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/equipamentos']"
-                        [routerLinkActive]="['router-link-active']">
-                        Voltar
-                    </a>
-                    <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddEquipamento.valid"
-                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarEquipamento()">
-                        Confirmar
-                    </button>
+                <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-7">
+                    <div class="row justify-content-center">
+                        <a class="col-5 col-sm-5 col-md-4 col-lg-4 col-xl-5 btn btn-padrao" [routerLink]="['/equipamentos']"
+                            [routerLinkActive]="['router-link-active']">
+                            Voltar
+                        </a>
+                        <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddEquipamento.valid"
+                            class="col-5 col-sm-5 col-md-4 col-lg-4 col-xl-5 btn btn-padrao" (click)="adicionarEquipamento()">
+                            Confirmar
+                        </button>
+                    </div>
                 </div>
-                <br>
+                <!--<br>
                 <div *ngIf="selEquipamento != null" class="row text-muted ml-auto">
                     <span>Última Atualização por <span class="text-bolder">{{equPesAtualizacao | uppercase}}</span>
                         no dia <span class="text-bolder">{{equDtAtualizacao | date: "dd/MM/yyyy"}}</span></span>
-                </div>
+                </div>-->
             </form>
         </div>
     </div>
