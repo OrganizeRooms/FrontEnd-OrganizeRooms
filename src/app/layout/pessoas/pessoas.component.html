@@ -2,23 +2,23 @@
     <app-page-header [heading]="'Pessoas'"></app-page-header>
 
     <div class="row justify-content-center">
-        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
+        <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-7">
             <form>
                 <div class="row justify-content-center">
-                    <div class="col-11 col-sm-6 col-md-6 col-lg-6 col-xl-5">
+                    <div class="col-11 col-sm-6 col-md-8 col-lg-6 col-xl-8">
                         <input class="form-control" matInput (keyup)="aplicarFiltro($event.target.value)"
                             placeholder="Pesquisar">
                     </div>
-                    <div class="col-7 col-sm-5 col-md-4 col-lg-4 col-xl-7">
+                    <div class="col-7 col-sm-5 col-md-3 col-lg-5 col-xl-4">
                         <div *ngIf="permissao == 'ROLE_ADMIN'"
                             class="row justify-content-sm-end">
-                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-3">
+                            <div class="col-6 col-sm-5 col-md-8 col-lg-5 col-xl-6">
                                 <a class="btn btn-padrao" [routerLink]="['/pessoas-adicionar']"
                                     [routerLinkActive]="['router-link-active']">
                                     Adicionar
                                 </a>
                             </div>
-                            <div class="col-6 col-sm-5 col-md-5 col-lg-5 col-xl-3">
+                            <div class="col-6 col-sm-5 col-md-4 col-lg-3 col-xl-5">
                                 <a class="btn btn-padrao" [routerLink]="['/pessoas-importar']"
                                     [routerLinkActive]="['router-link-active']">
                                     Importar

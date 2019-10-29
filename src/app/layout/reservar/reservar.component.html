@@ -1,17 +1,17 @@
 <div>
     <app-page-header [heading]="'Reserva de Sala'"></app-page-header>
 
-    <div class="row justify-content-center">
-        <div class="col col-lg-8 col-xl-8">
-            <mat-vertical-stepper [linear]="false" labelPosition="bottom" #stepper>
+    <div class="row justify-content-md-center">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-7">
+            <mat-vertical-stepper linear labelPosition="bottom" #stepper>
 
                 <!--- PRIMEIRO PASSO - INICIO -->
-                <mat-step [stepControl]="formVerificacao">
+                <mat-step completed="false">
                     <ng-template matStepLabel>Verificando a Disponibilidade</ng-template>
 
                     <div class="row">
-                        <div class="col-2 col-sm-4 col-md-4 col-lg-4 col-xl-4">
-                            <span>Unidade</span>
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-5">
+                            <span>Unidade <span style="color: red;">*</span></span>
                             <mat-select class="form-control" [(ngModel)]="selUnidade">
                                 <mat-option *ngFor="let unidade of listUnidades" [value]="unidade"
                                     (onSelectionChange)="log(unidade)">
@@ -19,10 +19,10 @@
                                 </mat-option>
                             </mat-select>
                         </div>
-                        <div class="col-11 col-lg-6 col-xl-3">
-                            <span>Data</span>
+                        <div class="col-12 col-sm-5 col-md-4 col-lg-6 col-xl-5">
+                            <span>Data <span style="color: red;">*</span></span>
                             <div class="input-group datepicker-home">
-                                <input class="form-control text-center" placeholder="yyyy-mm-dd" name="dp"
+                                <input class="form-control text-center" placeholder="dd/mm/yyy" name="dp"
                                     [(ngModel)]="data" ngbDatepicker #d="ngbDatepicker" required>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
@@ -33,34 +33,36 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-2 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-                            <span>Lotação</span>
-                            <input type="text" class="form-control text-center" [(ngModel)]="lotacao">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-11 col-xl-10">
+                            <div class="row">
+                                <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-4">
+                                    <span>Hora Inicial</span>
+                                    <ngb-timepicker [spinners]="false" [(ngModel)]="horaInicio"></ngb-timepicker>
+                                </div>
+                                <div class="col-6 col-sm-3 col-md-4 col-lg-4 col-xl-4">
+                                    <span>Hora Final</span>
+                                    <ngb-timepicker [spinners]="false" [(ngModel)]="horaFim"></ngb-timepicker>
+                                </div>
+
+                                <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                    <span>Lotação</span>
+                                    <input type="number" class="form-control text-center" [(ngModel)]="lotacao">
+                                </div>
+                                <div *ngIf="apareceFiltrar == true" (click)="filtrarSalas()"
+                                    class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                    <a class="btn btn-padrao btn-filtrar">
+                                        Filtrar
+                                    </a>
+                                </div>
+                                <div *ngIf="filtrarValido == true && apareceFiltrar == false"
+                                    class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                    <a class="btn btn-padrao btn-filtrar" (click)="limpar()">
+                                        Limpar
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
-                                <span>Hora Inicial</span>
-                                <ngb-timepicker [spinners]="false" [(ngModel)]="horaInicio"></ngb-timepicker>
-                            </div>
-                            <div class="col-6 col-sm-6 col-md-5 col-lg-5 col-xl-5">
-                                <span>Hora Final</span>
-                                <ngb-timepicker [spinners]="false" [(ngModel)]="horaFim"></ngb-timepicker>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div *ngIf="apareceFiltrar == true" (click)="filtrarSalas()"
-                                class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
-                                <a class="btn btn-padrao btn-filtrar">
-                                    Filtrar
-                                </a>
-                            </div>
-                            <div *ngIf="filtrarValido == true && apareceFiltrar == false"
-                                class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
-                                <a class="btn btn-padrao btn-filtrar" (click)="limpar()">
-                                    Limpar
-                                </a>
-                            </div>
-                        </div>
+
                     </div>
 
                     <mat-radio-group *ngIf="listSalas != null" [(ngModel)]="selSala">
@@ -75,7 +77,9 @@
                             <tbody *ngIf="listSalas != null || listSalas != '' ">
                                 <tr *ngFor="let sala of listSalas">
                                     <td>
-                                        <mat-radio-button [value]="sala">{{sala.salaNome}}</mat-radio-button>
+                                        <mat-radio-button [value]="sala">
+                                            {{sala.salaNome}}
+                                        </mat-radio-button>
                                     </td>
                                     <td>{{sala.salaUnidade.uniNome}}</td>
                                     <td>{{sala.salaLotacao}}</td>
@@ -89,11 +93,6 @@
                         </table>
                     </mat-radio-group>
 
-                    <form *ngIf="" [formGroup]="formVerificacao">
-                        <input type="text" formControlName="valido" required>
-
-                    </form>
-
                     <div *ngIf="selSala !=null" class="row ml-auto">
                         <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="next(stepper)">
                             Confirmar
@@ -103,8 +102,8 @@
                 <!--- PRIMEIRO PASSO - FIM -->
 
                 <!--- SEGUNDO PASSO - INICIO -->
-                <mat-step [stepControl]="formAgendar">
-                    <form>
+                <mat-step completed="false">
+                    <form [formGroup]="formAgendar">
                         <ng-template matStepLabel>Faça a Reserva</ng-template>
                         <!---<input matInput placeholder="Address" formControlName="secondCtrl" required>-->
                         <div>
@@ -116,7 +115,7 @@
                 <!--- SEGUNDO PASSO - FIM -->
 
                 <!--- TERCEIRO PASSO -->
-                <mat-step>
+                <mat-step completed="false">
                     <ng-template matStepLabel>Reserva realizada!</ng-template>
                     You are now done.
                     <div>

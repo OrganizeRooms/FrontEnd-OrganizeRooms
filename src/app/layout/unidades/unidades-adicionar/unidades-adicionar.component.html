@@ -2,26 +2,25 @@
     <app-page-header *ngIf="selUnidade != null" [heading]="'Unidades - Detalhes da Unidade'"></app-page-header>
     <app-page-header *ngIf="selUnidade == null" [heading]="'Unidades - Adicionar Unidade'"></app-page-header>
 
-    <br />
-    <div class="row justify-content-md-center">
-        <div class="col-10 col-sm-8 col-md-8 col-lg-7">
+    <div class="row ml-auto justify-content-md-center">
+        <div class="col-10 col-sm-8 col-md-8 col-lg-8 col-xl-5">
             <form [formGroup]="formAddUnidade">
                 <div class="row">
-                    <div class="col-2 col-sm-3 col-md-4 col-lg-2">
+                    <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-2">
                         <span>Código</span>
                         <input type="text" class="form-control" formControlName="uniId" disabled>
                     </div>
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-3">
+                    <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                         <span>Data Cadastro</span>
                         <span
                             class="form-control disabled">{{formAddUnidade.value.uniDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
-                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
+                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-1">
                         <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
-                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3">
+                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-1">
                         <mat-checkbox [disabled]="true" formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
@@ -29,27 +28,29 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 col-sm-8 col-md-7 col-lg-7">
-                        <span>Nome</span>
+                    <div class="col-12 col-sm-12 col-md-10 col-lg-9 col-xl-8">
+                        <span>Nome <span style="color: red;">*</span></span>
                         <input type="text" class="form-control" formControlName="uniNome" autofocus required>
                     </div>
                 </div>
                 <br>
-                <div class="row ml-auto">
-                    <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/unidades']"
-                        [routerLinkActive]="['router-link-active']">
-                        Voltar
-                    </a>
-                    <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddUnidade.valid"
-                        class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarUnidade()">
-                        Confirmar
-                    </button>
+                <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7">
+                    <div class="row justify-content-center">
+                        <a class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao" [routerLink]="['/unidades']"
+                            [routerLinkActive]="['router-link-active']">
+                            Voltar
+                        </a>
+                        <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddUnidade.valid"
+                            class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao" (click)="adicionarUnidade()">
+                            Confirmar
+                        </button>
+                    </div>
                 </div>
-                <br>
+                <!--<br>
                 <div *ngIf="selUnidade != null" class="row text-muted ml-auto">
                     <span>Última Atualização por <span class="text-bolder">{{uniPesAtualizacao | uppercase}}</span>
                         no dia <span class="text-bolder">{{uniDtAtualizacao | date: "dd/MM/yyyy"}}</span></span>
-                </div>
+                </div>-->
             </form>
         </div>
     </div>

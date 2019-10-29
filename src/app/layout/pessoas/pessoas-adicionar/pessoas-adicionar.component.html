@@ -3,7 +3,7 @@
     <app-page-header *ngIf="selPessoa == null" [heading]="'Pessoas - Adicionar Pessoa'"></app-page-header>
 
     <br />
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-sm-center">
         <div class="col-10 col-sm-8 col-md-8 col-lg-8 col-xl-7">
             <form [formGroup]="formAddPessoa">
                 <div class="row">
@@ -12,7 +12,7 @@
                         <input type="text" class="form-control" formControlName="pesId" disabled>
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
-                        <span>Permissão</span>
+                        <span>Permissão <span style="color: red;">*</span></span>
                         <mat-select class="form-control" [(value)]="selPermissao">
                             <mat-option value="ROLE_USUARIO">Usuario</mat-option>
                             <mat-option value="ROLE_ADMIN">Administrador</mat-option>
@@ -27,12 +27,12 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
-                        <span>Nome</span>
+                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-5">
+                        <span>Nome <span style="color: red;">*</span></span>
                         <input type="text" class="form-control" formControlName="pesNome" required>
                     </div>
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
-                        <span>Unidade</span>
+                    <div class="col-2 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+                        <span>Unidade <span style="color: red;">*</span></span>
                         <mat-select class="form-control" [formControl]="selUnidade">
                             <mat-option *ngFor="let unidade of listUnidades" [value]="unidade"
                                 (onSelectionChange)="log(unidade)">
@@ -44,35 +44,35 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-8 col-xl-8">
-                        <span>E-mail</span>
+                    <div class="col-2 col-sm-11 col-md-4 col-lg-8 col-xl-8">
+                        <span>E-mail <span style="color: red;">*</span></span>
                         <input type="email" class="form-control" formControlName="pesEmail" required>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-1 col-sm-1 col-md-2 col-lg-2 col-xl-2">
+                    <div class="col-1 col-sm-3 col-md-2 col-lg-2 col-xl-2">
                         <span>DDD</span>
                         <input type="text" class="form-control" formControlName="pesDDD">
                     </div>
-                    <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3">
+                    <div class="col-2 col-sm-5 col-md-3 col-lg-3 col-xl-3">
                         <span>Telefone</span>
                         <input type="text" class="form-control" formControlName="pesTelefone">
                     </div>
                 </div>
                 <br>
-                <div class="col-3 col-sm-2 col-md-3 col-lg-8">
+                <div class="col-3 col-sm-12 col-md-3 col-lg-8">
                     <div class="row justify-content-center">
-                        <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/pessoas']"
+                        <a class="col-3 col-sm-4 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/pessoas']"
                             [routerLinkActive]="['router-link-active']">
                             Voltar
                         </a>
                         <a *ngIf="permissao == 'ROLE_ADMIN' && selPessoa != null"
-                            class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="resetarSenha()">
+                            class="col-3 col-sm-4 col-md-3 col-lg-3 btn btn-padrao" (click)="resetarSenha()">
                             Resetar Senha
                         </a>
                         <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddPessoa.valid"
-                            class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarPessoa()">
+                            class="col-3 col-sm-4 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarPessoa()">
                             Confirmar
                         </button>
                     </div>

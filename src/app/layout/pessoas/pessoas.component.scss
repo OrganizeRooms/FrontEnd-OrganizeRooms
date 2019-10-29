@@ -2,11 +2,15 @@
 .mat-column-pesId {
     max-width: 10px;
 }
-.mat-column-pesNome,
-.mat-column-pesUnidade,
-.mat-column-pesDescricaoPermissao {
+.mat-column-pesNome {
     max-width: 25px;
 }
+.mat-column-pesDescricaoPermissao {
+    max-width: 34px;
+}
+.mat-column-pesUnidade {
+    max-width: 18px;
+}
 .mat-column-detalhes {
-    max-width: 10px;
+    max-width: 5px;
 }
