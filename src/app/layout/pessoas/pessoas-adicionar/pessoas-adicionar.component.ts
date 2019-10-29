@@ -3,7 +3,6 @@ import { routerTransition } from '../../../router.animations';
 
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { PessoaService, OrganizeRoomsService, UnidadeService, StorageService, Pessoa, SessionStorageService } from 'src/app/shared';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-pessoas-adicionar',

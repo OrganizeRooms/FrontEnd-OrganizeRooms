@@ -6,7 +6,7 @@
             <mat-vertical-stepper [linear]="false" labelPosition="bottom" #stepper>
 
                 <!--- PRIMEIRO PASSO - INICIO -->
-                <mat-step [stepControl]="formUnidade">
+                <mat-step [stepControl]="formVerificacao">
                     <ng-template matStepLabel>Verificando a Disponibilidade</ng-template>
 
                     <div class="row">
@@ -38,20 +38,28 @@
                             <input type="text" class="form-control text-center" [(ngModel)]="lotacao">
                         </div>
                         <div class="row">
-                            <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-6">
+                            <div class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
                                 <span>Hora Inicial</span>
                                 <ngb-timepicker [spinners]="false" [(ngModel)]="horaInicio"></ngb-timepicker>
                             </div>
-                            <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-6">
+                            <div class="col-6 col-sm-6 col-md-5 col-lg-5 col-xl-5">
                                 <span>Hora Final</span>
                                 <ngb-timepicker [spinners]="false" [(ngModel)]="horaFim"></ngb-timepicker>
                             </div>
                         </div>
-                        <div class="col-2 col-sm-4 col-md-4 col-lg- col-xl-2">
-                            <a class="btn btn-padrao btn-filtrar"
-                                (click)="filtrarSalas()">
-                                Filtrar
-                            </a>
+                        <div class="row">
+                            <div *ngIf="apareceFiltrar == true" (click)="filtrarSalas()"
+                                class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
+                                <a class="btn btn-padrao btn-filtrar">
+                                    Filtrar
+                                </a>
+                            </div>
+                            <div *ngIf="filtrarValido == true && apareceFiltrar == false"
+                                class="col-2 col-sm-4 col-md-4 col-lg-5 col-xl-5">
+                                <a class="btn btn-padrao btn-filtrar" (click)="limpar()">
+                                    Limpar
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -80,6 +88,11 @@
                             </tbody>
                         </table>
                     </mat-radio-group>
+
+                    <form *ngIf="" [formGroup]="formVerificacao">
+                        <input type="text" formControlName="valido" required>
+
+                    </form>
 
                     <div *ngIf="selSala !=null" class="row ml-auto">
                         <a class="col-3 col-sm-2 col-md-3 col-lg-3 btn btn-padrao" (click)="next(stepper)">
