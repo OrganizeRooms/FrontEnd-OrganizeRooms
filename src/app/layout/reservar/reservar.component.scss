@@ -18,6 +18,11 @@
     border: black solid;
 }
 
+.card-body {
+    max-height: 180px;
+    overflow-y: scroll;
+}
+
 mat-radio-group{
     display: flex;
     flex-direction: column;
@@ -27,3 +32,29 @@ mat-radio-group{
 /*.mat-step-header {
     pointer-events: none !important;
   }*/
+
+  h2{
+    margin-top: 10px;
+    margin-right: -50px; 
+  }
+
+  .page-text{
+    font-size: 110%;
+  }
+  
+  .card-agendamento {
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+    padding: 12px; 
+    padding-left: 24px; 
+    padding-right: 20px;
+    margin-bottom: 20px;
+}
+  
+.card-titulo{
+    font-size: 110%;
+    font-weight: bolder;
+}
+
+.mat-column-select {
+    overflow: initial;
+  }

@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./home-detalhes.component.scss']
 })
 export class HomeDetalhesComponent implements OnInit {
+
+    agendamentoSelecionado;
     constructor() { }
     ngOnInit() { }
 }

@@ -20,6 +20,8 @@ const routes: Routes = [
             { path: 'reservar', loadChildren: () => import('./reservar/reservar.module').then(m => m.ReservarModule), canActivate: [AuthGuard]  },
             { path: 'equipamentos', loadChildren: () => import('./equipamentos/equipamentos.module').then(m => m.EquipamentosModule), canActivate: [AuthGuard]  },
             { path: 'equipamentos-adicionar', loadChildren: () => import('./equipamentos/equipamentos-adicionar/equipamentos-adicionar.module').then(m => m.EquipamentosAdicionarModule), canActivate: [AuthGuard]  },
+            { path: 'agendamentos', loadChildren: () => import('./agendamentos/agendamentos.module').then(m => m.AgendamentosModule), canActivate: [AuthGuard]  },
+            { path: 'agendamentos-detalhes', loadChildren: () => import('./agendamentos/agendamentos-detalhes/agendamentos-detalhes.module').then(m => m.AgendamentosDetalhesModule), canActivate: [AuthGuard]  },
         ]
     }
 ];
