@@ -3,7 +3,10 @@ import { routerTransition } from '../../../router.animations';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Unidade, UnidadeService, OrganizeRoomsService, SessionStorageService } from 'src/app/shared';
+import { Unidade, UnidadeService, OrganizeRoomsService, SessionStorageService, PessoaService, EquipamentoService } from 'src/app/shared';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatTableDataSource } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
     selector: 'app-agendamentos-detalhes',
@@ -15,28 +18,48 @@ import { Unidade, UnidadeService, OrganizeRoomsService, SessionStorageService } 
 export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     labelPosition = 'before';
     permissao;
-    
-    selUnidade;
-    formAddUnidade: FormGroup;
 
-    uniDtAtualizacao;
-    uniPesAtualizacao;
+    selAgendamento;
+    selUnidade;
+    formAgendamento: FormGroup;
+    ageParticipantes;
+    ageEquipamentos;
+
+    // Modal Participantes
+    displayedColumnsParticipantes: string[] = ['selecionar', 'pesId', 'pesNome', 'pesUnidade'];
+    listPessoas = new MatTableDataSource<any>();
+    participantesSelecionados = new SelectionModel<any>(true, []);
+
+    filtrosModalPartic: FormGroup;
+
+    // Modal Equipamentos
+    displayedColumnsEquipamentos: string[] = ['selecionar', 'equId', 'equNome', 'equUnidade'];
+    listEquipamentos = new MatTableDataSource<any>();
+    equipamentosSelecionados = new SelectionModel<any>(true, []);
+
+    filtrosModalEquip: FormGroup;
 
     constructor(
         private formBuilder: FormBuilder,
-        private unidadeService: UnidadeService,
+        private modal: NgbModal,
         private organizeRoomsService: OrganizeRoomsService,
-        private sessionService: SessionStorageService
-        ) { }
+        private sessionService: SessionStorageService,
+        private unidadeService: UnidadeService,
+        private pessoaService: PessoaService,
+        private equipamentoService: EquipamentoService
+    ) { }
 
     ngOnInit() {
-        this.selUnidade = this.organizeRoomsService.getValue()
+        this.selAgendamento = this.organizeRoomsService.getValue()
 
-        /*if (this.selUnidade != null && this.selUnidade.uniPesAtualizacao != null) {
-            this.uniPesAtualizacao = this.selUnidade.uniPesAtualizacao.pesNome;
-            this.uniDtAtualizacao = this.selUnidade.uniDtAtualizacao
+        /*if (this.selAgendamento != null && this.selAgendamento.uniPesAtualizacao != null) {
+            this.uniPesAtualizacao = this.selAgendamento.uniPesAtualizacao.pesNome;
+            this.uniDtAtualizacao = this.selAgendamento.uniDtAtualizacao
         }*/
         this.criarFormulario();
+        this.carregarListas();
+        this.carregarPessoas();
+        this.carregarEquipamentos();
 
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
@@ -46,30 +69,55 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     }
 
     criarFormulario() {
-        if (this.selUnidade != null) {
-            this.formAddUnidade = this.formBuilder.group({
-                uniId: [this.selUnidade.uniId],
-                uniNome: [this.selUnidade.uniNome, Validators.compose([Validators.required])],
-                uniAtiva: [this.selUnidade.uniAtiva],
-                uniDtCadastro: [this.selUnidade.uniDtCadastro]
-            });
-        } else {
-            this.formAddUnidade = this.formBuilder.group({
-                uniId: [0],
-                uniNome: [null, Validators.compose([Validators.required])],
-                uniAtiva: [true],
-                uniDtCadastro: [new Date()]
+        if (this.selAgendamento != null) {
+            this.formAgendamento = this.formBuilder.group({
+                ageId: [this.selAgendamento.ageId],
+                ageAtiva: [this.selAgendamento.ageAtiva],
+                ageAssunto: [this.selAgendamento.ageAssunto, Validators.compose([Validators.required])],
+                ageDescricao: [this.selAgendamento.ageDescricao],
+                ageDtCadastro: [this.selAgendamento.ageDtCadastro]
             });
         }
     }
 
-    adicionarUnidade() {
+    carregarListas() {
+        this.ageParticipantes = this.selAgendamento.ageParticipantes;
+        this.ageEquipamentos = this.selAgendamento.ageEquipamentos;
+    }
 
+    abrirModal(modal) {
+        this.modal.open(modal)
+    }
+
+    // temporario
+    carregarPessoas() {
+        this.pessoaService.buscarTodasPessoas().subscribe(ret => {
+            this.listPessoas.data = ret.data
+        });
+    }
+
+    carregarEquipamentos() {
+
+        /*this.equipamentoService.buscarEquipamentosDisponiveis(
+            this.selAgendamento.ageHoraInicio, this.selAgendamento.ageHoraFim, this.selAgendamento.ageSala.salaUnidade
+        ).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                this.listEquipamentos.data = ret.data;
+            }
+        })*/
+
+        this.equipamentoService.buscarTodosEquipamentos().subscribe(ret => {
+            this.listEquipamentos.data = ret.data;
+        });
+    }
+
+    adicionarUnidade() {
+        /*
         var cUniPesCadastro;
         var cUniDtCadastro;
-        if (this.selUnidade != null) {
-            cUniPesCadastro = this.selUnidade.uniPesCadastro;
-            cUniDtCadastro = this.selUnidade.uniDtCadastro;
+        if (this.selAgendamento != null) {
+            cUniPesCadastro = this.selAgendamento.uniPesCadastro;
+            cUniDtCadastro = this.selAgendamento.uniDtCadastro;
         } else {
             cUniPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
             cUniDtCadastro = new Date();
@@ -87,7 +135,7 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
 
         this.unidadeService.adicionarAtualizarUnidade(unidade).subscribe(ret => {
             if (ret.data != null) {
-                if (this.selUnidade == null) {
+                if (this.selAgendamento == null) {
                     alert('Unidade ' + ret.data.uniNome + ' Adicionada com Sucesso!');
                 } else {
                     alert('Unidade ' + ret.data.uniNome + ' Atualizada com Sucesso!');
@@ -96,11 +144,58 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         });
 
 
-        // this.open(content);
+        // this.open(content);*/
     }
 
     //   open(content) {
     //      this.modal.open(content)
     //  }
 
+    // ---- Inicio Métodos do Modal Participantes
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelectedPart() {
+        const numSelected = this.participantesSelecionados.selected.length;
+        const numRows = this.listPessoas.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterTogglePart() {
+        this.isAllSelectedPart() ?
+            this.participantesSelecionados.clear() :
+            this.listPessoas.data.forEach(rowPart => this.participantesSelecionados.select(rowPart));
+    }
+
+    /** The label for the checkbox on the passed row */
+    checkboxLabelPart(rowPart?: any): string {
+        if (!rowPart) {
+            return `${this.isAllSelectedPart() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.participantesSelecionados.isSelected(rowPart) ? 'deselect' : 'select'} rowPart ${rowPart.position + 1}`;
+    }
+    // ---- Fim Métodos do Modal Participantes
+
+    // ---- Inicio Métodos do Modal Equipamentos
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelectedEquip() {
+        const numSelected = this.equipamentosSelecionados.selected.length;
+        const numRows = this.listEquipamentos.data.length;
+        return numSelected === numRows;
+    }
+
+    /** Selects all rows if they are not all selected; otherwise clear selection. */
+    masterToggleEquip() {
+        this.isAllSelectedEquip() ?
+            this.equipamentosSelecionados.clear() :
+            this.listEquipamentos.data.forEach(rowEquip => this.equipamentosSelecionados.select(rowEquip));
+    }
+
+    /** The label for the checkbox on the passed row */
+    checkboxLabelEquip(rowEquip?: any): string {
+        if (!rowEquip) {
+            return `${this.isAllSelectedEquip() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.equipamentosSelecionados.isSelected(rowEquip) ? 'deselect' : 'select'} rowEquip ${rowEquip.position + 1}`;
+    }
+    // ---- Fim Métodos do Modal Equipamentos
 }

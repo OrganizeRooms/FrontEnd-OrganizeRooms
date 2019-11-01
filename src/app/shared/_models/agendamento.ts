@@ -1,19 +1,23 @@
 import { Pessoa } from './pessoa';
-import { Time } from '@angular/common';
 import { Sala } from './sala';
+import { Equipamento } from './equipamento';
+import { Participante } from './participante';
 
 export interface Agendamento {
     ageId: number;
+    ageAtiva: Boolean;
     ageAssunto: string;
     ageDescricao: string;
     ageSala: Sala;
     agePesResponsavel: Pessoa;
     ageStatus: string;
     ageData: Date;
-    ageHoraInicio: Time;
-    ageHoraFim: Time;
+    ageHoraInicio: Date;
+    ageHoraFim: Date;
     agePesCadastro: Pessoa;
     agePesAtualizacao: Pessoa;
     ageDtCadastro: Date;
     ageDtAtualizacao: Date;
+    ageEquipamentos: Array<Equipamento>;
+    ageParticipantes: Array<Participante>
 }

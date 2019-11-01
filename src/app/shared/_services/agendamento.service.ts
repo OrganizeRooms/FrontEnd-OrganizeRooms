@@ -2,31 +2,43 @@
 import { HttpClient } from '@angular/common/http';
 
 import { API_CONFIG } from '../../shared/_config';
-import { Agendamento } from '../_models';
+import { Agendamento, Unidade, Response } from '../_models';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AgendamentoService {
     constructor(private http: HttpClient) { }
 
-    buscarTodosAgendamentos() {
-        return this.http.get<Agendamento[]>(`${API_CONFIG.baseUrl}/agendamentos`);
+
+    buscarTodosAgendamentos(): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos`);
     }
 
-    getPorUsuario() {
-        return this.http.get<Agendamento[]>(`${API_CONFIG.baseUrl}/agendamentos`);
+    buscarTodosDoUsuario(idUsuario: String, data: String): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos` + idUsuario + data);
     }
 
-    addAgendamento(ingrediente: Agendamento): Observable<Response> {
-        return this.http.post<Response>(`${API_CONFIG.baseUrl}/ingrediente`, ingrediente);
+    buscarTodosDaSala(idSala: String, data: String): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos` + idSala + data);
     }
 
-    atualizarAgendamento(ingrediente: Agendamento): Observable<Response> {
-        return this.http.put<Response>(`${API_CONFIG.baseUrl}/ingrediente`, ingrediente);
+    buscarPorResponsavel(
+        idResponsavel: String, dataInicio: Date, dataFim: Date, unidade: Unidade, status: String): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos`
+            + idResponsavel + dataInicio + dataFim + unidade + status);
     }
 
-    //deletarAgendamento(ingrediente: Agendamento): Observable<Response> {
-   //     return this.http.delete<Response>(`${API_CONFIG.baseUrl}/ingrediente/${ingrediente.id}`);
-    //}
+    buscarSalasDisponiveis(dataHoraInicio: Date, dataHoraFim: Date, unidade: Unidade, lotacao: String): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos`
+            + dataHoraInicio + dataHoraFim + unidade + lotacao);
+    }
+
+    addAgendamento(agendamento: Agendamento): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos`, agendamento);
+    }
+
+    /*atualizarAgendamento(agendamento: Agendamento): Observable<Response> {
+        return this.http.put<Response>(`${API_CONFIG.baseUrl}/agendamentos`, agendamento);
+    }*/
 
 }

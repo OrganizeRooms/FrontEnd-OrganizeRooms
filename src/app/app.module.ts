@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -26,7 +26,7 @@ import { StorageService, AuthenticationService, OrganizeRoomsService, SessionSto
     declarations: [
         AppComponent,
     ],
-    providers: [
+    providers: [       
         StorageService,
         SessionStorageService,
         AuthenticationService,
