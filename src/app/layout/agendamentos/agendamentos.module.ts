@@ -5,13 +5,10 @@ import { CommonModule } from '@angular/common';
 import { AgendamentosRoutingModule } from './agendamentos-routing.module';
 import { AgendamentosComponent } from './agendamentos.component';
 import { PageHeaderModule } from '../../shared';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 // Component Material Angular
 import {
-    MatCheckboxModule, MatInputModule, MatDatepickerModule, MatSelectModule,
-    MatTableModule, MatPaginatorModule, MatSortModule
+    MatCheckboxModule, MatInputModule, MatDatepickerModule, MatSelectModule, MatTableModule, MatPaginatorModule, MatSortModule
 } from '@angular/material';
 
 @NgModule({

@@ -121,12 +121,15 @@ export class ReservarComponent implements OnInit, OnDestroy {
             var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
             var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
 
+            var lotacao;
             if (!this.lotacao) {
-                this.lotacao = 0;
+                lotacao = 0;
+            } else {
+                lotacao = this.lotacao
             }
 
             /*this.agendamentoService.buscarSalasDisponiveis(
-                dataHoraInicio, dataHoraFim, this.selUnidade, this.lotacao
+                dataHoraInicio, dataHoraFim, this.selUnidade, lotacao
             ).subscribe(ret => {
                 if (ret.data != null && ret.data != '') {
                     this.listSalas = ret.data;
@@ -152,9 +155,51 @@ export class ReservarComponent implements OnInit, OnDestroy {
         return dataHora;
     }
 
-    montarStringData(data) {
+    montarStringDataEng(data) {
         var stringData = data.year + '/' + data.month + '/' + data.day
         return stringData
+    }
+
+    montarStringDataPtBr(data) {
+
+        var dia;
+        var mes;
+
+        if (data.day < 10) {
+            dia = '0' + data.day
+        } else {
+            dia = data.day
+        }
+
+        if (data.month < 10) {
+            mes = '0' + data.month
+        } else {
+            mes = data.month
+        }
+
+        var stringData = dia + '/' + mes + '/' + data.year
+        return stringData
+    }
+
+    montarStringHoraMinuto(horaMinuto) {
+
+        var hora;
+        var minuto;
+
+        if (horaMinuto.hour < 10) {
+            hora = '0' + horaMinuto.hour
+        } else {
+            hora = horaMinuto.hour
+        }
+
+        if (horaMinuto.minute < 10) {
+            minuto = '0' + horaMinuto.minute
+        } else {
+            minuto = horaMinuto.minute
+        }
+
+        var stringHoraMinuto = hora + ':' + minuto
+        return stringHoraMinuto
     }
 
     // Reload na tela para recarregar os campos
@@ -189,7 +234,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
             && this.horaFim.hour == 0 && this.horaFim.minute == 0) {
             alert('Informe uma Hora Fim!')
 
-        }*/ else if (this.horaInicio.hour == this.horaFim.hour) {
+        }*/ else if (this.horaInicio.hour == this.horaFim.hour && this.horaInicio.minute == this.horaFim.minute) {
             alert('Informe Horas Diferentes!')
 
         }/* else if ((this.horaInicio.hour >= this.horaFim.hour && this.horaInicio.minute >= this.horaFim.minute)
@@ -240,12 +285,17 @@ export class ReservarComponent implements OnInit, OnDestroy {
 
     realizarReserva(stepper) {
 
-        var nAgeData = this.montarStringData(this.data)
+        var nAgeData = this.montarStringDataEng(this.data)
         var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
         var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
 
-        var nAgeParticipantes = this.montaArrayParticipantes();
-
+        var nAgeParticipantes;
+        if (!this.pessoasSelecionadas.selected) {
+            nAgeParticipantes = this.montaArrayParticipantes();
+        } else {
+            nAgeParticipantes = null;
+        }
+        
         const agendamento: Agendamento = {
             ageId: null,
             ageAtiva: true,
@@ -271,8 +321,9 @@ export class ReservarComponent implements OnInit, OnDestroy {
             console.log("retorno")
             console.log(ret.data)
             if (ret.data != null) {
-                alert('Agendamento Realizado com Sucesso!');
-            }else{
+                this.next(stepper);
+                //alert('Agendamento Realizado com Sucesso!');
+            } else {
                 alert('Não foi possível Finalizar o Agendamento! Tente novamente.');
             }
         });
@@ -286,6 +337,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
                 parId: null,
                 parTipo: 1,
                 parPessoa: pessoa,
+                parAgendamento: null,
             }
             participantes.push(part)
         });

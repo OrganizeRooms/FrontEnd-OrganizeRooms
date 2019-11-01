@@ -2,13 +2,13 @@
     <app-page-header [heading]="'Minhas Reservas'"></app-page-header>
 
     <div class="row justify-content-center mr-auto">
-        <div class="col-12 col-sm-11 col-md-10 col-lg-10 col-xl-10">
+        <div class="col-12 col-sm-11 col-md-10 col-lg-10 col-xl-11">
 
             <div class="row justify-content-center mr-auto">
                 <div class="col-12 col-sm-5 col-md-4 col-lg-6 col-xl-2">
                     <span>Data Inicial <span style="color: red;">*</span></span>
                     <div class="input-group datepicker-home">
-                        <input class="form-control text-center" placeholder="dd/mm/yyy" name="dataInicial"
+                        <input class="form-control text-center" placeholder="dd/mm/yyyy" name="dataInicial"
                             [(ngModel)]="dataInicial" ngbDatepicker #datainicial="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary calendar" (click)="datainicial.toggle()"
@@ -19,7 +19,7 @@
                 <div class="col-12 col-sm-5 col-md-4 col-lg-6 col-xl-2">
                     <span>Data Final <span style="color: red;">*</span></span>
                     <div class="input-group datepicker-home">
-                        <input class="form-control text-center" placeholder="dd/mm/yyy" name="dataFinal"
+                        <input class="form-control text-center" placeholder="dd/mm/yyyy" name="dataFinal"
                             [(ngModel)]="dataFinal" ngbDatepicker #datafinal="ngbDatepicker">
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary calendar" (click)="datafinal.toggle()"

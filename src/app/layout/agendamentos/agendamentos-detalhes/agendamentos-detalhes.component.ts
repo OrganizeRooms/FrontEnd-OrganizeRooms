@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
-
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import { Unidade, UnidadeService, OrganizeRoomsService, SessionStorageService, PessoaService, EquipamentoService } from 'src/app/shared';
+import {
+    OrganizeRoomsService, SessionStorageService, PessoaService, EquipamentoService, AgendamentoService, Agendamento, Participante, Equipamento, Pessoa
+} from 'src/app/shared';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { ParticipanteService } from 'src/app/shared/_services/participante.service';
 
 @Component({
     selector: 'app-agendamentos-detalhes',
@@ -24,18 +25,19 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     formAgendamento: FormGroup;
     ageParticipantes;
     ageEquipamentos;
+    selAgeStatus;
 
     // Modal Participantes
     displayedColumnsParticipantes: string[] = ['selecionar', 'pesId', 'pesNome', 'pesUnidade'];
     listPessoas = new MatTableDataSource<any>();
-    participantesSelecionados = new SelectionModel<any>(true, []);
+    pessoasSelecionadas = new SelectionModel<Pessoa>(true, []);
 
     filtrosModalPartic: FormGroup;
 
     // Modal Equipamentos
     displayedColumnsEquipamentos: string[] = ['selecionar', 'equId', 'equNome', 'equUnidade'];
     listEquipamentos = new MatTableDataSource<any>();
-    equipamentosSelecionados = new SelectionModel<any>(true, []);
+    equipamentosSelecionados = new SelectionModel<Equipamento>(true, []);
 
     filtrosModalEquip: FormGroup;
 
@@ -44,18 +46,15 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         private modal: NgbModal,
         private organizeRoomsService: OrganizeRoomsService,
         private sessionService: SessionStorageService,
-        private unidadeService: UnidadeService,
         private pessoaService: PessoaService,
-        private equipamentoService: EquipamentoService
+        private equipamentoService: EquipamentoService,
+        private agendamentoService: AgendamentoService,
+        private participanteService: ParticipanteService
     ) { }
 
     ngOnInit() {
         this.selAgendamento = this.organizeRoomsService.getValue()
 
-        /*if (this.selAgendamento != null && this.selAgendamento.uniPesAtualizacao != null) {
-            this.uniPesAtualizacao = this.selAgendamento.uniPesAtualizacao.pesNome;
-            this.uniDtAtualizacao = this.selAgendamento.uniDtAtualizacao
-        }*/
         this.criarFormulario();
         this.carregarListas();
         this.carregarPessoas();
@@ -73,10 +72,12 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
             this.formAgendamento = this.formBuilder.group({
                 ageId: [this.selAgendamento.ageId],
                 ageAtiva: [this.selAgendamento.ageAtiva],
+                ageData: [this.selAgendamento.ageData],
                 ageAssunto: [this.selAgendamento.ageAssunto, Validators.compose([Validators.required])],
                 ageDescricao: [this.selAgendamento.ageDescricao],
                 ageDtCadastro: [this.selAgendamento.ageDtCadastro]
             });
+            this.selAgeStatus = this.selAgendamento.ageStatus;
         }
     }
 
@@ -111,50 +112,84 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         });
     }
 
-    adicionarUnidade() {
-        /*
-        var cUniPesCadastro;
-        var cUniDtCadastro;
-        if (this.selAgendamento != null) {
-            cUniPesCadastro = this.selAgendamento.uniPesCadastro;
-            cUniDtCadastro = this.selAgendamento.uniDtCadastro;
-        } else {
-            cUniPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
-            cUniDtCadastro = new Date();
+    atualizarReserva() {
+
+        const agendamento: Agendamento = {
+            ageId: this.selAgendamento.ageId,
+            ageAtiva: this.formAgendamento.value.ageAtiva,
+            ageAssunto: this.formAgendamento.value.ageAssunto,
+            ageDescricao: this.formAgendamento.value.ageDescricao,
+            ageStatus: this.selAgeStatus,
+            agePesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
+            ageDtAtualizacao: new Date(),
+            ageEquipamentos: this.ageEquipamentos,
+            // Atributos que não são alterados e possuem trava no BackEnd
+            ageDtCadastro: null,
+            ageSala: null,
+            agePesResponsavel: null,
+            ageData: null,
+            ageHoraInicio: null,
+            ageHoraFim: null,
+            agePesCadastro: null,
+            ageParticipantes: null
         }
+        console.log(agendamento)
 
-        const unidade: Unidade = {
-            uniId: this.formAddUnidade.value.uniId,
-            uniNome: this.formAddUnidade.value.uniNome,
-            uniAtiva: this.formAddUnidade.value.uniAtiva,
-            uniPesCadastro: cUniPesCadastro,
-            uniDtCadastro: cUniDtCadastro,
-            uniPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
-            uniDtAtualizacao: new Date(),
-        };
-
-        this.unidadeService.adicionarAtualizarUnidade(unidade).subscribe(ret => {
+        var error = false;
+        this.agendamentoService.atualizarAgendamento(agendamento).subscribe(ret => {
             if (ret.data != null) {
-                if (this.selAgendamento == null) {
-                    alert('Unidade ' + ret.data.uniNome + ' Adicionada com Sucesso!');
-                } else {
-                    alert('Unidade ' + ret.data.uniNome + ' Atualizada com Sucesso!');
-                }
+                alert('Agendamento Alterado com Sucesso!');
+            } else {
+                alert('Não foi possível Atualizar o Agendamento! Tente novamente.');
+                error = true;
             }
         });
 
-
-        // this.open(content);*/
+        /*if (!error) {
+            if (this.pessoasSelecionadas.hasValue) {
+                var errorAddParticipante = this.adicionarParticipante();
+                if (!errorAddParticipante) {
+                    alert('Não foi possível inserir os Novos Participantes!\nRecarregue a página e Tente novamente.');
+                }
+            }
+        }*/
     }
 
-    //   open(content) {
-    //      this.modal.open(content)
-    //  }
+    adicionarParticipante() {
+
+        var error = false;
+        this.pessoasSelecionadas.selected.forEach(pessoa => {
+            var part = {
+                parId: null,
+                parTipo: 1,
+                parPessoa: pessoa,
+                parAgendamento: this.selAgendamento
+            }
+            console.log(part)
+            this.participanteService.adicionarParticipante(part).subscribe(ret => {
+                if (ret.data != null) {
+                    //
+                } else {
+                    error = true
+                }
+            });
+        });
+
+        return error
+    }
 
     // ---- Inicio Métodos do Modal Participantes
+
+    //**** Metodos Gerais  *******
+    inserirNovosParticipantes() {
+
+    }
+    // **** FIM Metodos Gerais  *******
+
+    // **** Metodos do Select ******
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelectedPart() {
-        const numSelected = this.participantesSelecionados.selected.length;
+        const numSelected = this.pessoasSelecionadas.selected.length;
         const numRows = this.listPessoas.data.length;
         return numSelected === numRows;
     }
@@ -162,8 +197,8 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     /** Selects all rows if they are not all selected; otherwise clear selection. */
     masterTogglePart() {
         this.isAllSelectedPart() ?
-            this.participantesSelecionados.clear() :
-            this.listPessoas.data.forEach(rowPart => this.participantesSelecionados.select(rowPart));
+            this.pessoasSelecionadas.clear() :
+            this.listPessoas.data.forEach(rowPart => this.pessoasSelecionadas.select(rowPart));
     }
 
     /** The label for the checkbox on the passed row */
@@ -171,11 +206,14 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         if (!rowPart) {
             return `${this.isAllSelectedPart() ? 'select' : 'deselect'} all`;
         }
-        return `${this.participantesSelecionados.isSelected(rowPart) ? 'deselect' : 'select'} rowPart ${rowPart.position + 1}`;
+        return `${this.pessoasSelecionadas.isSelected(rowPart) ? 'deselect' : 'select'} rowPart ${rowPart.position + 1}`;
     }
     // ---- Fim Métodos do Modal Participantes
 
     // ---- Inicio Métodos do Modal Equipamentos
+
+
+    // **** Metodos do Select ******
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelectedEquip() {
         const numSelected = this.equipamentosSelecionados.selected.length;

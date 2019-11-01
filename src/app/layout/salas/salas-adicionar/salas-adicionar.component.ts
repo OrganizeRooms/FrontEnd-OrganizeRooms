@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
-
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Sala, OrganizeRoomsService, SalaService, UnidadeService, SessionStorageService } from 'src/app/shared';
 
 @Component({
@@ -85,26 +83,17 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarSala() {
 
-        var cSalaPesCadastro: Number;
-        var cSalaDtCadastro;
-        if (this.selSala != null) {
-            cSalaPesCadastro = this.selSala.salaPesCadastro;
-            cSalaDtCadastro = this.selSala.salaDtCadastro;
-        } else {
-            cSalaPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
-            cSalaDtCadastro = new Date();
-        }
-
         const sala: Sala = {
             salaId: this.formAddSala.value.salaId,
             salaNome: this.formAddSala.value.salaNome,
             salaLotacao: this.formAddSala.value.salaLotacao,
             salaAtiva: this.formAddSala.value.salaAtiva,
-            salaPesCadastro: cSalaPesCadastro,
-            salaDtCadastro: cSalaDtCadastro,
             salaPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             salaDtAtualizacao: new Date(),
-            salaUnidade: this.selUnidade.value
+            salaUnidade: this.selUnidade.value,
+            // NÃO É ATUALIZADO 
+            salaPesCadastro: null,
+            salaDtCadastro: null,
         };
         console.log(sala)
         this.salaService.adicionarAtualizarSala(sala).subscribe(ret => {

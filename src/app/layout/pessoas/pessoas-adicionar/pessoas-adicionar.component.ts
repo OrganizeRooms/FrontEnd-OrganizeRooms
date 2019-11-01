@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
-
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { PessoaService, OrganizeRoomsService, UnidadeService, StorageService, Pessoa, SessionStorageService } from 'src/app/shared';
+import { PessoaService, OrganizeRoomsService, UnidadeService, Pessoa, SessionStorageService } from 'src/app/shared';
 
 @Component({
     selector: 'app-pessoas-adicionar',
@@ -91,16 +90,6 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarPessoa() {
 
-        var cPesCadastro: Number;
-        var cPesDtCadastro;
-        if (this.selPessoa != null) {
-            cPesCadastro = this.selPessoa.pesCadastro;
-            cPesDtCadastro = this.selPessoa.pesDtCadastro;
-        } else {
-            cPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
-            cPesDtCadastro = new Date();
-        }
-
         const pessoa: Pessoa = {
             pesId: this.formAddPessoa.value.pesId,
             pesNome: this.formAddPessoa.value.pesNome,
@@ -110,11 +99,12 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
             pesUnidade: this.selUnidade.value,
             pesDdd: this.formAddPessoa.value.pesDDD,
             pesTelefone: this.formAddPessoa.value.pesTelefone,
-            pesTipoInclusao: 'SIS',
-            pesCadastro: cPesCadastro,
-            pesDtCadastro: cPesDtCadastro,
             pesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             pesDtAtualizacao: new Date(),
+            // NÃO É ATUALIZADO 
+            pesTipoInclusao: null,
+            pesCadastro: null,
+            pesDtCadastro: null,
         };
         console.log(pessoa)
         this.pessoaService.adicionarAtualizarPessoa(pessoa).subscribe(ret => {

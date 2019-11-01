@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
-
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import {
     EquipamentoService, UnidadeService, OrganizeRoomsService, Equipamento, SessionStorageService
 } from 'src/app/shared';
@@ -84,26 +82,17 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarEquipamento() {
 
-        var cEquPesCadastro: Number;
-        var cEquPesDtCadastro;
-        if (this.selEquipamento != null) {
-            cEquPesCadastro = this.selEquipamento.equPesCadastro;
-            cEquPesDtCadastro = this.selEquipamento.equDtCadastro;
-        } else {
-            cEquPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
-            cEquPesDtCadastro = new Date();
-        }
-
         const equipamento: Equipamento = {
             equId: this.formAddEquipamento.value.equId,
             equNome: this.formAddEquipamento.value.equNome,
             equDescricao: this.formAddEquipamento.value.equDescricao,
             equAtiva: this.formAddEquipamento.value.equAtiva,
             equUnidade: this.selUnidade.value,
-            equPesCadastro: cEquPesCadastro,
-            equDtCadastro: cEquPesDtCadastro,
             equPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             equDtAtualizacao: new Date(),
+            // NÃO É ATUALIZADO 
+            equPesCadastro: null,
+            equDtCadastro: null,
         };
         console.log(equipamento)
         this.equipamentoService.adicionarAtualizarEquipamento(equipamento).subscribe(ret => {
