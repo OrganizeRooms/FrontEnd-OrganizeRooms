@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
-
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Unidade, UnidadeService, OrganizeRoomsService, SessionStorageService } from 'src/app/shared';
 
 @Component({
@@ -65,24 +63,15 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarUnidade() {
 
-        var cUniPesCadastro;
-        var cUniDtCadastro;
-        if (this.selUnidade != null) {
-            cUniPesCadastro = this.selUnidade.uniPesCadastro;
-            cUniDtCadastro = this.selUnidade.uniDtCadastro;
-        } else {
-            cUniPesCadastro = this.sessionService.getSessionUser().pessoa.pesId;
-            cUniDtCadastro = new Date();
-        }
-
         const unidade: Unidade = {
             uniId: this.formAddUnidade.value.uniId,
             uniNome: this.formAddUnidade.value.uniNome,
             uniAtiva: this.formAddUnidade.value.uniAtiva,
-            uniPesCadastro: cUniPesCadastro,
-            uniDtCadastro: cUniDtCadastro,
             uniPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             uniDtAtualizacao: new Date(),
+            // NÃO É ATUALIZADO 
+            uniPesCadastro: null,
+            uniDtCadastro: null,
         };
 
         this.unidadeService.adicionarAtualizarUnidade(unidade).subscribe(ret => {
@@ -94,13 +83,5 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-
-        // this.open(content);
     }
-
-    //   open(content) {
-    //      this.modal.open(content)
-    //  }
-
 }

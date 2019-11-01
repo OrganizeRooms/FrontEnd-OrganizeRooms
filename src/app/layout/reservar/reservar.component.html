@@ -22,7 +22,7 @@
                             <div class="col-12 col-sm-5 col-md-4 col-lg-6 col-xl-5">
                                 <span>Data <span style="color: red;">*</span></span>
                                 <div class="input-group datepicker-home">
-                                    <input class="form-control text-center" placeholder="dd/mm/yyy" name="dp"
+                                    <input class="form-control text-center" placeholder="dd/mm/yyyy" name="dp"
                                         [(ngModel)]="data" ngbDatepicker #d="ngbDatepicker" [minDate]="today">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary calendar" (click)="d.toggle()"
@@ -126,7 +126,7 @@
                                 <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-3">
                                     <span>Data</span>
                                     <span
-                                        class="form-control disabled text-center">{{data.day}}/{{data.month}}/{{data.year}}</span>
+                                        class="form-control disabled text-center">{{montarStringDataPtBr(data)}}</span>
                                 </div>
                             </div>
 
@@ -134,8 +134,8 @@
                                 <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-4">
                                     <span>Período</span>
                                     <span class="form-control disabled text-center">
-                                        {{horaInicio.hour}}:{{horaInicio.minute}} às
-                                        {{horaFim.hour}}:{{horaFim.minute}}
+                                        {{montarStringHoraMinuto(horaInicio)}} às
+                                        {{montarStringHoraMinuto(horaFim)}}
                                     </span>
                                 </div>
                             </div>
@@ -232,11 +232,17 @@
 
                 <!--- TERCEIRO PASSO -->
                 <mat-step completed="false">
-                    <ng-template matStepLabel>Reserva realizada!</ng-template>
-                    You are now done.
-                    <div>
-                        <button mat-button matStepperPrevious>Back</button>
-                        <button mat-button (click)="stepper.reset()">Reset</button>
+                    <ng-template matStepLabel>Reserva realizada com Sucesso!</ng-template>
+                    <span class="color-blue">Sua Reserva foi Finalizada com Sucesso!</span> 
+                    <br/>
+                    <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7">
+                        <div class="row ml-auto justify-content-center">
+                            <button class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao" matStepperPrevious>
+                                Voltar
+                            </button>
+                            <button class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
+                                (click)="stepper.reset()">Novo Agendamento</button>
+                        </div>
                     </div>
                 </mat-step>
             </mat-vertical-stepper>

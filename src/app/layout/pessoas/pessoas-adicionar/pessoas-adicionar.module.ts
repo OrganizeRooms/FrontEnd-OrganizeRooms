@@ -1,14 +1,13 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { PessoasAdicionarRoutingModule } from './pessoas-adicionar-routing.module';
 import { PessoasAdicionarComponent } from './pessoas-adicionar.component';
 import { PageHeaderModule } from '../../../shared';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 // Component Material Angular
-import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerModule, MatSelectModule } from '@angular/material';
+import {
+    MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerModule, MatSelectModule
+} from '@angular/material';
 
 @NgModule({
     imports: [

@@ -37,8 +37,8 @@ export class AgendamentoService {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos`, agendamento);
     }
 
-    /*atualizarAgendamento(agendamento: Agendamento): Observable<Response> {
-        return this.http.put<Response>(`${API_CONFIG.baseUrl}/agendamentos`, agendamento);
-    }*/
+    atualizarAgendamento(agendamento: Agendamento): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos/atualizar`, agendamento);
+    }
 
 }

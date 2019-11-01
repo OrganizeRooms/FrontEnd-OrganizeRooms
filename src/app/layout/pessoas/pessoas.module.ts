@@ -1,10 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { PessoasRoutingModule } from './pessoas-routing.module';
 import { PessoasComponent } from './pessoas.component';
 import { PageHeaderModule } from '../../shared';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule, MatPaginatorModule, MatSortModule, MatCheckboxModule } from '@angular/material';
 
