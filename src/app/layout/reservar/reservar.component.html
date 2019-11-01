@@ -105,8 +105,9 @@
                 <!--- SEGUNDO PASSO - INICIO -->
                 <mat-step completed="false">
                     <ng-template matStepLabel>Faça a Reserva</ng-template>
-                    
+
                     <div *ngIf="selSala != null">
+
                         <form [formGroup]="formAgendar">
                             <h3 class="text-center color-blue" style="font: bolder;">
                                 {{selSala.salaNome}}
@@ -139,19 +140,6 @@
                                 </div>
                             </div>
 
-                            <!--<div class="row ml-auto" *ngIf="horaInicio.hour == 0 && horaFim.hour == 0">
-                                <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-3 ">
-                                    <span>Hora Inicial</span>
-                                    <ngb-timepicker [spinners]="false" formControlName="ageHoraInicio">
-                                    </ngb-timepicker>
-                                </div>
-                                <div class="col-6 col-sm-3 col-md-4 col-lg-4 col-xl-3">
-                                    <span>Hora Final</span>
-                                    <ngb-timepicker [spinners]="false" formControlName="ageHoraFim">
-                                    </ngb-timepicker>
-                                </div>
-                            </div>-->
-
                             <div class="row ml-auto">
                                 <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-5">
                                     <span>Responsável</span>
@@ -168,7 +156,7 @@
                             <div class="row ml-auto">
                                 <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
                                     <span>Descrição</span>
-                                    <textarea class="form-control" autofocus required formControlName="ageDescricao">
+                                    <textarea class="form-control" formControlName="ageDescricao">
                                     </textarea>
                                 </div>
                             </div>
@@ -223,17 +211,17 @@
                                 </div>
                             </div>
                             <!-- FIM - PARTICIPANTES (PESSOAS) -->
-                            <br/>
+                            <br />
                             <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7">
                                 <div class="row ml-auto justify-content-center">
                                     <button matStepperPrevious
                                         class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao">
                                         Back
                                     </button>
-                                    <a class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
-                                        (click)="next(stepper)">
+                                    <button class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
+                                        [disabled]="!formAgendar.valid" (click)="realizarReserva(stepper)">
                                         Confirmar
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                         </form>

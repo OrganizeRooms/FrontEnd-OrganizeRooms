@@ -67,24 +67,67 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
     }
 
     carregarAgendamentos() {
-        /*this.Agendamentoservice.buscarTodasAgendamentos().subscribe(ret => {
+        this.agendamentoService.buscarTodosAgendamentos().subscribe(ret => {
             this.tableData.data = ret.data;
             this.tableData.paginator = this.paginator;
             this.tableData.sort = this.sort;
-        });*/
-        this.configurarPaginador();
+        });
     }
 
-    filtrarSalas(){
-        
+    filtrarSalas() {
+        this.filtrarValido = this.verificarCampos();
+
+        if (this.filtrarValido) {
+            this.carregarAgendamentos();
+
+            var idResponsavel = this.sessionService.getSessionUser().pessoa.pesId
+
+            var nDataInicial = new Date(this.montarStringData(this.dataInicial))
+            var nDataFinal = new Date(this.montarStringData(this.dataFinal))
+
+            /*this.agendamentoService.buscarPorResponsavel(
+                idResponsavel, nDataInicial, nDataFinal, this.selUnidade, this.selAgeStatus
+            ).subscribe(ret => {
+                this.tableData.data = ret.data;
+                this.tableData.paginator = this.paginator;
+                this.tableData.sort = this.sort;
+            });*/
+            this.configurarPaginador();
+        }
     }
     
+    montarStringData(data){
+        var stringData = data.year + '/' + data.month + '/' + data.day
+        return stringData
+    }
+
     limpar() {
         window.location.reload()
     }
 
     editarAgendamento(registro) {
         this.organizeRoomsService.setValue(registro);
+    }
+
+    // Verificação dos Campos OBRIGATÓRIOS da Verificação de Disponibilidade das Salas
+    verificarCampos(): Boolean {
+
+        var mfiltrarValido = false;
+
+        /*if (!this.selUnidade) {
+            alert('Informe a Unidade!')
+
+        } else*/ if (!this.dataInicial) {
+            alert('Informe uma Data Inicial!')
+
+        } else if (!this.dataFinal) {
+            alert('Informe uma Data Final!')
+
+        }
+        else {
+            mfiltrarValido = true
+        }
+        return mfiltrarValido
     }
 
     aplicarFiltro(valor: string) {

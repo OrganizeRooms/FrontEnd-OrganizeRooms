@@ -14,7 +14,7 @@ import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/ap
 
 import {
     UnidadeService, OrganizeRoomsService, SalaService,
-    SessionStorageService, PessoaService, EquipamentoService
+    SessionStorageService, PessoaService, EquipamentoService, AgendamentoService, Agendamento, Pessoa, Equipamento, Participante
 } from 'src/app/shared';
 
 @Component({
@@ -53,25 +53,27 @@ export class ReservarComponent implements OnInit, OnDestroy {
     // Modal Participantes
     displayedColumnsParticipantes: string[] = ['selecionar', 'pesId', 'pesNome', 'pesUnidade'];
     listPessoas = new MatTableDataSource<any>();
-    pessoasSelecionadas = new SelectionModel<any>(true, []);
+    pessoasSelecionadas = new SelectionModel<Pessoa>(true, []);
 
     filtrosModalPartic: FormGroup;
 
     // Modal Equipamentos
     displayedColumnsEquipamentos: string[] = ['selecionar', 'equId', 'equNome', 'equUnidade'];
     listEquipamentos = new MatTableDataSource<any>();
-    equipamentosSelecionados = new SelectionModel<any>(true, []);
+    equipamentosSelecionados = new SelectionModel<Equipamento>(true, []);
 
     filtrosModalEquip: FormGroup;
 
     constructor(
         private formBuilder: FormBuilder,
+        private calendar: NgbCalendar,
+        private modal: NgbModal,
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
         private sessionService: SessionStorageService,
         private salaService: SalaService,
-        private calendar: NgbCalendar,
-        private modal: NgbModal,
+        private agendamentoService: AgendamentoService,
+
 
         // Temporario
         private pessoaService: PessoaService,
@@ -104,19 +106,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
         this.lotacao = null;
     }
 
-    // temporario
-    carregarPessoas() {
-        this.pessoaService.buscarTodasPessoas().subscribe(ret => {
-            this.listPessoas.data = ret.data
-        });
-    }
-    carregarEquipamentos() {
-        this.equipamentoService.buscarTodosEquipamentos().subscribe(ret => {
-            this.listEquipamentos.data = ret.data;
-        });
-    }
-    // FIM temporario
-
     // Inicio Métodos Passo 1 - Verificação
     carregarUnidades() {
         this.unidadeService.buscarUnidadesAtivas().subscribe(ret => {
@@ -128,11 +117,23 @@ export class ReservarComponent implements OnInit, OnDestroy {
         this.filtrarValido = this.verificarCampos();
 
         if (this.filtrarValido) {
-            var nhoraInicio = new Date(this.data.year, this.data.month, this.data.day,
-                this.horaInicio.hour, this.horaInicio.minute, this.horaInicio.second);
 
-            var nhoraFim = new Date(this.data.year, this.data.month, this.data.day,
-                this.horaFim.hour, this.horaFim.minute, this.horaFim.second);
+            var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
+            var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
+
+            if (!this.lotacao) {
+                this.lotacao = 0;
+            }
+
+            /*this.agendamentoService.buscarSalasDisponiveis(
+                dataHoraInicio, dataHoraFim, this.selUnidade, this.lotacao
+            ).subscribe(ret => {
+                if (ret.data != null && ret.data != '') {
+                    this.listSalas = ret.data;
+                } else {
+                    this.listSalas = '';
+                }
+            });*/
 
             this.salaService.buscarTodasSalas().subscribe(ret => {
                 if (ret.data != null && ret.data != '') {
@@ -145,19 +146,31 @@ export class ReservarComponent implements OnInit, OnDestroy {
         }
     }
 
+    // Pega Data e Hora e retorna um DateTime
+    montarDataHora(data, hora): Date {
+        var dataHora = new Date(data.year, data.month, data.day, hora.hour, hora.minute, hora.second);
+        return dataHora;
+    }
+
+    montarStringData(data) {
+        var stringData = data.year + '/' + data.month + '/' + data.day
+        return stringData
+    }
+
+    // Reload na tela para recarregar os campos
     limpar() {
         window.location.reload()
     }
 
+    // Vai para o próximo passo
     next(stepper) {
-        // complete the current step
+        // Completa o Passo
         stepper.selected.completed = true;
-
-        // move to next step
-
+        // Vai para o Próximo
         stepper.next();
     }
 
+    // Verificação dos Campos OBRIGATÓRIOS da Verificação de Disponibilidade das Salas
     verificarCampos(): Boolean {
 
         var mfiltrarValido = false;
@@ -194,14 +207,90 @@ export class ReservarComponent implements OnInit, OnDestroy {
     criarFormularioAgendamento() {
         this.formAgendar = this.formBuilder.group({
             ageAssunto: [null, Validators.required],
-            ageDescricao: [null, Validators.required],
-            //ageHoraInicio: [null],
-            //ageHoraFim: [null],
+            ageDescricao: [null],
         });
     }
 
     abrirModal(modal) {
         this.modal.open(modal)
+    }
+
+    // temporario
+    carregarPessoas() {
+        this.pessoaService.buscarTodasPessoas().subscribe(ret => {
+            this.listPessoas.data = ret.data
+        });
+    }
+    carregarEquipamentos() {
+        var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
+        var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
+
+        /*this.equipamentoService.buscarEquipamentosDisponiveis(dataHoraInicio, dataHoraFim, this.selSala.salaUnidade
+        ).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                this.listEquipamentos.data = ret.data;
+            }
+        })*/
+
+        this.equipamentoService.buscarTodosEquipamentos().subscribe(ret => {
+            this.listEquipamentos.data = ret.data;
+        });
+    }
+    // FIM temporario
+
+    realizarReserva(stepper) {
+
+        var nAgeData = this.montarStringData(this.data)
+        var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
+        var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
+
+        var nAgeParticipantes = this.montaArrayParticipantes();
+
+        const agendamento: Agendamento = {
+            ageId: null,
+            ageAtiva: true,
+            ageAssunto: this.formAgendar.value.ageAssunto,
+            ageDescricao: this.formAgendar.value.ageDescricao,
+            ageSala: this.selSala,
+            agePesResponsavel: this.responsavel,
+            ageStatus: 'AGENDADO',
+            ageData: new Date(nAgeData),
+            ageHoraInicio: dataHoraInicio,
+            ageHoraFim: dataHoraFim,
+            agePesCadastro: this.sessionService.getSessionUser().pessoa.pesId,
+            agePesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
+            ageDtCadastro: new Date(),
+            ageDtAtualizacao: new Date(),
+            ageEquipamentos: this.equipamentosSelecionados.selected,
+            //ageParticipantes: this.pessoasSelecionadas.selected
+            ageParticipantes: nAgeParticipantes
+        }
+
+        console.log(agendamento)
+        this.agendamentoService.addAgendamento(agendamento).subscribe(ret => {
+            console.log("retorno")
+            console.log(ret.data)
+            if (ret.data != null) {
+                alert('Agendamento Realizado com Sucesso!');
+            }else{
+                alert('Não foi possível Finalizar o Agendamento! Tente novamente.');
+            }
+        });
+    }
+
+    montaArrayParticipantes(): Array<Participante> {
+
+        var participantes = new Array<Participante>()
+        this.pessoasSelecionadas.selected.forEach(pessoa => {
+            var part = {
+                parId: null,
+                parTipo: 1,
+                parPessoa: pessoa,
+            }
+            participantes.push(part)
+        });
+
+        return participantes
     }
 
     // ---- Inicio Métodos do Modal Participantes

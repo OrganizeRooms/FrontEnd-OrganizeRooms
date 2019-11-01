@@ -1,5 +1,6 @@
 ﻿export * from './pessoa';
 export * from './agendamento';
+export * from './participante';
 export * from './equipamento';
 export * from './notificacao';
 export * from './sala';

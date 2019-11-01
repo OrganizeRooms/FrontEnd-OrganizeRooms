@@ -7,9 +7,11 @@ import { PageHeaderModule } from '../../../shared';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
-// Date Picker
-import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerModule } from '@angular/material';
+// Component Material Angular
+import {
+    MatFormFieldModule, MatCheckboxModule, MatInputModule, MatSelectModule,
+    MatTableModule, MatPaginatorModule, MatSortModule,
+} from '@angular/material';
 
 @NgModule({
     imports: [
@@ -19,6 +21,10 @@ import { MatFormFieldModule, MatCheckboxModule, MatInputModule, MatDatepickerMod
         MatFormFieldModule,
         MatInputModule,
         MatCheckboxModule,
+        MatSelectModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
         FormsModule,
         ReactiveFormsModule
     ],
