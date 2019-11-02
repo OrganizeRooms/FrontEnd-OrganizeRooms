@@ -49,6 +49,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
     // Agendamento
     formAgendar: FormGroup;
     responsavel;
+    agendado = false;
 
     // Modal Participantes
     displayedColumnsParticipantes: string[] = ['selecionar', 'pesId', 'pesNome', 'pesUnidade'];
@@ -289,16 +290,15 @@ export class ReservarComponent implements OnInit, OnDestroy {
         var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
         var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
 
-        var nAgeParticipantes;
-        if (!this.pessoasSelecionadas.selected) {
+        var nAgeParticipantes: Array<Participante>;
+        if (this.pessoasSelecionadas.hasValue) {
             nAgeParticipantes = this.montaArrayParticipantes();
         } else {
             nAgeParticipantes = null;
         }
-        
+
         const agendamento: Agendamento = {
             ageId: null,
-            ageAtiva: true,
             ageAssunto: this.formAgendar.value.ageAssunto,
             ageDescricao: this.formAgendar.value.ageDescricao,
             ageSala: this.selSala,
@@ -322,6 +322,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
             console.log(ret.data)
             if (ret.data != null) {
                 this.next(stepper);
+                this.agendado = true;
                 //alert('Agendamento Realizado com Sucesso!');
             } else {
                 alert('Não foi possível Finalizar o Agendamento! Tente novamente.');
@@ -333,7 +334,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
 
         var participantes = new Array<Participante>()
         this.pessoasSelecionadas.selected.forEach(pessoa => {
-            var part = {
+            var part: Participante = {
                 parId: null,
                 parTipo: 1,
                 parPessoa: pessoa,

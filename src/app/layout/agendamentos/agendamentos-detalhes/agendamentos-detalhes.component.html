@@ -14,11 +14,6 @@
                         <span
                             class="form-control disabled text-center">{{formAgendamento.value.ageDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
-                    <div id="checkbox" class="col-2 col-sm-2 col-md-4 col-lg-3 col-xl-2">
-                        <mat-checkbox formControlName="ageAtiva" checked="formAgendamento.ageAtiva"
-                            [labelPosition]='labelPosition'>
-                            Ativa?</mat-checkbox>
-                    </div>
                 </div>
 
                 <div class="row ml-auto">
@@ -42,8 +37,8 @@
                     <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-4">
                         <span>Período</span>
                         <span class="form-control disabled text-center">
-                            {{selAgendamento.ageHoraInicio | date: 'HH:mm' :'-0259'}} às
-                            {{selAgendamento.ageHoraFim | date: 'HH:mm' :'-0259'}}
+                            {{selAgendamento.ageHoraInicio | date: 'HH:mm' :'-0300'}} às
+                            {{selAgendamento.ageHoraFim | date: 'HH:mm' :'-0300'}}
                         </span>
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-4">
