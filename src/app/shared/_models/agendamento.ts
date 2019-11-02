@@ -5,7 +5,6 @@ import { Participante } from './participante';
 
 export interface Agendamento {
     ageId: number;
-    ageAtiva: Boolean;
     ageAssunto: string;
     ageDescricao: string;
     ageSala: Sala;

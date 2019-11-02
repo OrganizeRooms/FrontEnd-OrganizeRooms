@@ -218,7 +218,7 @@
                                         class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao">
                                         Back
                                     </button>
-                                    <button class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
+                                    <button *ngIf="agendado == false" class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
                                         [disabled]="!formAgendar.valid" (click)="realizarReserva(stepper)">
                                         Confirmar
                                     </button>
@@ -241,7 +241,7 @@
                                 Voltar
                             </button>
                             <button class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
-                                (click)="stepper.reset()">Novo Agendamento</button>
+                                (click)="limpar()">Novo Agendamento</button>
                         </div>
                     </div>
                 </mat-step>

@@ -18,7 +18,7 @@ export class ParticipanteService {
     }
 
     adicionarListaParticipantes(participantes: Array<Participante>): Observable<Response> {
-        return this.http.post<Response>(`${API_CONFIG.baseUrl}/participantes/listaParticipantes`, participantes);
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/participantes`, participantes);
     }
 
 }

@@ -116,7 +116,6 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
 
         const agendamento: Agendamento = {
             ageId: this.selAgendamento.ageId,
-            ageAtiva: this.formAgendamento.value.ageAtiva,
             ageAssunto: this.formAgendamento.value.ageAssunto,
             ageDescricao: this.formAgendamento.value.ageDescricao,
             ageStatus: this.selAgeStatus,
@@ -145,37 +144,31 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
             }
         });
 
-        /*if (!error) {
-            if (this.pessoasSelecionadas.hasValue) {
-                var errorAddParticipante = this.adicionarParticipante();
-                if (!errorAddParticipante) {
-                    alert('Não foi possível inserir os Novos Participantes!\nRecarregue a página e Tente novamente.');
-                }
+        var participantes = this.montaArrayParticipantes()
+        this.participanteService.adicionarListaParticipantes(participantes).subscribe(ret => {
+            if (ret.data != null || ret.data == 'Sucesso') {
+                //
+            } else {
+                error = true
             }
-        }*/
+        });
     }
 
-    adicionarParticipante() {
+    montaArrayParticipantes(): Array<Participante> {
 
+        var participantes = new Array<Participante>()
         var error = false;
         this.pessoasSelecionadas.selected.forEach(pessoa => {
-            var part = {
+            var part: Participante = {
                 parId: null,
                 parTipo: 1,
                 parPessoa: pessoa,
                 parAgendamento: this.selAgendamento
             }
-            console.log(part)
-            this.participanteService.adicionarParticipante(part).subscribe(ret => {
-                if (ret.data != null) {
-                    //
-                } else {
-                    error = true
-                }
-            });
+            participantes.push(part)
         });
 
-        return error
+        return participantes
     }
 
     // ---- Inicio Métodos do Modal Participantes
