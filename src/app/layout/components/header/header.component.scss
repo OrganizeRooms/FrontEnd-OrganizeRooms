@@ -1,4 +1,10 @@
 $topnav-background-color: #222;
+
+.card-mensagens{
+    width: 250px;
+    padding-left: 10px;
+}
+
 :host {
     .navbar {
         background-color: $topnav-background-color;

@@ -10,6 +10,13 @@ import { JwtInterceptor } from './shared/guard';
 // Services
 import { StorageService, AuthenticationService, OrganizeRoomsService, SessionStorageService } from './shared/_services';
 
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
+
+
 @NgModule({
     imports: [
         CommonModule,
@@ -22,7 +29,8 @@ import { StorageService, AuthenticationService, OrganizeRoomsService, SessionSto
     declarations: [
         AppComponent,
     ],
-    providers: [       
+    providers: [
+        { provide: LOCALE_ID, useValue: 'pt-BR' },
         StorageService,
         SessionStorageService,
         AuthenticationService,

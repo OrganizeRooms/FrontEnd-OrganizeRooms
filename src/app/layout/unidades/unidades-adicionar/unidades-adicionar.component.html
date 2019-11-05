@@ -15,12 +15,14 @@
                         <span
                             class="form-control disabled">{{formAddUnidade.value.uniDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
-                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-1">
+                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox"
+                        class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-1">
                         <mat-checkbox formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
-                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-1">
+                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox"
+                        class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-1">
                         <mat-checkbox [disabled]="true" formControlName="uniAtiva" checked="formAddUnidade.uniAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
@@ -34,14 +36,19 @@
                     </div>
                 </div>
                 <br>
-                <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-7">
-                    <div class="row justify-content-center">
-                        <a class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao" [routerLink]="['/unidades']"
+                <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-10">
+                    <div class="row">
+                        <a class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao" [routerLink]="['/unidades']"
                             [routerLinkActive]="['router-link-active']">
                             Voltar
                         </a>
+                        <a *ngIf="permissao == 'ROLE_ADMIN' && selUnidade != null"
+                            class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao" (click)="excluir()">
+                            Excluir
+                        </a>
                         <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddUnidade.valid"
-                            class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao" (click)="adicionarUnidade()">
+                            class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao"
+                            (click)="adicionarUnidade()">
                             Confirmar
                         </button>
                     </div>

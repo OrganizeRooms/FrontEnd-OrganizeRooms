@@ -61,11 +61,15 @@
 
                 <!-- Dt Cadastro -->
                 <ng-container matColumnDef="detalhes">
-                    <th mat-header-cell *matHeaderCellDef>Detalhes</th>
+                    <th mat-header-cell *matHeaderCellDef></th>
                     <td mat-cell *matCellDef="let sala">
                         <a [routerLink]="['/salas-adicionar']" [routerLinkActive]="['router-link-active']"
                             (click)="editarSala(sala)">
-                            <i class="fa fa-fw fa-plus"></i>
+                            <i class="fa fa-fw fa-pencil"></i>
+                        </a>
+                        &nbsp;
+                        <a (click)="excluir(sala)">
+                            <i style="color: red;" class="fa fa-trash-o"></i>
                         </a>
                     </td>
                 </ng-container>

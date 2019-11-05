@@ -13,9 +13,12 @@ import {
 import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/app/shared/utils';
 
 import {
-    UnidadeService, OrganizeRoomsService, SalaService,
-    SessionStorageService, PessoaService, EquipamentoService, AgendamentoService, Agendamento, Pessoa, Equipamento, Participante
+    UnidadeService, OrganizeRoomsService, SalaService, SessionStorageService, PessoaService,
+    EquipamentoService, AgendamentoService, Agendamento, Pessoa, Equipamento, Participante, AgendamentoContext
 } from 'src/app/shared';
+
+// Metodos
+//import { montarStringDataHora, montarStringDataEng, montarDataHora } from 'src/app/shared/utils';
 
 @Component({
     selector: 'app-reservar',
@@ -52,14 +55,14 @@ export class ReservarComponent implements OnInit, OnDestroy {
     agendado = false;
 
     // Modal Participantes
-    displayedColumnsParticipantes: string[] = ['selecionar', 'pesId', 'pesNome', 'pesUnidade'];
+    displayedColumnsParticipantes: string[] = ['selecionar', 'pesNome', 'pesUnidade', 'obrigatorio'];
     listPessoas = new MatTableDataSource<any>();
     pessoasSelecionadas = new SelectionModel<Pessoa>(true, []);
 
     filtrosModalPartic: FormGroup;
 
     // Modal Equipamentos
-    displayedColumnsEquipamentos: string[] = ['selecionar', 'equId', 'equNome', 'equUnidade'];
+    displayedColumnsEquipamentos: string[] = ['selecionar', 'equNome', 'equDescricao'];
     listEquipamentos = new MatTableDataSource<any>();
     equipamentosSelecionados = new SelectionModel<Equipamento>(true, []);
 
@@ -89,14 +92,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
 
         this.carregarUnidades();
         this.criarFormularioAgendamento();
-
-        this.filtrosModalPartic = this.formBuilder.group({
-            pesId: [null],
-        });
-
-        // temporario
-        this.carregarPessoas()
-        this.carregarEquipamentos()
     }
 
     ngOnDestroy() {
@@ -119,97 +114,48 @@ export class ReservarComponent implements OnInit, OnDestroy {
 
         if (this.filtrarValido) {
 
-            var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
-            var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
+            var dataHoraInicio = this.montarStringDataHora(this.data, this.horaInicio)
+            var dataHoraFim = this.montarStringDataHora(this.data, this.horaFim)
 
-            var lotacao;
+            var nLotacao;
             if (!this.lotacao) {
-                lotacao = 0;
+                nLotacao = 0;
             } else {
-                lotacao = this.lotacao
+                nLotacao = this.lotacao
             }
 
-            /*this.agendamentoService.buscarSalasDisponiveis(
-                dataHoraInicio, dataHoraFim, this.selUnidade, lotacao
-            ).subscribe(ret => {
-                if (ret.data != null && ret.data != '') {
-                    this.listSalas = ret.data;
-                } else {
-                    this.listSalas = '';
-                }
-            });*/
+            var agendamentoContext: AgendamentoContext = {
+                idUnidade: this.selUnidade.uniId,
+                lotacao: nLotacao,
+                dataAgendamento: this.montarStringDataEng(this.data),
+                dataInicial: dataHoraInicio,
+                dataFinal: dataHoraFim
+            }
 
-            this.salaService.buscarTodasSalas().subscribe(ret => {
+            this.agendamentoService.buscarSalasDisponiveis(agendamentoContext).subscribe(ret => {
                 if (ret.data != null && ret.data != '') {
                     this.listSalas = ret.data;
                 } else {
                     this.listSalas = '';
                 }
             });
+
             this.apareceFiltrar = false;
         }
     }
 
-    // Pega Data e Hora e retorna um DateTime
-    montarDataHora(data, hora): Date {
-        var dataHora = new Date(data.year, data.month, data.day, hora.hour, hora.minute, hora.second);
-        return dataHora;
-    }
-
-    montarStringDataEng(data) {
-        var stringData = data.year + '/' + data.month + '/' + data.day
-        return stringData
-    }
-
-    montarStringDataPtBr(data) {
-
-        var dia;
-        var mes;
-
-        if (data.day < 10) {
-            dia = '0' + data.day
-        } else {
-            dia = data.day
-        }
-
-        if (data.month < 10) {
-            mes = '0' + data.month
-        } else {
-            mes = data.month
-        }
-
-        var stringData = dia + '/' + mes + '/' + data.year
-        return stringData
-    }
-
-    montarStringHoraMinuto(horaMinuto) {
-
-        var hora;
-        var minuto;
-
-        if (horaMinuto.hour < 10) {
-            hora = '0' + horaMinuto.hour
-        } else {
-            hora = horaMinuto.hour
-        }
-
-        if (horaMinuto.minute < 10) {
-            minuto = '0' + horaMinuto.minute
-        } else {
-            minuto = horaMinuto.minute
-        }
-
-        var stringHoraMinuto = hora + ':' + minuto
-        return stringHoraMinuto
-    }
-
     // Reload na tela para recarregar os campos
     limpar() {
-        window.location.reload()
+        //window.location.reload()
+
+        location.reload()
     }
 
     // Vai para o próximo passo
     next(stepper) {
+        this.carregarEquipamentos();
+        this.carregarPessoas();
+
         // Completa o Passo
         stepper.selected.completed = true;
         // Vai para o Próximo
@@ -267,28 +213,44 @@ export class ReservarComponent implements OnInit, OnDestroy {
             this.listPessoas.data = ret.data
         });
     }
-    carregarEquipamentos() {
-        var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
-        var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
 
-        /*this.equipamentoService.buscarEquipamentosDisponiveis(dataHoraInicio, dataHoraFim, this.selSala.salaUnidade
-        ).subscribe(ret => {
+    marcarObrigatorio(registro) {
+        console.log("marcarObrigatorio")
+        console.log(registro)
+        console.log(this.pessoasSelecionadas)
+        /*if (registro.participanteObrigatorio) {
+            registro.participanteObrigatorio = false;
+        } else {
+            registro.participanteObrigatorio = true;
+        }
+
+        console.log(registro.participanteObrigatorio)*/
+    }
+
+    carregarEquipamentos() {
+        var dataHoraInicio = this.montarStringDataHora(this.data, this.horaInicio)
+        var dataHoraFim = this.montarStringDataHora(this.data, this.horaFim)
+
+        var agendamentoContext: AgendamentoContext = {
+            idUnidade: this.selUnidade.uniId,
+            lotacao: '0',
+            dataAgendamento: this.montarStringDataEng(this.data),
+            dataInicial: dataHoraInicio,
+            dataFinal: dataHoraFim
+        }
+
+        this.equipamentoService.buscarEquipamentosDisponiveis(agendamentoContext).subscribe(ret => {
             if (ret.data != null && ret.data != '') {
                 this.listEquipamentos.data = ret.data;
             }
-        })*/
-
-        this.equipamentoService.buscarTodosEquipamentos().subscribe(ret => {
-            this.listEquipamentos.data = ret.data;
-        });
+        })
     }
-    // FIM temporario
 
     realizarReserva(stepper) {
 
         var nAgeData = this.montarStringDataEng(this.data)
-        var dataHoraInicio = this.montarDataHora(this.data, this.horaInicio)
-        var dataHoraFim = this.montarDataHora(this.data, this.horaFim)
+        var dataHoraInicio = new Date(this.montarStringDataHora(this.data, this.horaInicio))
+        var dataHoraFim = new Date(this.montarStringDataHora(this.data, this.horaFim))
 
         var nAgeParticipantes: Array<Participante>;
         if (this.pessoasSelecionadas.hasValue) {
@@ -315,11 +277,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
             //ageParticipantes: this.pessoasSelecionadas.selected
             ageParticipantes: nAgeParticipantes
         }
-
-        console.log(agendamento)
         this.agendamentoService.addAgendamento(agendamento).subscribe(ret => {
-            console.log("retorno")
-            console.log(ret.data)
             if (ret.data != null) {
                 this.next(stepper);
                 this.agendado = true;
@@ -393,6 +351,98 @@ export class ReservarComponent implements OnInit, OnDestroy {
         return `${this.equipamentosSelecionados.isSelected(rowEquip) ? 'deselect' : 'select'} rowEquip ${rowEquip.position + 1}`;
     }
     // ---- Fim Métodos do Modal Equipamentos
+
+
+    // Pega Data e Hora e retorna um DateTime
+    montarDataHora(data, hora): Date {
+        var dataHora = new Date(data.year, data.month, data.day, hora.hour, hora.minute, hora.second);
+        return dataHora;
+    }
+
+    montarStringDataHora(parData, parHora) {
+
+        var mes = this.validarData(parData, 1);
+        var dia = this.validarData(parData, 2);
+        var hora = this.validarData(parHora, 3);
+        var minuto = this.validarData(parHora, 4);
+
+        var dataHora = parData.year + '/' + mes + '/' + dia + ' ' + hora + ':' + minuto + ':00';
+        return dataHora;
+    }
+
+    montarStringDataEng(data) {
+
+        var mes = this.validarData(data, 1);
+        var dia = this.validarData(data, 2);
+
+        var stringData = data.year + '/' + mes + '/' + dia
+        return stringData
+    }
+
+    montarStringDataPtBr(data) {
+
+        var mes = this.validarData(data, 1);
+        var dia = this.validarData(data, 2);
+
+        var stringData = dia + '/' + mes + '/' + data.year
+        return stringData
+    }
+
+    montarStringHoraMinuto(horaMinuto) {
+
+        var hora = this.validarData(horaMinuto, 3);
+        var minuto = this.validarData(horaMinuto, 4);
+
+        var stringHoraMinuto = hora + ':' + minuto
+        return stringHoraMinuto
+    }
+
+    validarData(valor, tipoValor) {
+
+        var mes;        /// TIPO 1
+        var dia;        /// TIPO 2
+        var hora;       /// TIPO 3
+        var minuto;     /// TIPO 4
+
+        // Mes
+        if (tipoValor == 1) {
+            if (valor.month < 10) {
+                mes = '0' + valor.month
+            } else {
+                mes = valor.month
+            }
+            return mes
+        }
+
+        // Dia
+        if (tipoValor == 2) {
+            if (valor.day < 10) {
+                dia = '0' + valor.day
+            } else {
+                dia = valor.day
+            }
+            return dia
+        }
+
+        // Hora
+        if (tipoValor == 3) {
+            if (valor.hour < 10) {
+                hora = '0' + valor.hour
+            } else {
+                hora = valor.hour
+            }
+            return hora
+        }
+
+        if (tipoValor == 4) {
+            if (valor.minute < 10) {
+                minuto = '0' + valor.minute
+            } else {
+                minuto = valor.minute
+            }
+            return minuto
+        }
+    }
 
     // Fim Métodos Passo 2 - Realizar Agendamento
 }

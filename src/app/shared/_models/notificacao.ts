@@ -1,10 +1,15 @@
 import { Pessoa } from './pessoa';
+import { EnviaEmail } from './enviaEmail';
 
 export interface Notificacao {
     notId: number;
-    notTitulo: String;
     notDescricao: string;
     notAtiva: boolean;
-    pessoa: Pessoa;
+    notPessoa: Pessoa;
+    notPesCadastro: Pessoa;
     notDtCadastro: Date;
+    notPesAtualizacao: Pessoa;
+    notDtAtualizacao: Date;
+    notEnviado: Boolean;
+    enviaEmail: EnviaEmail;
 }

@@ -2,13 +2,24 @@
 import { HttpClient } from '@angular/common/http';
 
 import { API_CONFIG } from '../../shared/_config';
-import { Notificacao } from '../_models';
+import { Notificacao, Response } from '../_models';
+import { EnviaEmail } from '../_models/enviaEmail';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class NotificacaoService {
     constructor(private http: HttpClient) { }
 
-    /*buscarTodos() {
-        return this.http.get<Notificacao[]>(`${API_CONFIG.baseUrl}/notificacoes`);
-    }*/
+    // Traz somente as ativas
+    buscarPorPessoa(idPessoa: String): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/notificacao/pessoa/` + idPessoa);
+    }
+
+    atualizarNotificacao(notificacao: Notificacao): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/notificacao`, notificacao);
+    }
+    
+    enviarEmail(enviaEmail: EnviaEmail): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/notificacao/enviaEmail`, enviaEmail);
+    }
 }
