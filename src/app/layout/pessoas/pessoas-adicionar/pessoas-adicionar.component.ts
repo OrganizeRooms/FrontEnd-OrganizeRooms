@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { PessoaService, OrganizeRoomsService, UnidadeService, Pessoa, SessionStorageService } from 'src/app/shared';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-pessoas-adicionar',
@@ -25,6 +26,7 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
     pesAtualizacao;
 
     constructor(
+        public router: Router,
         private formBuilder: FormBuilder,
         private pessoaService: PessoaService,
         private unidadeService: UnidadeService,
@@ -90,6 +92,16 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarPessoa() {
 
+        var pesTipoInclusao;
+        var pesCadastro;
+        if (this.selPessoa != null) {
+            pesTipoInclusao = null
+            pesCadastro = null
+        } else {
+            pesCadastro = this.sessionService.getSessionUser().pessoa.pesId
+            pesTipoInclusao = 'SIS'
+        }
+
         const pessoa: Pessoa = {
             pesId: this.formAddPessoa.value.pesId,
             pesNome: this.formAddPessoa.value.pesNome,
@@ -102,9 +114,12 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
             pesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             pesDtAtualizacao: new Date(),
             // NÃO É ATUALIZADO 
-            pesTipoInclusao: null,
-            pesCadastro: null,
+            pesCadastro: pesCadastro,
+            pesTipoInclusao: pesTipoInclusao,
             pesDtCadastro: null,
+
+            // somente front
+            participanteObrigatorio: null,
         };
         console.log(pessoa)
         this.pessoaService.adicionarAtualizarPessoa(pessoa).subscribe(ret => {
@@ -113,22 +128,28 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
             if (ret.data != null) {
                 if (this.selPessoa != null) {
                     alert('Pessoa ' + ret.data.pesNome + ' Atualizada com Sucesso!');
+                    this.router.navigate(['/pessoas']);
                 } else {
                     alert('Pessoa ' + ret.data.pesNome + ' Adiconada com Sucesso!');
+                    this.router.navigate(['/pessoas']);
                 }
             }
         });
     }
 
-    resetarSenha(){
+    excluir() {
+
+    }
+
+    resetarSenha() {
         this.pessoaService.resetarSenha(this.selPessoa).subscribe(ret => {
-            if(ret.data != 'false'){
+            if (ret.data != 'false') {
                 alert("Senha Resetada com Sucesso!")
-            }else{
+            } else {
                 alert("Erro ao Resetar Senha!")
             }
         });
-    
+
     }
 
     log(unidade) {

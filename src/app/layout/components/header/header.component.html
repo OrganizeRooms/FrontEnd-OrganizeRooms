@@ -1,56 +1,74 @@
 <nav class="navbar navbar-expand-lg fixed-top">
     <a class="navbar-brand" href="#">Organize Rooms</a>
     <button class="navbar-toggler" type="button" (click)="toggleSidebar()">
-        <!-- <span class="navbar-toggler-icon"></span> -->
         <i class="fa fa-bars text-muted" aria-hidden="true"></i>
     </button>
     <div class="collapse navbar-collapse">
+
         <ul class="navbar-nav ml-auto">
-            <!--<li class="nav-item">
-                <a href="javascript:void(0)" class="nav-link mt-1"
-                    style="padding: 0.375rem 1rem !important; border-color: #999;" (click)="rltAndLtr()">
-                    RTL/LTR
+
+            <li class="nav-item dropdown no-arrow" ngbDropdown (click)="carregarNotificacoes()">
+                <a class="nav-link dropdown-toggle" ngbDropdownToggle>
+                    <i class="fa fa-bell fa-fw"></i>
+                    <span *ngIf="contNotificacoes != 0" class="badge badge-danger badge-counter">{{contNotificacoes}}</span>
                 </a>
-            </li> &nbsp;-->
+                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" ngbDropdownMenu>
+                    <h6 class="dropdown-header">
+                        Notificações
+                    </h6>
+                    <div *ngIf="listNotificacoes">
+                        <a *ngFor="let noti of listNotificacoes" class="dropdown-item d-flex align-items-center"
+                            (click)="desativarNotificacao(noti)">
+                            <div>
+                                <div class="small text-gray-500">{{noti.notDtCadastro | date: 'd MMMM y': 'pt'}}</div>
+                                <span class="font-weight-bold">{{noti.notDescricao}}</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <a *ngIf="!listNotificacoes" class="dropdown-item d-flex align-items-center">
+                        <div>
+                            <!--<div class="small text-gray-500">{{noti.notDtCadastro | date: 'd MMMM y': 'pt'}}</div>-->
+                            <span class="font-weight-bold">Você não possui Novas Notificações!</span>
+                        </div>
+                    </a>
+                    <!--<a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>-->
+                </div>
+            </li>
+            <!--<li class="nav-item dropdown" ngbDropdown (click)="carregarNotificacoes()">
+                <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
+                    <i class="fa fa-bell"></i> <b class="caret"></b><span class="sr-only"></span>
+                </a>
+                <div class="dropdown-menu-right card-mensagens text-center" ngbDropdownMenu>
+                    <div *ngIf="listNotificacoes != null">
+                        <h5 class="color-blue text-bolder">Notificações</h5>
+                        <div *ngFor="let noti of listNotificacoes">
+                            <hr>
+                            <span>{{noti.notDescricao}}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="listNotificacoes == null">
+                        <span>Você não possui Novas Notificações!</span>
+                    </div>
+                </div>
+            </li>-->
+
             <li class="nav-item dropdown" ngbDropdown>
                 <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
-                    <i class="fa fa-bell"></i> <b class="caret"></b><span class="sr-only">(current)</span>
+                    <i class="fa fa-user"></i>
+                    <!--<span> Lucas Jansen </span>-->
+                    <span> {{currentPessoa.pesNome}} </span>
+                    <b class="caret"></b>
                 </a>
                 <div class="dropdown-menu-right" ngbDropdownMenu>
-                    <a href="javascript:void(0)" class="dropdown-item">
-                        Pending Task <span class="badge badge-info">6</span>
+                    <a class="dropdown-item" (click)="resetarSenha()">
+                        <i class="fa fa-fw fa-power-off"></i> Resetar Senha
                     </a>
-                    <a href="javascript:void(0)" class="dropdown-item">
-                        In queue <span class="badge badge-info"> 13</span>
+                    <a class="dropdown-item" [routerLink]="['/login']" (click)="logout()">
+                        <i class="fa fa-fw fa-power-off"></i> Sair
                     </a>
-                    <a href="javascript:void(0)" class="dropdown-item">
-                        Mail <span class="badge badge-info"> 45</span>
-                    </a>
-            <li class="dropdown-divider"></li>
-            <a href="javascript:void(0)" class="dropdown-item">
-                View All
-            </a>
-    </div>
-    </li>
-    <li class="nav-item dropdown" ngbDropdown>
-        <a href="javascript:void(0)" class="nav-link" ngbDropdownToggle>
-            <i class="fa fa-user"></i>
-            <!--<span> Lucas Jansen </span>-->
-            <span> {{currentPessoa.pesNome}} </span>
-            <b class="caret"></b>
-        </a>
-        <div class="dropdown-menu-right" ngbDropdownMenu>
-            <!--<a class="dropdown-item" href="javascript:void(0)">
-                <i class="fa fa-fw fa-user"></i> {{ 'Profile' }}
-            </a>-->
-            <a class="dropdown-item" (click)="resetarSenha()">
-                <i class="fa fa-fw fa-power-off"></i> Alterar Senha
-            </a>
-            <a class="dropdown-item" [routerLink]="['/login']" (click)="logout()">
-                <i class="fa fa-fw fa-power-off"></i> Sair
-            </a>
-        </div>
-    </li>
-    </ul>
+                </div>
+            </li>
+        </ul>
     </div>
 </nav>

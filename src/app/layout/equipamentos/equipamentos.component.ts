@@ -48,6 +48,10 @@ export class EquipamentosComponent implements OnInit {
         this.organizeRoomsService.setValue(registro);
     }
 
+    excluir(registro){
+
+    }
+
     aplicarFiltro(valor: string) {
         this.tableData.filter = valor.trim().toLowerCase();
     }

@@ -61,18 +61,22 @@
                     </div>
                 </div>
                 <br>
-                <div class="col-3 col-sm-12 col-md-3 col-lg-8">
-                    <div class="row justify-content-center">
-                        <a class="col-3 col-sm-4 col-md-3 col-lg-3 btn btn-padrao" [routerLink]="['/pessoas']"
+                <div class="col-3 col-sm-12 col-md-3 col-lg-8 col-xl-10">
+                    <div class="row">
+                        <a class="col-3 col-sm-4 col-md-3 col-lg-3 col-xl-2 btn btn-padrao" [routerLink]="['/pessoas']"
                             [routerLinkActive]="['router-link-active']">
                             Voltar
                         </a>
                         <a *ngIf="permissao == 'ROLE_ADMIN' && selPessoa != null"
-                            class="col-3 col-sm-4 col-md-3 col-lg-3 btn btn-padrao" (click)="resetarSenha()">
+                            class="col-3 col-sm-4 col-md-3 col-lg-3 col-xl-3 btn btn-padrao" (click)="resetarSenha()">
                             Resetar Senha
                         </a>
+                        <a *ngIf="permissao == 'ROLE_ADMIN' && selPessoa != null"
+                            class="col-3 col-sm-4 col-md-3 col-lg-3 col-xl-2 btn btn-padrao" (click)="excluir()">
+                            Excluir
+                        </a>
                         <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddPessoa.valid"
-                            class="col-3 col-sm-4 col-md-3 col-lg-3 btn btn-padrao" (click)="adicionarPessoa()">
+                            class="col-3 col-sm-4 col-md-3 col-lg-3 col-xl-2 btn btn-padrao" (click)="adicionarPessoa()">
                             Confirmar
                         </button>
                     </div>

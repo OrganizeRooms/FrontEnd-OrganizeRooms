@@ -4,6 +4,7 @@ import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
 import {
     EquipamentoService, UnidadeService, OrganizeRoomsService, Equipamento, SessionStorageService
 } from 'src/app/shared';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-equipamentos-adicionar',
@@ -26,6 +27,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
     equPesAtualizacao;
 
     constructor(
+        public router: Router,
         private formBuilder: FormBuilder,
         private equipamentoService: EquipamentoService,
         private unidadeService: UnidadeService,
@@ -82,6 +84,13 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarEquipamento() {
 
+        var equPesCadastro;
+        if (this.selEquipamento != null) {
+            equPesCadastro = null
+        } else {
+            equPesCadastro = this.sessionService.getSessionUser().pessoa.pesId
+        }
+
         const equipamento: Equipamento = {
             equId: this.formAddEquipamento.value.equId,
             equNome: this.formAddEquipamento.value.equNome,
@@ -91,7 +100,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
             equPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             equDtAtualizacao: new Date(),
             // NÃO É ATUALIZADO 
-            equPesCadastro: null,
+            equPesCadastro: equPesCadastro,
             equDtCadastro: null,
         };
         console.log(equipamento)
@@ -101,11 +110,17 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
             if (ret.data != null) {
                 if (this.selEquipamento != null) {
                     alert('Equipamento ' + ret.data.equNome + ' Atualizada com Sucesso!');
+                    this.router.navigate(['/equipamentos']);
                 } else {
                     alert('Equipamento ' + ret.data.equNome + ' Adicionada com Sucesso!');
+                    this.router.navigate(['/equipamentos']);
                 }
             }
         });
+    }
+
+    excluir() {
+
     }
 
     log(unidade) {

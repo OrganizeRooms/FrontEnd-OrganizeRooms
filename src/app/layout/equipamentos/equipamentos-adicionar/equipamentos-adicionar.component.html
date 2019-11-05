@@ -17,12 +17,14 @@
                         <span class="form-control disabled">
                             {{formAddEquipamento.value.equDtCadastro | date: 'dd/MM/yyyy'}}</span>
                     </div>
-                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox" class="col-1 col-sm-1 col-md-2 col-lg-3 col-xl-7">
+                    <div *ngIf="permissao == 'ROLE_ADMIN'" id="checkbox"
+                        class="col-1 col-sm-1 col-md-2 col-lg-3 col-xl-7">
                         <mat-checkbox formControlName="equAtiva" checked="formAddEquipamento.equAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
                     </div>
-                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox" class="col-1 col-sm-1 col-md-2 col-lg-3 col-xl-7">
+                    <div *ngIf="permissao != 'ROLE_ADMIN'" id="checkbox"
+                        class="col-1 col-sm-1 col-md-2 col-lg-3 col-xl-7">
                         <mat-checkbox [disabled] formControlName="equAtiva" checked="formAddEquipamento.equAtiva"
                             [labelPosition]='labelPosition'>
                             Ativa?</mat-checkbox>
@@ -53,14 +55,19 @@
                     </div>
                 </div>
                 <br>
-                <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-7">
-                    <div class="row justify-content-center">
-                        <a class="col-5 col-sm-5 col-md-4 col-lg-4 col-xl-5 btn btn-padrao" [routerLink]="['/equipamentos']"
-                            [routerLinkActive]="['router-link-active']">
+                <div class="col-12 col-sm-12 col-md-10 col-lg-10 col-xl-10">
+                    <div class="row">
+                        <a class="col-5 col-sm-5 col-md-4 col-lg-4 col-xl-3 btn btn-padrao"
+                            [routerLink]="['/equipamentos']" [routerLinkActive]="['router-link-active']">
                             Voltar
                         </a>
+                        <a *ngIf="permissao == 'ROLE_ADMIN' && selEquipamento != null"
+                            class="col-5 col-sm-5 col-md-4 col-lg-4 col-xl-3 btn btn-padrao" (click)="excluir()">
+                            Excluir
+                        </a>
                         <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddEquipamento.valid"
-                            class="col-5 col-sm-5 col-md-4 col-lg-4 col-xl-5 btn btn-padrao" (click)="adicionarEquipamento()">
+                            class="col-5 col-sm-5 col-md-4 col-lg-4 col-xl-3 btn btn-padrao"
+                            (click)="adicionarEquipamento()">
                             Confirmar
                         </button>
                     </div>

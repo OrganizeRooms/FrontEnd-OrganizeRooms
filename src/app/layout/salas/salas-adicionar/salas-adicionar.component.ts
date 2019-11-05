@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Sala, OrganizeRoomsService, SalaService, UnidadeService, SessionStorageService } from 'src/app/shared';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-salas-adicionar',
@@ -24,6 +25,7 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
     salaPesAtualizacao;
 
     constructor(
+        public router: Router,
         private formBuilder: FormBuilder,
         private salaService: SalaService,
         private unidadeService: UnidadeService,
@@ -83,6 +85,13 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
 
     adicionarSala() {
 
+        var salaPesCadastro;
+        if (this.selSala != null) {
+            salaPesCadastro = null
+        } else {
+            salaPesCadastro = this.sessionService.getSessionUser().pessoa.pesId
+        }
+
         const sala: Sala = {
             salaId: this.formAddSala.value.salaId,
             salaNome: this.formAddSala.value.salaNome,
@@ -91,8 +100,8 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
             salaPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             salaDtAtualizacao: new Date(),
             salaUnidade: this.selUnidade.value,
+            salaPesCadastro: salaPesCadastro,
             // NÃO É ATUALIZADO 
-            salaPesCadastro: null,
             salaDtCadastro: null,
         };
         console.log(sala)
@@ -102,11 +111,17 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
             if (ret.data != null) {
                 if (this.selSala != null) {
                     alert('Sala ' + ret.data.salaNome + ' Atualizada com Sucesso!');
+                    this.router.navigate(['/salas']);
                 } else {
                     alert('Sala ' + ret.data.salaNome + ' Adicionada com Sucesso!');
+                    this.router.navigate(['/salas']);
                 }
             }
         });
+    }
+
+    excluir() {
+
     }
 
     log(sala) {

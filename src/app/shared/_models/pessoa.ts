@@ -20,4 +20,7 @@ export interface Pessoa {
 
     pesAtualizacao: Number;
     pesDtAtualizacao: Date;
+
+    /// SOMENTE FRONT
+    participanteObrigatorio: Boolean;
 }

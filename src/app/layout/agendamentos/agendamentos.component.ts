@@ -22,8 +22,8 @@ import { NgbDateCustomParserFormatter, CustomDatepickerI18n, I18n } from 'src/ap
 export class AgendamentosComponent implements OnInit, OnDestroy {
     permissao;
 
-    listUnidades;
-    selUnidade = null;
+    listUnidades: any[];
+    selUnidade;
     selAgeStatus;
     dataInicial: NgbDateStruct;
     dataFinal: NgbDateStruct;
@@ -51,6 +51,8 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
         // this.carregarAgendamentos();
         this.carregarUnidades();
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
+        this.selAgeStatus = 'AGENDADO';
+        this.selUnidade = this.listUnidades[1]
     }
 
     ngOnDestroy() {
@@ -102,7 +104,9 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
     }
 
     limpar() {
-        window.location.reload()
+        //window.location.reload()
+
+        location.reload()
     }
 
     editarAgendamento(registro) {
