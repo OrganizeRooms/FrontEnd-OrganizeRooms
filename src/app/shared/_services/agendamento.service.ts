@@ -28,11 +28,6 @@ export class AgendamentoService {
             + idResponsavel + dataInicio + dataFim + unidade + status);
     }
 
-    // Salas Disponiveis
-    buscarSalasDisponiveis(agendamentoContext: AgendamentoContext): Observable<Response> {
-        return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos/salasdisp`, agendamentoContext);
-    }
-
     addAgendamento(agendamento: Agendamento): Observable<Response> {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos`, agendamento);
     }
@@ -40,7 +35,4 @@ export class AgendamentoService {
     atualizarAgendamento(agendamento: Agendamento): Observable<Response> {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos/atualizar`, agendamento);
     }
-
-
-
 }

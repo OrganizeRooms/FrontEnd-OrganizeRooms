@@ -19,7 +19,7 @@ export class NotificacaoService {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/notificacao`, notificacao);
     }
     
-    enviarEmail(enviaEmail: EnviaEmail): Observable<Response> {
-        return this.http.post<Response>(`${API_CONFIG.baseUrl}/notificacao/enviaEmail`, enviaEmail);
+    enviarEmail(notificacao: Array<Notificacao>): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/notificacao/enviaEmail`, notificacao);
     }
 }

@@ -1,13 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-    OrganizeRoomsService, SessionStorageService, PessoaService, EquipamentoService, AgendamentoService, Agendamento, Participante, Equipamento, Pessoa
-} from 'src/app/shared';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { ParticipanteService } from 'src/app/shared/_services/participante.service';
+import {
+    ParticipanteService, SessionStorageService, PessoaService, EquipamentoService,
+    AgendamentoService, NotificacaoService, OrganizeRoomsService
+} from 'src/app/shared/_services';
+import {
+    Agendamento, Pessoa, Equipamento, Participante, AgendamentoContext, Notificacao, EnviaEmail
+} from 'src/app/shared/_models';
 
 @Component({
     selector: 'app-agendamentos-detalhes',
@@ -28,14 +31,14 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     selAgeStatus;
 
     // Modal Participantes
-    displayedColumnsParticipantes: string[] = ['selecionar', 'pesId', 'pesNome', 'pesUnidade'];
+    displayedColumnsParticipantes: string[] = ['selecionar', 'pesNome', 'pesUnidade', 'obrigatorio'];
     listPessoas = new MatTableDataSource<any>();
     pessoasSelecionadas = new SelectionModel<Pessoa>(true, []);
 
     filtrosModalPartic: FormGroup;
 
     // Modal Equipamentos
-    displayedColumnsEquipamentos: string[] = ['selecionar', 'equId', 'equNome', 'equUnidade'];
+    displayedColumnsEquipamentos: string[] = ['selecionar', 'equNome', 'equDescricao'];
     listEquipamentos = new MatTableDataSource<any>();
     equipamentosSelecionados = new SelectionModel<Equipamento>(true, []);
 
@@ -44,23 +47,27 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     constructor(
         private formBuilder: FormBuilder,
         private modal: NgbModal,
+        // Services
         private organizeRoomsService: OrganizeRoomsService,
         private sessionService: SessionStorageService,
         private pessoaService: PessoaService,
         private equipamentoService: EquipamentoService,
         private agendamentoService: AgendamentoService,
-        private participanteService: ParticipanteService
+        private participanteService: ParticipanteService,
+        private notificacaoService: NotificacaoService
     ) { }
 
     ngOnInit() {
         this.selAgendamento = this.organizeRoomsService.getValue()
 
-        this.criarFormulario();
-        this.carregarListas();
-        this.carregarPessoas();
-        this.carregarEquipamentos();
+        if (this.selAgendamento != null) {
+            this.criarFormulario();
+            this.carregarListas();
+            this.carregarPessoas();
+            this.carregarEquipamentos();
 
-        this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
+            this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
+        }
     }
 
     ngOnDestroy() {
@@ -99,17 +106,27 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
 
     carregarEquipamentos() {
 
-        /*this.equipamentoService.buscarEquipamentosDisponiveis(
-            this.selAgendamento.ageHoraInicio, this.selAgendamento.ageHoraFim, this.selAgendamento.ageSala.salaUnidade
-        ).subscribe(ret => {
+        var dataHoraInicio = this.montarStringDataHora(
+            new Date(this.selAgendamento.ageHoraInicio),
+            new Date(this.selAgendamento.ageHoraInicio))
+
+        var dataHoraFim = this.montarStringDataHora(
+            new Date(this.selAgendamento.ageHoraFim),
+            new Date(this.selAgendamento.ageHoraFim))
+
+        var agendamentoContext: AgendamentoContext = {
+            idUnidade: this.selAgendamento.ageSala.salaUnidade.uniId,
+            lotacao: '0',
+            dataAgendamento: this.montarStringDataEng(new Date(this.selAgendamento.ageHoraFim)),
+            dataInicial: dataHoraInicio,
+            dataFinal: dataHoraFim
+        }
+
+        this.equipamentoService.buscarEquipamentosDisponiveis(agendamentoContext).subscribe(ret => {
             if (ret.data != null && ret.data != '') {
                 this.listEquipamentos.data = ret.data;
             }
-        })*/
-
-        this.equipamentoService.buscarTodosEquipamentos().subscribe(ret => {
-            this.listEquipamentos.data = ret.data;
-        });
+        })
     }
 
     atualizarReserva() {
@@ -144,26 +161,49 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
             }
         });
 
-        var participantes = this.montaArrayParticipantes()
-        this.participanteService.adicionarListaParticipantes(participantes).subscribe(ret => {
-            if (ret.data != null || ret.data == 'Sucesso') {
-                //
-            } else {
-                error = true
-            }
-        });
+        var participantes;
+        if (this.pessoasSelecionadas.hasValue()) {
+            participantes = this.montaArrayParticipantes()
+            this.inserirNovosParticipantes(participantes)
+        }
     }
 
     montaArrayParticipantes(): Array<Participante> {
 
         var participantes = new Array<Participante>()
-        var error = false;
+
+        var agendamento: Agendamento = {
+            ageId: this.selAgendamento.ageId,
+            ageAssunto: null,
+            ageDescricao: null,
+            ageSala: null,
+            agePesResponsavel: null,
+            ageStatus: null,
+            ageData: null,
+            ageHoraInicio: null,
+            ageHoraFim: null,
+            agePesCadastro: null,
+            agePesAtualizacao: null,
+            ageDtCadastro: null,
+            ageDtAtualizacao: null,
+            ageEquipamentos: null,
+            ageParticipantes: null
+        }
         this.pessoasSelecionadas.selected.forEach(pessoa => {
+
+            var nParTipo;
+            if (pessoa.participanteObrigatorio) {
+                nParTipo = 2
+            } else {
+                nParTipo = 1
+            }
+
             var part: Participante = {
                 parId: null,
-                parTipo: 1,
+                parTipo: nParTipo,
+                parConfirmado: null,
                 parPessoa: pessoa,
-                parAgendamento: this.selAgendamento
+                parAgendamento: agendamento
             }
             participantes.push(part)
         });
@@ -171,12 +211,87 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         return participantes
     }
 
+    inserirNovosParticipantes(participantes) {
+        this.participanteService.adicionarListaParticipantes(participantes).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                this.notificarParticipantes(participantes)
+
+            } else {
+                alert('Participante(s) NÃO adicionados! Tente Novamente!')
+            }
+        });
+    }
+
+    notificarParticipantes(participantes) {
+        var notificacoes = new Array<Notificacao>()
+
+        var nMensagemPadrão = 'Você possui uma nova reunião na data '
+            + this.montarStringDataPtBr(new Date(this.selAgendamento.ageHoraInicio))
+            + ' no período das ' + this.montarStringHoraMinuto(new Date(this.selAgendamento.ageHoraInicio))
+            + ' às ' + this.montarStringHoraMinuto(new Date(this.selAgendamento.ageHoraFim))
+            + ' marcada por ' + this.selAgendamento.agePesResponsavel.pesNome + '.'
+
+        var nMensagemObrigatorio = 'Você é uma pessoa Obrigatória na nova reunião marcada por '
+            + this.selAgendamento.agePesResponsavel.pesNome
+            + ' na data ' + this.montarStringDataPtBr(new Date(this.selAgendamento.ageHoraInicio))
+            + ' no período das ' + this.montarStringHoraMinuto(new Date(this.selAgendamento.ageHoraInicio))
+            + ' às ' + this.montarStringHoraMinuto(new Date(this.selAgendamento.ageHoraFim)) + '.'
+
+        var nAssunto = 'Nova Reunião Marcada por' + this.selAgendamento.agePesResponsavel.pesNome
+
+        participantes.forEach(part => {
+
+            var mensagem
+            if (part.parTipo == 1) {
+                mensagem = nMensagemPadrão      // tipo 1 Normal
+            } else {
+                mensagem = nMensagemObrigatorio // tipo 2 obrigatorio
+            }
+
+            var enviaEmail: EnviaEmail = {
+                destinatario: part.parPessoa.pesEmail, // email participante
+                assunto: nAssunto,           // assunto do e-mail
+                mensagem: mensagem          // mensagem do e-mail
+            }
+
+            var notificacao: Notificacao = {
+                notId: null,
+                notDescricao: mensagem,            /// mensagem enviada por e-mail
+                notAtiva: true,
+                notPessoa: part.parPessoa,                   // participante
+                notPesCadastro: this.sessionService.getSessionUser().pessoa.pesId,
+                notDtCadastro: new Date(),
+                notPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
+                notDtAtualizacao: new Date(),
+                notEnviado: false,
+                enviaEmail: enviaEmail
+            }
+
+            notificacoes.push(notificacao);
+        });
+
+        console.log(notificacoes)
+
+        this.notificacaoService.enviarEmail(notificacoes).subscribe(ret => {
+            console.log(ret.data)
+            if (ret.data != null) {
+                //
+            }
+        });
+    }
+
+    excluirParticipante(registro) {
+        this.participanteService.deletarParticipante(registro.parId).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                alert('Participante ' + registro.parPessoa.pesNome + " retirado da Reunião com Sucesso!\nRecarregue a página. ")
+            } else {
+                alert('Erro ao retirar Participante ' + registro.parPessoa.pesNome)
+            }
+        });
+    }
+
     // ---- Inicio Métodos do Modal Participantes
 
-    //**** Metodos Gerais  *******
-    inserirNovosParticipantes() {
-
-    }
     // **** FIM Metodos Gerais  *******
 
     // **** Metodos do Select ******
@@ -203,9 +318,8 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     }
     // ---- Fim Métodos do Modal Participantes
 
+
     // ---- Inicio Métodos do Modal Equipamentos
-
-
     // **** Metodos do Select ******
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelectedEquip() {
@@ -229,4 +343,91 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         return `${this.equipamentosSelecionados.isSelected(rowEquip) ? 'deselect' : 'select'} rowEquip ${rowEquip.position + 1}`;
     }
     // ---- Fim Métodos do Modal Equipamentos
+
+    montarStringDataEng(data: Date) {
+
+        var mes = this.validarData(data, 1);
+        var dia = this.validarData(data, 2);
+
+        var stringData = data.getFullYear() + '/' + mes + '/' + dia
+        return stringData
+    }
+
+    montarStringDataPtBr(data: Date) {
+
+        var mes = this.validarData(data, 1);
+        var dia = this.validarData(data, 2);
+
+        var stringData = dia + '/' + mes + '/' + data.getFullYear()
+        return stringData
+    }
+
+    montarStringHoraMinuto(horaMinuto: Date) {
+
+        var hora = this.validarData(horaMinuto, 3);
+        var minuto = this.validarData(horaMinuto, 4);
+
+        var stringHoraMinuto = hora + ':' + minuto
+        return stringHoraMinuto
+    }
+
+    montarStringDataHora(parData, parHora) {
+
+        var mes = this.validarData(parData, 1);
+        var dia = this.validarData(parData, 2);
+        var hora = this.validarData(parHora, 3);
+        var minuto = this.validarData(parHora, 4);
+
+        var dataHora = parData.getFullYear() + '/' + mes + '/' + dia + ' ' + hora + ':' + minuto + ':00';
+        return dataHora;
+    }
+
+    validarData(valor: Date, tipoValor) {
+
+        var mes;        /// TIPO 1
+        var dia;        /// TIPO 2
+        var hora;       /// TIPO 3
+        var minuto;     /// TIPO 4
+
+        // Mes
+        if (tipoValor == 1) {
+            if (valor.getUTCMonth() + 1 < 10) {
+                mes = '0' + (valor.getUTCMonth() + 1)
+            } else {
+                mes = valor.getUTCMonth() + 1
+            }
+            return mes
+        }
+
+        // Dia
+        if (tipoValor == 2) {
+            if (valor.getDate() < 10) {
+                dia = '0' + valor.getDate()
+            } else {
+                dia = valor.getDate()
+            }
+            return dia
+        }
+
+        // Hora
+        if (tipoValor == 3) {
+            if (valor.getHours() < 10) {
+                hora = '0' + valor.getHours()
+            } else {
+                hora = valor.getHours()
+            }
+            return hora
+        }
+
+        if (tipoValor == 4) {
+            if (valor.getMinutes() < 10) {
+                minuto = '0' + valor.getMinutes()
+            } else {
+                minuto = valor.getMinutes()
+            }
+            return minuto
+        }
+    }
+
+
 }

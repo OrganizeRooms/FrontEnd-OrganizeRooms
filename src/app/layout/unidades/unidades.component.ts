@@ -5,6 +5,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { rangeLabel } from '../../shared/utils/range-label';
 
 import { UnidadeService, OrganizeRoomsService, SessionStorageService } from '../../shared/_services';
+import { registerLocaleData } from '@angular/common';
 
 @Component({
     selector: 'app-unidades',
@@ -49,7 +50,10 @@ export class UnidadesComponent implements OnInit {
     }
 
     excluir(registro){
-
+        console.log(registro)
+        this.unidadeService.deletarUnidade(registro.uniId).subscribe(ret => {
+            console.log(ret.data)
+        });
     }
 
     aplicarFiltro(valor: string) {

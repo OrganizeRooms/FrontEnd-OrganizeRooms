@@ -6,7 +6,7 @@
         </a>
         <a *ngIf="permissao == 'ROLE_ADMIN' || permissao == 'ROLE_USUARIO'" [routerLink]="['/reservar']"
             [routerLinkActive]="['router-link-active']" class="list-group-item">
-            <i class="fa fa-fw fa-calendar-check-o"></i>&nbsp;
+            <i class="fa fa-fw fa-calendar-o"></i>&nbsp;
             <span>Reserva de Sala</span>
         </a>
         <a *ngIf="permissao == 'ROLE_ADMIN' || permissao == 'ROLE_USUARIO'" [routerLink]="['/agendamentos']"

@@ -9,8 +9,8 @@ import { Observable } from 'rxjs';
 export class ParticipanteService {
     constructor(private http: HttpClient) { }
 
-    buscarUnidadePorAgendamento(id: String): Observable<Response> {
-        return this.http.get<Response>(`${API_CONFIG.baseUrl}/participantes/` + id);
+    buscarPorAgendamento(ageId: String): Observable<Response> {
+        return this.http.get<Response>(`${API_CONFIG.baseUrl}/participantes/porAgendamento/` + ageId);
     }
 
     adicionarParticipante(participante: Participante): Observable<Response> {
@@ -18,7 +18,11 @@ export class ParticipanteService {
     }
 
     adicionarListaParticipantes(participantes: Array<Participante>): Observable<Response> {
-        return this.http.post<Response>(`${API_CONFIG.baseUrl}/participantes`, participantes);
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/participantes/listaParticipantes`, participantes);
+    }
+
+    deletarParticipante(partId: String): Observable<Response> {
+        return this.http.delete<Response>(`${API_CONFIG.baseUrl}/participantes/deletar/` + partId);
     }
 
 }

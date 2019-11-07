@@ -10,3 +10,4 @@ export * from './response';
 export * from './dialogdata';
 export * from './jwtAuthentication';
 export * from './agendamentoContext';
+export * from './enviaEmail';

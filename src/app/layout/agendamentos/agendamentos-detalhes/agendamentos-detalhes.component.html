@@ -37,8 +37,10 @@
                     <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-4">
                         <span>Período</span>
                         <span class="form-control disabled text-center">
-                            {{selAgendamento.ageHoraInicio | date: 'HH:mm' :'-0300'}} às
-                            {{selAgendamento.ageHoraFim | date: 'HH:mm' :'-0300'}}
+                            <!--{{selAgendamento.ageHoraInicio | date: 'HH:mm' :'-0300'}} às
+                            {{selAgendamento.ageHoraFim | date: 'HH:mm' :'-0300'}}-->
+                            {{selAgendamento.ageHoraInicio | date: 'HH:mm'}} às
+                            {{selAgendamento.ageHoraFim | date: 'HH:mm'}}
                         </span>
                     </div>
                     <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-4">
@@ -92,14 +94,53 @@
                     <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-8">
                         <ul class="list-group">
                             <li class="list-group-item" *ngFor="let participante of ageParticipantes">
-                                {{participante.parPessoa.pesNome}}
+                                <div class="row">
+                                    <div class="col-6 col-sm-3 col-md-3 col-lg-10 col-xl-8">
+                                        {{participante.parPessoa.pesNome}}
+                                    </div>
+                                    <div class="row">
+                                        <!--- ACEITOU REUNIÃO -->
+                                        <div *ngIf="participante.parConfirmado == true"
+                                            class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            <i class="fa fa-calendar-check-o" title="Reunião Aceita"></i>
+                                        </div>
+
+                                        <!--- NÃO ACEITOU REUNIÃO -->
+                                        <div *ngIf="participante.parConfirmado == false"
+                                            class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            <i class="fa fa-calendar-times-o" title="Reunião Negada"></i>
+                                        </div>
+
+                                        <!-- APARECE SE O PARTICIPANTE FOR IMPORTANTE -->
+                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            <i *ngIf="participante.parTipo == 2" class="fa fa-exclamation"
+                                                title="Obrigatório"></i>
+                                        </div>
+
+                                        <!-- EXCLUIR PARTICIPANTE -->
+                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1"
+                                            aria-placeholder="Excluir Participante">
+                                            <a (click)="excluirParticipante(participante)">
+                                                <i class="fa fa-trash-o" title="Excluir Participante"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
+                        <!-- NOVOS PARTICIPANTES -->
                         <div class="divNews" *ngIf="pessoasSelecionadas.hasValue()">
                             <span class="color-blue">Novos Participantes:</span>
                             <ul class="list-group">
                                 <li class="list-group-item" *ngFor="let pessoaSel of pessoasSelecionadas.selected">
-                                    {{pessoaSel.pesNome}}
+                                    <div class="row">
+                                        <div class="col-6 col-sm-3 col-md-3 col-lg-10 col-xl-10">
+                                            {{pessoaSel.pesNome}}
+                                        </div>
+                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            <i *ngIf="pessoaSel.participanteObrigatorio" class="fa fa-exclamation"></i>
+                                        </div>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -200,12 +241,11 @@
                     </td>
                 </ng-container>
 
-                <!-- Código -->
+                <!-- Código 
                 <ng-container matColumnDef="pesId">
                     <th mat-header-cell *matHeaderCellDef>Código</th>
                     <td mat-cell *matCellDef="let pessoa">{{pessoa.pesId}}</td>
-
-                </ng-container>
+                </ng-container>-->
 
                 <!-- Nome -->
                 <ng-container matColumnDef="pesNome">
@@ -219,9 +259,19 @@
                     <td mat-cell *matCellDef="let pessoa">{{pessoa.pesUnidade.uniNome}}</td>
                 </ng-container>
 
+                <!-- Obrigatorio -->
+                <ng-container matColumnDef="obrigatorio">
+                    <th mat-header-cell *matHeaderCellDef>Obrigatório?</th>
+                    <td mat-cell *matCellDef="let pessoa">
+                        <mat-checkbox [(ngModel)]="pessoa.participanteObrigatorio"
+                            checked="pessoa.participanteObrigatorio">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsParticipantes"></tr>
-                <tr mat-row *matRowDef="let rowPart; columns: displayedColumnsParticipantes;"
-                    (click)="pessoasSelecionadas.toggle(rowPart)">
+                <tr mat-row *matRowDef="let rowPart; columns: displayedColumnsParticipantes;">
+                    <!--(click)="pessoasSelecionadas.toggle(rowPart)">-->
                 </tr>
             </table>
         </div>
@@ -272,11 +322,11 @@
                     </td>
                 </ng-container>
 
-                <!-- Código -->
+                <!-- Código 
                 <ng-container matColumnDef="equId">
                     <th mat-header-cell *matHeaderCellDef>Código</th>
                     <td mat-cell *matCellDef="let equipamento">{{equipamento.equId}}</td>
-                </ng-container>
+                </ng-container>-->
 
                 <!-- Nome -->
                 <ng-container matColumnDef="equNome">
@@ -284,10 +334,10 @@
                     <td mat-cell *matCellDef="let equipamento">{{equipamento.equNome}}</td>
                 </ng-container>
 
-                <!-- Unidade -->
-                <ng-container matColumnDef="equUnidade">
-                    <th mat-header-cell *matHeaderCellDef>Unidade</th>
-                    <td mat-cell *matCellDef="let equipamento"> {{equipamento.equUnidade.uniNome}} </td>
+                <!-- Descrição -->
+                <ng-container matColumnDef="equDescricao">
+                    <th mat-header-cell *matHeaderCellDef>Descrição</th>
+                    <td mat-cell *matCellDef="let equipamento">{{equipamento.equDescricao}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsEquipamentos"></tr>
