@@ -21,6 +21,10 @@ export class UnidadeService {
         return this.http.get<Response>(`${API_CONFIG.baseUrl}/unidades/` + id);
     }
 
+    deletarUnidade(id: String): Observable<Response> {
+        return this.http.delete<Response>(`${API_CONFIG.baseUrl}/unidades/` + id);
+    }
+
     adicionarAtualizarUnidade(unidade: Unidade): Observable<Response> {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/unidades`, unidade);
     }

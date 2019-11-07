@@ -8,3 +8,4 @@ export * from './notificacao.service';
 export * from './storage.service';
 export * from './sessionStorage.service';
 export * from './organizerooms.service';
+export * from './participante.service';

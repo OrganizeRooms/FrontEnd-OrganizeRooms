@@ -7,6 +7,7 @@ import { rangeLabel } from '../../shared/utils/range-label';
 import { AgendamentoService, OrganizeRoomsService, SessionStorageService, UnidadeService } from '../../shared/_services';
 import { NgbDateStruct, NgbDatepickerI18n, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateCustomParserFormatter, CustomDatepickerI18n, I18n } from 'src/app/shared';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-agendamentos',
@@ -52,7 +53,6 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
         this.carregarUnidades();
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
         this.selAgeStatus = 'AGENDADO';
-        this.selUnidade = this.listUnidades[1]
     }
 
     ngOnDestroy() {
@@ -97,8 +97,8 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
             this.configurarPaginador();
         }
     }
-    
-    montarStringData(data){
+
+    montarStringData(data) {
         var stringData = data.year + '/' + data.month + '/' + data.day
         return stringData
     }

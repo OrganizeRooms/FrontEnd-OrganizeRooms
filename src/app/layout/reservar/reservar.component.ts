@@ -1,21 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-
 // Date Picker
 import {
     NgbDateStruct, NgbDatepickerI18n, NgbModal,
     NgbDateParserFormatter, NgbCalendar
 } from '@ng-bootstrap/ng-bootstrap';
 import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/app/shared/utils';
-
 import {
-    UnidadeService, OrganizeRoomsService, SalaService, SessionStorageService, PessoaService,
-    EquipamentoService, AgendamentoService, Agendamento, Pessoa, Equipamento, Participante, AgendamentoContext
-} from 'src/app/shared';
+    UnidadeService, SalaService, SessionStorageService, PessoaService, EquipamentoService, AgendamentoService, NotificacaoService
+} from 'src/app/shared/_services';
+import {
+    Agendamento, Pessoa, Equipamento, Participante, AgendamentoContext, Notificacao, EnviaEmail
+} from 'src/app/shared/_models';
+import { Router } from '@angular/router';
 
 // Metodos
 //import { montarStringDataHora, montarStringDataEng, montarDataHora } from 'src/app/shared/utils';
@@ -72,11 +72,12 @@ export class ReservarComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private calendar: NgbCalendar,
         private modal: NgbModal,
+        private router: Router,
         private unidadeService: UnidadeService,
-        private organizeRoomsService: OrganizeRoomsService,
         private sessionService: SessionStorageService,
         private salaService: SalaService,
         private agendamentoService: AgendamentoService,
+        private notificacaoService: NotificacaoService,
 
 
         // Temporario
@@ -132,7 +133,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
                 dataFinal: dataHoraFim
             }
 
-            this.agendamentoService.buscarSalasDisponiveis(agendamentoContext).subscribe(ret => {
+            this.salaService.buscarSalasDisponiveis(agendamentoContext).subscribe(ret => {
                 if (ret.data != null && ret.data != '') {
                     this.listSalas = ret.data;
                 } else {
@@ -149,6 +150,10 @@ export class ReservarComponent implements OnInit, OnDestroy {
         //window.location.reload()
 
         location.reload()
+    }
+
+    fechar() {
+        this.router.navigate(['/home']);
     }
 
     // Vai para o próximo passo
@@ -214,19 +219,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
         });
     }
 
-    marcarObrigatorio(registro) {
-        console.log("marcarObrigatorio")
-        console.log(registro)
-        console.log(this.pessoasSelecionadas)
-        /*if (registro.participanteObrigatorio) {
-            registro.participanteObrigatorio = false;
-        } else {
-            registro.participanteObrigatorio = true;
-        }
-
-        console.log(registro.participanteObrigatorio)*/
-    }
-
     carregarEquipamentos() {
         var dataHoraInicio = this.montarStringDataHora(this.data, this.horaInicio)
         var dataHoraFim = this.montarStringDataHora(this.data, this.horaFim)
@@ -286,15 +278,26 @@ export class ReservarComponent implements OnInit, OnDestroy {
                 alert('Não foi possível Finalizar o Agendamento! Tente novamente.');
             }
         });
+
+        this.notificarParticipantes(nAgeParticipantes);
     }
 
     montaArrayParticipantes(): Array<Participante> {
 
         var participantes = new Array<Participante>()
         this.pessoasSelecionadas.selected.forEach(pessoa => {
+
+            var nParTipo;
+            if (pessoa.participanteObrigatorio) {
+                nParTipo = 2
+            } else {
+                nParTipo = 1
+            }
+
             var part: Participante = {
                 parId: null,
-                parTipo: 1,
+                parTipo: nParTipo,
+                parConfirmado: null,
                 parPessoa: pessoa,
                 parAgendamento: null,
             }
@@ -302,6 +305,61 @@ export class ReservarComponent implements OnInit, OnDestroy {
         });
 
         return participantes
+    }
+
+
+    notificarParticipantes(participantes) {
+        var notificacoes = new Array<Notificacao>()
+
+        var nMensagemPadrão = 'Você possui uma nova reunião na data '
+            + this.montarStringDataPtBr(this.data)
+            + ' no período das ' + this.montarStringHoraMinuto(this.horaInicio)
+            + ' às ' + this.montarStringHoraMinuto(this.horaFim)
+            + ' marcada por ' + this.responsavel.pesNome + '.'
+
+        var nMensagemObrigatorio = 'Você é uma pessoa Obrigatória na nova reunião marcada por '
+            + this.responsavel.pesNome + ' na data ' + this.montarStringDataPtBr(this.data)
+            + ' no período das ' + this.montarStringHoraMinuto(this.horaInicio)
+            + ' às ' + this.montarStringHoraMinuto(this.horaFim) + '.'
+
+        var nAssunto = 'Nova Reunião Marcada por' + this.responsavel.pesNome
+
+        participantes.forEach(part => {
+
+            var mensagem
+            if (part.parTipo == 1) {
+                mensagem = nMensagemPadrão      // tipo 1 Normal
+            } else {
+                mensagem = nMensagemObrigatorio // tipo 2 obrigatorio
+            }
+
+            var enviaEmail: EnviaEmail = {
+                destinatario: part.parPessoa.pesEmail, // email participante
+                assunto: nAssunto,           // assunto do e-mail
+                mensagem: mensagem          // mensagem do e-mail
+            }
+
+            var notificacao: Notificacao = {
+                notId: null,
+                notDescricao: mensagem,            /// mensagem enviada por e-mail
+                notAtiva: true,
+                notPessoa: part.parPessoa,                   // participante
+                notPesCadastro: this.responsavel.pesId,
+                notDtCadastro: new Date(),
+                notPesAtualizacao: this.responsavel.pesId,
+                notDtAtualizacao: new Date(),
+                notEnviado: false,
+                enviaEmail: enviaEmail
+            }
+
+            notificacoes.push(notificacao);
+        });
+
+        this.notificacaoService.enviarEmail(notificacoes).subscribe(ret => {
+            if (ret.data != null) {
+                //
+            }
+        });
     }
 
     // ---- Inicio Métodos do Modal Participantes
