@@ -277,10 +277,11 @@
 
     <div class="modal-body">
         <div class="page-text">
-            <div class="row">
-                <!--<form [formGroup]="filtrosModalPartic">
-                      FILTROS  
-                </form>-->
+            <div class="row justify-content-center">
+                <div class="col-7 col-sm-9 col-md-6 col-lg-5 col-xl-6">
+                    <input class="form-control text-center" matInput (keyup)="aplicarFiltroPart($event.target.value)"
+                        placeholder="Pesquisar">
+                </div>
             </div>
             <table mat-table [dataSource]="listPessoas" class="mat-elevation-z8">
 
@@ -358,10 +359,11 @@
 
     <div class="modal-body">
         <div class="page-text">
-            <div class="row">
-                <!--<form [formGroup]="filtrosModalPartic">
-                          FILTROS  
-                    </form>-->
+            <div class="row justify-content-center">
+                <div class="col-7 col-sm-9 col-md-6 col-lg-5 col-xl-6">
+                    <input class="form-control text-center" matInput (keyup)="aplicarFiltroEquip($event.target.value)"
+                        placeholder="Pesquisar">
+                </div>
             </div>
             <table mat-table [dataSource]="listEquipamentos" class="mat-elevation-z8">
 

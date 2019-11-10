@@ -8,4 +8,5 @@ export interface Unidade {
     uniDtCadastro: Date;
     uniPesAtualizacao: Number;
     uniDtAtualizacao: Date;
+
 }

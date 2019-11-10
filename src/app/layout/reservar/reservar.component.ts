@@ -78,9 +78,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
         private salaService: SalaService,
         private agendamentoService: AgendamentoService,
         private notificacaoService: NotificacaoService,
-
-
-        // Temporario
         private pessoaService: PessoaService,
         private equipamentoService: EquipamentoService
     ) { }
@@ -363,6 +360,11 @@ export class ReservarComponent implements OnInit, OnDestroy {
     }
 
     // ---- Inicio Métodos do Modal Participantes
+
+    aplicarFiltroPart(valor: string) {
+        this.listPessoas.filter = valor.trim().toLowerCase();
+    }
+
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelectedPart() {
         const numSelected = this.pessoasSelecionadas.selected.length;
@@ -387,6 +389,11 @@ export class ReservarComponent implements OnInit, OnDestroy {
     // ---- Fim Métodos do Modal Participantes
 
     // ---- Inicio Métodos do Modal Equipamentos
+
+    aplicarFiltroEquip(valor: string) {
+        this.listEquipamentos.filter = valor.trim().toLowerCase();
+    }
+
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelectedEquip() {
         const numSelected = this.equipamentosSelecionados.selected.length;

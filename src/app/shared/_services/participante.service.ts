@@ -21,6 +21,10 @@ export class ParticipanteService {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/participantes/listaParticipantes`, participantes);
     }
 
+    alterarParticipante(participante: Participante): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/participantes/alterar`, participante);
+    }
+
     deletarParticipante(partId: String): Observable<Response> {
         return this.http.delete<Response>(`${API_CONFIG.baseUrl}/participantes/deletar/` + partId);
     }

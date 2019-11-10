@@ -68,7 +68,7 @@
                             <i class="fa fa-fw fa-pencil"></i>
                         </a>
                         &nbsp;
-                        <a (click)="excluir(sala)">
+                        <a *ngIf="permissao == 'ROLE_ADMIN'" (click)="excluir(sala)">
                             <i class="fa fa-trash-o"></i>
                         </a>
                     </td>

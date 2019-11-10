@@ -71,7 +71,7 @@
                     <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
                         <span>Descrição</span>
                         <textarea class="form-control" formControlName="ageDescricao">
-                            </textarea>
+                        </textarea>
                     </div>
                 </div>
                 <br />
@@ -99,6 +99,19 @@
                                         {{participante.parPessoa.pesNome}}
                                     </div>
                                     <div class="row">
+
+                                        <!-- APARECE SE O PARTICIPANTE FOR IMPORTANTE -->
+                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            <i *ngIf="participante.parTipo == 2" class="fa fa-exclamation"
+                                                title="Obrigatório"></i>
+                                        </div>
+
+                                        <!--- ESPERANDO RESPOSTA -->
+                                        <div *ngIf="participante.parConfirmado == null"
+                                            class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            <i class="fa fa-calendar-minus-o" title="Aguardando Resposta"></i>
+                                        </div>
+
                                         <!--- ACEITOU REUNIÃO -->
                                         <div *ngIf="participante.parConfirmado == true"
                                             class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
@@ -109,12 +122,6 @@
                                         <div *ngIf="participante.parConfirmado == false"
                                             class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
                                             <i class="fa fa-calendar-times-o" title="Reunião Negada"></i>
-                                        </div>
-
-                                        <!-- APARECE SE O PARTICIPANTE FOR IMPORTANTE -->
-                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
-                                            <i *ngIf="participante.parTipo == 2" class="fa fa-exclamation"
-                                                title="Obrigatório"></i>
                                         </div>
 
                                         <!-- EXCLUIR PARTICIPANTE -->
@@ -215,11 +222,13 @@
 
     <div class="modal-body">
         <div class="page-text">
-            <div class="row">
-                <!--<form [formGroup]="filtrosModalPartic">
-                          FILTROS  
-                    </form>-->
+            <div class="row justify-content-center">
+                <div class="col-7 col-sm-9 col-md-6 col-lg-5 col-xl-6">
+                    <input class="form-control text-center" matInput (keyup)="aplicarFiltroPart($event.target.value)"
+                        placeholder="Pesquisar">
+                </div>
             </div>
+            <br />
             <table mat-table [dataSource]="listPessoas" class="mat-elevation-z8">
 
                 <!-- Checkbox -->
@@ -296,11 +305,13 @@
 
     <div class="modal-body">
         <div class="page-text">
-            <div class="row">
-                <!--<form [formGroup]="filtrosModalPartic">
-                              FILTROS  
-                        </form>-->
+            <div class="row justify-content-center">
+                <div class="col-7 col-sm-9 col-md-6 col-lg-5 col-xl-6">
+                    <input class="form-control text-center" matInput (keyup)="aplicarFiltroEquip($event.target.value)"
+                        placeholder="Pesquisar">
+                </div>
             </div>
+
             <table mat-table [dataSource]="listEquipamentos" class="mat-elevation-z8">
 
                 <!-- Checkbox -->
@@ -346,7 +357,7 @@
                 </tr>
             </table>
         </div>
-        <br />
+
         <div class="row ml-auto">
             <a class="btn btn-padrao" (click)="modal.dismiss()">Fechar</a>
         </div>
