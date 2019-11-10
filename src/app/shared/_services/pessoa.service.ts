@@ -17,6 +17,10 @@ export class PessoaService {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/pessoas`, pessoa);
     }
 
+    importarPessoas(pessoas: Array<Pessoa>): Observable<Response>{
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/pessoas/importar`, pessoas);
+    }
+
     resetarSenha(pessoa: Pessoa): Observable<Response> {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/pessoas/resetarSenha`, pessoa);
     }

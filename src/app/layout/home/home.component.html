@@ -6,7 +6,7 @@
         </div>
         <div class="col-11 col-xl-3 col-lg-6">
             <div class="input-group datepicker-home">
-                <input class="form-control text-center" placeholder="dd/mm/yyyy" name="dp" [(ngModel)]="model"
+                <input class="form-control text-center" placeholder="dd/mm/yyyy" name="dp" [(ngModel)]="data"
                     ngbDatepicker #d="ngbDatepicker">
                 <div class="input-group-append">
                     <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
@@ -16,61 +16,228 @@
     </div>
     <hr>
     <div class="row">
-        <div *ngFor="let agends of listAgendamentos" class="col-12 col-sm-6 col-lg-4 col-xl-3">
-
+        <div *ngFor="let agend of listAgendamentos" class="col-12 col-sm-6 col-lg-4 col-xl-3">
             <div class="card-agendamento">
-                <div class="card-titulo text-center">
-                    <span class="">
-                        {{agends.sala}} &nbsp; <span class="color-blue">{{agends.ageData | date: 'dd/MM/yyyy'}}</span>
+                <div class="row card-titulo text-center">
+                    <div class="col-12 col-sm-6 col-lg-12 col-xl-12">
+                        <span>{{agend.ageSala.salaNome}}</span>
+                    </div>
+                    <div class="col-12 col-sm-6 col-lg-12 col-xl-12 color-blue">
+                        <span>{{agend.ageData | date: 'dd/MM/yyyy'}}</span>
+                    </div>
+                </div>
+                <hr class="card-divider">
+                <div class="row">
+                    <span class="text-bolder">Unidade:</span>&nbsp;
+                    {{agend.ageSala.salaUnidade.uniNome}}
+                </div>
+                <div class="row">
+                    <span class="text-bolder">Responsável:</span>&nbsp;
+                    {{agend.agePesResponsavel.pesNome}}
+                </div>
+                <div class="row">
+                    <span class="text-bolder">Assunto:</span>&nbsp;
+                    {{agend.ageAssunto}}
+                </div>
+                <div class="row">
+                    <span class="text-bolder">Período:</span>&nbsp;
+                    <span>
+                        {{agend.ageHoraInicio | date: 'HH:mm'}} <b>às</b>
+                        {{agend.ageHoraFim | date: 'HH:mm'}}
                     </span>
                 </div>
-                <hr class="card-divider">
                 <div class="row">
-                    <span><b>Unidade:</b> {{agends.unidade}}</span>
-                </div>
-                <div class="row">
-                    <span><b>Responsável:</b> {{agends.pessoa_responsavel}}</span>
-                </div>
-                <div class="row">
-                    <span><b>Assunto:</b> {{agends.ageAssunto}}</span>
-                </div>
-                <div class="row">
-                    <span><b>Período:</b> {{agends.ageHoraInicio}} <b>às</b> {{agends.ageHoraFim}}</span>
-                </div>
-                <div class="row">
-                    <span><b>Status:</b> {{agends.ageStatus}}</span>
+                    <span class="text-bolder">Status:</span>&nbsp;
+                    {{agend.ageStatus}}
                 </div>
                 <hr class="card-divider">
-                <div class="row justify-content-md-center">
-                    <!--- <button class="btn btn-padrao" (click)="openDialog(agends)">Detalhes</button>
-                    <button class="btn btn-padrao" (click)="abrirDetalhes(agends, modalDetalhes)">Detalhes</button>-->
+                <div class="row ml-auto">
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-5">
+                        <a class="btn btn-padrao btn-home" (click)="abrirModal(agend, modalDetalhes)">
+                            Detalhes
+                        </a>
+                    </div>
+                    <div *ngIf="this.pessoaLogada.pesId != agend.agePesResponsavel.pesId && aparecer(agend)"
+                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <a class="btn btn-padrao btn-home btn-recusar" (click)="recusarAgendamento(agend)">
+                            <i class="fa fa-calendar-times-o color-white" title="Recusar Reunião"></i>
+                        </a>
+                    </div>
+                    <div *ngIf="this.pessoaLogada.pesId != agend.agePesResponsavel.pesId && aparecer(agend)"
+                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <a class="btn btn-padrao btn-home btn-aceitar" (click)="aceitarAgendamento(agend)">
+                            <i class="fa fa-calendar-check-o color-white" title="Aceitar Reunião"></i>
+                        </a>
+                    </div>
+                    <div *ngIf="pessoaLogada.pesId == agend.agePesResponsavel.pesId"
+                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <a class="btn btn-padrao btn-home btn-aceitar" (click)="concluirAgendamento(agend)">
+                            Concluir
+                        </a>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
+<!-- MODAL AGENDAMENTO DETALHES -->
+<ng-template #modalDetalhes let-modal>
+    <div class="modal-header">
+        <div class="row card-titulo text-center ml-auto">
+            <div class="col-12 col-sm-6 col-lg-12 col-xl-11">
+                <span>{{selAgendamento.ageSala.salaNome}}</span>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-12 col-xl-1 color-blue">
+                <a class="close" aria-label="Close" (click)="modal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-12 col-xl-12 color-blue">
+                <span>{{selAgendamento.ageData | date: 'dd/MM/yyyy'}}</span>
+            </div>
         </div>
     </div>
 
-    <!-- <ngb-alert [type]="alert.type" (close)="closeAlert(alert)" *ngFor="let alert of alerts">{{ alert.message }}
-    </ngb-alert>
-    <hr />
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card card-default">
-                <div class="card-header">
-                    <i class="fa fa-clock-o fa-fw"></i> Responsive Timeline
+    <div class="modal-body">
+        <div class="page-text">
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-12 col-xl-12">
+                    <span class="text-bolder">Unidade:</span>&nbsp;
+                    {{selAgendamento.ageSala.salaUnidade.uniNome}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-12 col-xl-12">
+                    <span class="text-bolder">Responsável:</span>&nbsp;
+                    {{selAgendamento.agePesResponsavel.pesNome}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-12 col-xl-12">
+                    <span class="text-bolder">Período:</span>&nbsp;
+                    <span>
+                        {{selAgendamento.ageHoraInicio | date: 'HH:mm'}} <b>às</b>
+                        {{selAgendamento.ageHoraFim | date: 'HH:mm'}}
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-12 col-xl-12">
+                    <span class="text-bolder text-justify">Assunto:</span>
+                    {{selAgendamento.ageAssunto}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-lg-12 col-xl-12">
+                    <span class="text-bolder">Descrição:</span>
+                </div>
+            </div>
+            <div class="row ml-auto mr-auto">
+                <div class="col-12 col-sm-6 col-lg-12 col-xl-12 text-area">
+                    {{selAgendamento.ageDescricao}}
+                </div>
+            </div>
+            <br />
+            <!-- INICIO - PARTICIPANTES (PESSOAS) -->
+            <div class="row ml-auto">
+                <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-5">
+                    <h4 class="card-title">
+                        <i class="fa fa-users"></i>&nbsp;
+                        Participantes
+                    </h4>
+                </div>
+            </div>
+            <div class="row ml-auto">
+                <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-8">
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let participante of selAgendamento.ageParticipantes">
+                            <div class="row">
+                                <div class="col-6 col-sm-3 col-md-3 col-lg-10 col-xl-9">
+                                    {{participante.parPessoa.pesNome}}
+                                </div>
+                                <div class="row">
+                                    <!-- APARECE SE O PARTICIPANTE FOR IMPORTANTE -->
+                                    <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                        <i *ngIf="participante.parTipo == 2" class="fa fa-exclamation"
+                                            title="Obrigatório"></i>
+                                    </div>
+
+                                    <!--- ESPERANDO RESPOSTA -->
+                                    <div *ngIf="participante.parConfirmado == null"
+                                        class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                        <i class="fa fa-calendar-minus-o" title="Aguardando Resposta"></i>
+                                    </div>
+
+                                    <!--- ACEITOU REUNIÃO -->
+                                    <div *ngIf="participante.parConfirmado == true"
+                                        class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                        <i class="fa fa-calendar-check-o" title="Reunião Aceita"></i>
+                                    </div>
+
+                                    <!--- NÃO ACEITOU REUNIÃO -->
+                                    <div *ngIf="participante.parConfirmado == false"
+                                        class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                        <i class="fa fa-calendar-times-o" title="Reunião Negada"></i>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- FIM - PARTICIPANTES (PESSOAS) -->
+            <br />
+            <!-- INICIO - EQUIPAMENTOS -->
+            <div class="row ml-auto">
+                <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-5">
+                    <h4 class="card-title">
+                        <i class="fa fa-desktop"></i>&nbsp;
+                        Equipamentos
+                    </h4>
+                </div>
+            </div>
+            <div class="row ml-auto">
+                <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-8">
+                    <ul class="list-group">
+                        <li class="list-group-item" *ngFor="let equipamento of selAgendamento.ageEquipamentos">
+                            {{equipamento.equNome}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- FIM - PARTICIPANTES (PESSOAS) -->
+            <hr class="card-divider">
+            <div class="row justify-content-center">
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-5">
+                        <a class="btn btn-padrao btn-home" (click)="modal.dismiss()">
+                            Fechar
+                        </a>
+                    </div>
+                    <div *ngIf="pessoaLogada.pesId == selAgendamento.agePesResponsavel.pesId"
+                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <a class="btn btn-padrao btn-home btn-aceitar" (click)="concluirAgendamento(selAgendamento)">
+                            Concluir
+                        </a>
+                    </div>
+                    <div *ngIf="this.pessoaLogada.pesId != selAgendamento.agePesResponsavel.pesId && aparecer(selAgendamento)"
+                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <a class="btn btn-padrao btn-home btn-recusar" (click)="recusarAgendamento(selAgendamento)">
+                            <i class="fa fa-calendar-times-o color-white" title="Recusar Reunião"></i>
+                        </a>
+                    </div>
+                    <div *ngIf="this.pessoaLogada.pesId != selAgendamento.agePesResponsavel.pesId && aparecer(selAgendamento)"
+                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
+                        <a class="btn btn-padrao btn-home btn-aceitar" (click)="aceitarAgendamento(selAgendamento)">
+                            <i class="fa fa-calendar-check-o color-white" title="Aceitar Reunião"></i>
+                        </a>
+                    </div>
+
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
-            <div class="card card-default mb-3">
-                <div class="card-header">
-                    <i class="fa fa-bell fa-fw"></i> Notifications card
-                </div>-->
-                <!-- /.card-header 
-                <app-notification></app-notification>-->
-                <!-- /.card-body 
-            </div>
-
-        </div>
     </div>
-</div>-->
+</ng-template>
+<!-- FIM MODAL AGENDAMENTO DETALHES -->

@@ -1,16 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, LOCALE_ID } from '@angular/core';
 import { routerTransition } from '../../router.animations';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
-
-import { Agendamento } from 'src/app/shared';
-
-// Dialog
-import { MatDialog, MatDialogConfig } from "@angular/material";
-import { HomeDetalhesComponent } from './home-detalhes/home-detalhes.component';
 // Date Picker
-import { NgbDateStruct, NgbDatepickerI18n, NgbModal, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbDatepickerI18n, NgbModal, NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/app/shared/utils';
-import { TouchSequence } from 'selenium-webdriver';
+import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteService, Participante } from 'src/app/shared';
 
 @Component({
     selector: 'app-home',
@@ -27,83 +20,33 @@ export class HomeComponent implements OnInit {
 
     // listAgendamentos: Agendamento;
     listAgendamentos;
-    DetalhesAgendamento;
-    model: NgbDateStruct;
-    agendamentoSelecionado;
+    data: NgbDateStruct;
+    selAgendamento;
+    pessoaLogada;
 
     constructor(
-        private dialog: MatDialog,
-        private modal: NgbModal) {
-        /*this.alerts.push(
-            {
-                id: 1,
-                type: 'success',
-                message: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Voluptates est animi quibusdam praesentium quam, et perspiciatis,
-                consectetur velit culpa molestias dignissimos
-                voluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum`
-            }
-        );*/
-    }
+        private modal: NgbModal,
+        private calendar: NgbCalendar,
+        private sessionStorage: SessionStorageService,
+        private agendamentoService: AgendamentoService,
+        private participanteService: ParticipanteService
+    ) { }
 
     ngOnInit() {
+        var today = this.calendar.getToday()
+        this.data = today;
+
+        this.pessoaLogada = this.sessionStorage.getSessionUser().pessoa;
         this.carregarAgendamentos();
     }
 
     carregarAgendamentos() {
-        this.listAgendamentos = [
-            {
-                ageId: 1, sala: 'Sala de Reunião 3', pessoa_responsavel: 'Lucas Jansen', unidade: 'Rio de Janeiro',
-                ageAssunto: 'Montar Kanban', ageData: new Date('09/08/2019'),
-                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
-                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
-                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
-                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            },
-            {
-                ageId: 2, sala: 'Sala de Reunião 4', pessoa_responsavel: 'Lucas Jansen', unidade: 'Rio de Janeiro',
-                ageAssunto: 'Montar Kanban', ageData: new Date('08/09/2019'),
-                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
-                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
-                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
-                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            },
-            {
-                ageId: 2, sala: 'Sala de Reunião 5', pessoa_responsavel: 'Lucas Jansen', unidade: 'Rio de Janeiro',
-                ageAssunto: 'Montar Kanban', ageData: new Date('08/09/2019'),
-                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
-                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
-                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
-                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            },
-            {
-                ageId: 3, sala: 'Sala Comercial', pessoa_responsavel: 'Éder jean Dias', unidade: 'Blumenau',
-                ageAssunto: 'Montar Kanban', ageData: new Date('08/09/2019'),
-                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
-                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
-                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
-                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            },
-            {
-                ageId: 4, sala: 'Sala Dos Top', pessoa_responsavel: 'Felipe Haag', unidade: 'Blumenau',
-                ageAssunto: 'Montar Kanban', ageData: new Date('09/26/2019'),
-                ageHoraInicio: '08:00', ageHoraFim: '08:30', ageStatus: 'Agendado',
-                ageDescricao: 'Lorem Lorem orem Lorem ipsum dolor sit amet, consectetur adipisicing elit. '
-                    + 'Voluptates est animi quibusdam praesentium quam, et perspiciatis,consectetur velit culpa '
-                    + 'molestias dignissimosvoluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum'
-            }
-        ]
-
+        this.agendamentoService.buscarTodosAgendamentos().subscribe(ret => {
+            this.listAgendamentos = ret.data;
+        });
     }
 
-
-    /*public closeAlert(alert: any) {
-        const index: number = this.alerts.indexOf(alert);
-        this.alerts.splice(index, 1);
-    }
-
-
-    filtro(data: FormControl) {
+    /*filtro(data: FormControl) {
         var fdata = new Date(data.value)
         this.listAgendamentosFiltrado = [];
         this.listAgendamentos.forEach(element => {
@@ -114,44 +57,88 @@ export class HomeComponent implements OnInit {
             }
         });
     }*/
+    aparecer(agend) {
 
-    openDialog(agends) {
-        const dialogConfig = new MatDialogConfig();
-
-        //dialogConfig.maxHeight = '80%';
-        //dialogConfig.maxWidth = '50%';
-        dialogConfig.panelClass = 'col-12';
-        dialogConfig.panelClass = 'col-sm-12';
-        dialogConfig.panelClass = 'col-lg-6';
-        dialogConfig.panelClass = 'col-xl-6';
-
-        dialogConfig.data = {
-            ageId: agends.ageId,
-            sala: agends.sala,
-            unidade: agends.unidade,
-            pessoa_responsavel: agends.pessoa_responsavel,
-            ageAssunto: agends.ageAssunto,
-            ageData: agends.ageData,
-            ageHoraInicio: agends.ageHoraInicio,
-            ageHoraFim: agends.ageHoraFim,
-            ageStatus: agends.ageStatus,
-            ageDescricao: agends.ageDescricao,
-        };
-
-        this.dialog.open(HomeDetalhesComponent, dialogConfig);
+        var retorno = false
+        agend.ageParticipantes.forEach(part => {
+            if (part.parPessoa.pesId == this.pessoaLogada.pesId) {
+                if (part.parConfirmado == null) {
+                    return retorno = true
+                }
+            }
+        });
+        return retorno
     }
 
+    aceitarAgendamento(agend) {
 
-    // this.open(content);
+        var agendamento = this.gerarNovoAgendamento(agend)
+        var part: Participante = {
+            parId: null,
+            parTipo: null,
+            parConfirmado: true,
+            parPessoa: this.pessoaLogada,
+            parAgendamento: agendamento
+        }
 
-    abrirDetalhes(agend, modalDetalhes) {
-        this.agendamentoSelecionado = agend
-
-        this.abrirModal(modalDetalhes);
+        var msg = "Aceito"
+        this.alterarParticipante(part, msg)
     }
 
-    abrirModal(modalDetalhes) {
+    recusarAgendamento(agend) {
+
+        var agendamento = this.gerarNovoAgendamento(agend)
+
+        var part: Participante = {
+            parId: null,
+            parTipo: null,
+            parConfirmado: false,
+            parPessoa: this.pessoaLogada,
+            parAgendamento: agendamento
+        }
+
+        var msg = "Recusado"
+        this.alterarParticipante(part, msg)
+    }
+
+    concluirAgendamento(agend) {
+
+    }
+
+    alterarParticipante(participante, msg) {
+        this.participanteService.alterarParticipante(participante).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                alert("Agendamento " + msg + " com Sucesso!")
+                location.reload()
+            } else {
+                alert("Agendamento não" + msg + "! Tente novamente.")
+            }
+        });
+    }
+
+    gerarNovoAgendamento(agend): Agendamento {
+        let agendamento: Agendamento = {
+            ageId: agend.ageId,
+            ageAssunto: null,
+            ageDescricao: null,
+            ageSala: null,
+            agePesResponsavel: null,
+            ageStatus: null,
+            ageData: null,
+            ageHoraInicio: null,
+            ageHoraFim: null,
+            agePesCadastro: null,
+            agePesAtualizacao: null,
+            ageDtCadastro: null,
+            ageDtAtualizacao: null,
+            ageEquipamentos: null,
+            ageParticipantes: null
+        }
+        return agendamento
+    }
+
+    abrirModal(agend, modalDetalhes) {
+        this.selAgendamento = agend;
         this.modal.open(modalDetalhes)
     }
-
 }

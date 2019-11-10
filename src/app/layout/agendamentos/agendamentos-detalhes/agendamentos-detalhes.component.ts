@@ -292,7 +292,9 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
 
     // ---- Inicio Métodos do Modal Participantes
 
-    // **** FIM Metodos Gerais  *******
+    aplicarFiltroPart(valor: string) {
+        this.listPessoas.filter = valor.trim().toLowerCase();
+    }
 
     // **** Metodos do Select ******
     /** Whether the number of selected elements matches the total number of rows. */
@@ -320,6 +322,11 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
 
 
     // ---- Inicio Métodos do Modal Equipamentos
+
+    aplicarFiltroEquip(valor: string) {
+        this.listEquipamentos.filter = valor.trim().toLowerCase();
+    }
+
     // **** Metodos do Select ******
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelectedEquip() {

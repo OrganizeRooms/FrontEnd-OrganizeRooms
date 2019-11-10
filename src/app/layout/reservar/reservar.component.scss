@@ -23,16 +23,6 @@
     overflow-y: scroll;
 }
 
-mat-radio-group{
-    display: flex;
-    flex-direction: column;
-    margin: 15px 0;
-}
-
-/*.mat-step-header {
-    pointer-events: none !important;
-  }*/
-
   h2{
     margin-top: 10px;
     margin-right: -50px; 
@@ -67,4 +57,8 @@ mat-radio-group{
 .btn-selecionar{
     padding-top: 2px !important;
     padding-bottom: 2px !important;
+}
+
+.form-control{
+    margin-bottom: 10px !important;
 }
