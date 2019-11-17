@@ -27,11 +27,11 @@ export class AuthenticationService {
   }
 
   verificarEmail(email: JwtAuthentication): Observable<Response> {
-    return this.http.post<Response>(`${API_CONFIG.baseUrl}/login/verificarEmail`,email);
+    return this.http.post<Response>(`${API_CONFIG.baseUrl}/login/verificarEmail`, email);
   }
 
   novaSenha(novaSenha: JwtAuthentication): Observable<Response> {
-    return this.http.post<Response>(`${API_CONFIG.baseUrl}/login/novaSenha`,novaSenha);
+    return this.http.post<Response>(`${API_CONFIG.baseUrl}/login/novaSenha`, novaSenha);
   }
 
 
@@ -45,7 +45,11 @@ export class AuthenticationService {
     //this.storageService.setLocalUser(user);
     this.sessionService.setSessionUser(user);
     this.pessoaLogada.emit(true);
-    this.router.navigate(['/home']);
+    if (ret.pessoa.pesPermissao == 'ROLE_TABLET') {
+      this.router.navigate(['/tablet']);
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
 
   noSuccessfulLogin() {

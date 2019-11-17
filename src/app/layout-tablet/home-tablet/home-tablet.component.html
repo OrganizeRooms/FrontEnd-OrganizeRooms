@@ -51,28 +51,13 @@
                     {{agend.ageStatus}}
                 </div>
                 <hr class="card-divider">
-                <div id="botoes-top" class="row justify-content-center">
-                    <div *ngIf="verificarStatus(agend) && verificarConfirmacao(agend)"
-                        class="col-12 col-sm-6 col-lg-4 col-xl-4">
-                        <a class="btn btn-padrao btn-home btn-recusar" (click)="recusarAgendamento(agend)">
-                            <i class="fa fa-calendar-times-o color-white" title="Recusar Reunião"></i>
-                        </a>
-                    </div>
-                    <div *ngIf="verificarStatus(agend) && verificarConfirmacao(agend)"
-                        class="col-12 col-sm-6 col-lg-4 col-xl-4">
-                        <a class="btn btn-padrao btn-home btn-aceitar" (click)="aceitarAgendamento(agend)">
-                            <i class="fa fa-calendar-check-o color-white" title="Aceitar Reunião"></i>
-                        </a>
-                    </div>
-                </div>
                 <div id="botoes-bottom" class="row justify-content-center">
-                    <div class="col-12 col-sm-6 col-lg-4 col-xl-5">
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-4">
                         <a class="btn btn-padrao btn-home" (click)="abrirModal(agend, modalDetalhes)">
                             Detalhes
                         </a>
                     </div>
-                    <div *ngIf="(!verificarPessoa(agend.agePesResponsavel)) && verificarStatus(agend)"
-                        class="col-12 col-sm-6 col-lg-4 col-xl-6">
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-6" *ngIf="verificarStatus(agend)">
                         <a class="btn btn-padrao btn-home btn-aceitar" (click)="concluirAgendamento(agend)">
                             Concluir
                         </a>
@@ -213,30 +198,16 @@
             <hr class="card-divider">
             <div class="row justify-content-center">
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-6 col-lg-5 col-xl-5">
                         <a class="btn btn-padrao btn-home" (click)="modal.dismiss()">
                             Fechar
                         </a>
                     </div>
-                    <div *ngIf="!verificarPessoa(selAgendamento.agePesResponsavel)  && verificarStatus(selAgendamento)"
-                        class="col-12 col-sm-6 col-lg-4 col-xl-4">
+                    <div class="col-12 col-sm-6 col-lg-4 col-xl-4" *ngIf="verificarStatus(selAgendamento)">
                         <a class="btn btn-padrao btn-home btn-aceitar" (click)="concluirAgendamento(selAgendamento)">
                             Concluir
                         </a>
                     </div>
-                    <div *ngIf="verificarStatus(selAgendamento) && verificarConfirmacao(selAgendamento)"
-                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
-                        <a class="btn btn-padrao btn-home btn-recusar" (click)="recusarAgendamento(selAgendamento)">
-                            <i class="fa fa-calendar-times-o color-white" title="Recusar Reunião"></i>
-                        </a>
-                    </div>
-                    <div *ngIf="verificarStatus(selAgendamento) && verificarConfirmacao(selAgendamento)"
-                        class="col-12 col-sm-6 col-lg-4 col-xl-2">
-                        <a class="btn btn-padrao btn-home btn-aceitar" (click)="aceitarAgendamento(selAgendamento)">
-                            <i class="fa fa-calendar-check-o color-white" title="Aceitar Reunião"></i>
-                        </a>
-                    </div>
-
                 </div>
             </div>
         </div>

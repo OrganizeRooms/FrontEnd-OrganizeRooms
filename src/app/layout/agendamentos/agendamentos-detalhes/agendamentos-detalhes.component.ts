@@ -22,6 +22,7 @@ import {
 export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     labelPosition = 'before';
     permissao;
+    pessoaLogada;
 
     selAgendamento;
     selUnidade;
@@ -67,6 +68,7 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
             this.carregarEquipamentos();
 
             this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
+            this.pessoaLogada = this.sessionService.getSessionUser().pessoa
         }
     }
 
@@ -129,13 +131,30 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         })
     }
 
-    atualizarReserva() {
+    verificarStatus() {
+        var retorno = true
+        if (this.selAgendamento.selAgeStatus == 'EM ANDAMENTO' || this.selAgendamento.selAgeStatus == 'AGENDADO') {
+            retorno = false
+        }
+        console.log(retorno)
+        return retorno
+    }
+
+    atualizarReserva(status) {
+
+        var nAgeStatus;
+
+        if (status == '') {
+            nAgeStatus = this.selAgeStatus
+        } else {
+            nAgeStatus = status
+        }
 
         const agendamento: Agendamento = {
             ageId: this.selAgendamento.ageId,
             ageAssunto: this.formAgendamento.value.ageAssunto,
             ageDescricao: this.formAgendamento.value.ageDescricao,
-            ageStatus: this.selAgeStatus,
+            ageStatus: nAgeStatus,
             agePesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             ageDtAtualizacao: new Date(),
             ageEquipamentos: this.ageEquipamentos,
@@ -198,10 +217,17 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
                 nParTipo = 1
             }
 
+            var nParConfirmado;
+            if (pessoa.pesId == this.selAgendamento.agePesResponsavel.pesId) {
+                nParConfirmado = true
+            } else {
+                nParConfirmado = null
+            }
+
             var part: Participante = {
                 parId: null,
                 parTipo: nParTipo,
-                parConfirmado: null,
+                parConfirmado: nParConfirmado,
                 parPessoa: pessoa,
                 parAgendamento: agendamento
             }
@@ -284,8 +310,49 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         this.participanteService.deletarParticipante(registro.parId).subscribe(ret => {
             if (ret.data != null && ret.data != '') {
                 alert('Participante ' + registro.parPessoa.pesNome + " retirado da Reunião com Sucesso!\nRecarregue a página. ")
+                this.notificarPartExcluido(registro);
             } else {
                 alert('Erro ao retirar Participante ' + registro.parPessoa.pesNome)
+            }
+        });
+    }
+
+    notificarPartExcluido(part) {
+        var notificacoes = new Array<Notificacao>()
+
+        var nMensagemExcluido = 'Você foi retirado da reunião marcada por ' + this.selAgendamento.agePesResponsavel.pesNome
+            + ' na data ' + this.montarStringDataPtBr(new Date(this.selAgendamento.ageHoraInicio))
+            + ' no período das ' + this.montarStringHoraMinuto(new Date(this.selAgendamento.ageHoraInicio))
+            + ' às ' + this.montarStringHoraMinuto(new Date(this.selAgendamento.ageHoraFim)) + '.'
+
+        var nAssunto = 'Retirado da Reunião Marcada por' + this.selAgendamento.agePesResponsavel.pesNome
+
+        var enviaEmail: EnviaEmail = {
+            destinatario: part.parPessoa.pesEmail,  // email participante
+            assunto: nAssunto,                      // assunto do e-mail
+            mensagem: nMensagemExcluido             // mensagem do e-mail
+        }
+
+        var notificacao: Notificacao = {
+            notId: null,
+            notDescricao: nMensagemExcluido,            // mensagem enviada por e-mail
+            notAtiva: true,
+            notPessoa: part.parPessoa,                   // participante
+            notPesCadastro: this.sessionService.getSessionUser().pessoa.pesId,
+            notDtCadastro: new Date(),
+            notPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
+            notDtAtualizacao: new Date(),
+            notEnviado: false,
+            enviaEmail: enviaEmail
+        }
+        notificacoes.push(notificacao);
+
+        console.log(notificacoes)
+
+        this.notificacaoService.enviarEmail(notificacoes).subscribe(ret => {
+            console.log(ret.data)
+            if (ret.data != null) {
+                //
             }
         });
     }

@@ -89,6 +89,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
         this.responsavel = this.sessionService.getSessionUser().pessoa;
 
         this.carregarUnidades();
+        this.selUnidade = this.sessionService.getSessionUser().pessoa.pesUnidade.uniId
         this.criarFormularioAgendamento();
     }
 
@@ -123,12 +124,15 @@ export class ReservarComponent implements OnInit, OnDestroy {
             }
 
             var agendamentoContext: AgendamentoContext = {
-                idUnidade: this.selUnidade.uniId,
+                idUnidade: this.selUnidade,
                 lotacao: nLotacao,
                 dataAgendamento: this.montarStringDataEng(this.data),
                 dataInicial: dataHoraInicio,
                 dataFinal: dataHoraFim
             }
+
+
+            console.log(agendamentoContext)
 
             this.salaService.buscarSalasDisponiveis(agendamentoContext).subscribe(ret => {
                 if (ret.data != null && ret.data != '') {
@@ -231,6 +235,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
         this.equipamentoService.buscarEquipamentosDisponiveis(agendamentoContext).subscribe(ret => {
             if (ret.data != null && ret.data != '') {
                 this.listEquipamentos.data = ret.data;
+                console.log(ret.data)
             }
         })
     }
@@ -266,6 +271,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
             //ageParticipantes: this.pessoasSelecionadas.selected
             ageParticipantes: nAgeParticipantes
         }
+        console.log(agendamento)
         this.agendamentoService.addAgendamento(agendamento).subscribe(ret => {
             if (ret.data != null) {
                 this.next(stepper);
@@ -275,6 +281,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
                 alert('Não foi possível Finalizar o Agendamento! Tente novamente.');
             }
         });
+
 
         this.notificarParticipantes(nAgeParticipantes);
     }
@@ -291,9 +298,17 @@ export class ReservarComponent implements OnInit, OnDestroy {
                 nParTipo = 1
             }
 
+            /*var nParConfirmado;
+            if (pessoa.pesId == this.responsavel.pesId) {
+                nParConfirmado = true
+            } else {
+                nParConfirmado = null
+            }*/
+
             var part: Participante = {
                 parId: null,
                 parTipo: nParTipo,
+                // parConfirmado: nParConfirmado,
                 parConfirmado: null,
                 parPessoa: pessoa,
                 parAgendamento: null,

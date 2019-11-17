@@ -14,7 +14,7 @@
                             <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-5">
                                 <span>Unidade <span style="color: red;">*</span></span>
                                 <mat-select class="form-control" [(ngModel)]="selUnidade">
-                                    <mat-option *ngFor="let unidade of listUnidades" [value]="unidade">
+                                    <mat-option *ngFor="let unidade of listUnidades" [value]="unidade.uniId">
                                         {{unidade.uniNome}}
                                     </mat-option>
                                 </mat-select>
@@ -46,7 +46,7 @@
 
                                     <div class="col-6 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <span>Lotação</span>
-                                        <input type="number" class="form-control text-center" [(ngModel)]="lotacao">
+                                        <input type="text" class="form-control text-center" [(ngModel)]="lotacao">
                                     </div>
                                     <div *ngIf="apareceFiltrar == true" (click)="filtrarSalas()"
                                         class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">

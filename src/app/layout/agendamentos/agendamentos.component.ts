@@ -53,6 +53,7 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
         this.carregarUnidades();
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
         this.selAgeStatus = 'AGENDADO';
+        this.selUnidade = this.sessionService.getSessionUser().pessoa.pesUnidade.uniId;
     }
 
     ngOnDestroy() {

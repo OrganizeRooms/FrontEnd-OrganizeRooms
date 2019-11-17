@@ -110,6 +110,7 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         this.authenticationService.authenticate(this.creds).subscribe(response => {
             const aux = JSON.parse(response.body);
+            console.log(aux)
             this.authenticationService.successfulLogin(aux);
         }, error => {
             this.authenticationService.noSuccessfulLogin();

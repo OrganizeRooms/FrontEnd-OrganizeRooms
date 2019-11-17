@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
-    EquipamentoService, UnidadeService, OrganizeRoomsService, Equipamento, SessionStorageService
+    EquipamentoService, UnidadeService, OrganizeRoomsService, Equipamento, SessionStorageService, Unidade
 } from 'src/app/shared';
 import { Router } from '@angular/router';
 
@@ -69,7 +69,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
                 equDtCadastro: [this.selEquipamento.equDtCadastro]
             });
             console.log(this.selUnidade)
-            this.selUnidade = new FormControl(this.selEquipamento.equUnidade)
+            this.selUnidade = new FormControl(this.selEquipamento.equUnidade.uniId)
             console.log(this.selUnidade)
         } else {
             this.formAddEquipamento = this.formBuilder.group({
@@ -79,6 +79,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
                 equAtiva: [true],
                 equDtCadastro: [new Date()]
             });
+            this.selUnidade = new FormControl(this.sessionService.getSessionUser().pessoa.pesUnidade.uniId)
         }
     }
 
@@ -91,22 +92,30 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
             equPesCadastro = this.sessionService.getSessionUser().pessoa.pesId
         }
 
+        const unidade: Unidade = {
+            uniId: this.selUnidade.value,
+            uniNome: null,
+            uniAtiva: null,
+            uniPesCadastro: null,
+            uniDtCadastro: null,
+            uniPesAtualizacao: null,
+            uniDtAtualizacao: null
+        }
+
         const equipamento: Equipamento = {
             equId: this.formAddEquipamento.value.equId,
             equNome: this.formAddEquipamento.value.equNome,
             equDescricao: this.formAddEquipamento.value.equDescricao,
             equAtiva: this.formAddEquipamento.value.equAtiva,
-            equUnidade: this.selUnidade.value,
+            equUnidade: unidade,
             equPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             equDtAtualizacao: new Date(),
             // NÃO É ATUALIZADO 
             equPesCadastro: equPesCadastro,
             equDtCadastro: null,
         };
-        console.log(equipamento)
+
         this.equipamentoService.adicionarAtualizarEquipamento(equipamento).subscribe(ret => {
-            console.log("retorno")
-            console.log(ret.data)
             if (ret.data != null) {
                 if (this.selEquipamento != null) {
                     alert('Equipamento ' + ret.data.equNome + ' Atualizada com Sucesso!');
@@ -122,11 +131,4 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
     excluir() {
 
     }
-
-    log(unidade) {
-        console.log(unidade)
-        console.log("----")
-        console.log(this.selUnidade)
-    }
-
 }

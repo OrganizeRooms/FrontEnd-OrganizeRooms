@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Sala, OrganizeRoomsService, SalaService, UnidadeService, SessionStorageService } from 'src/app/shared';
+import { Sala, OrganizeRoomsService, SalaService, UnidadeService, SessionStorageService, Unidade } from 'src/app/shared';
 import { Router } from '@angular/router';
 
 @Component({
@@ -44,7 +44,6 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
         console.log(this.selUnidade)
         this.carregarUnidades();
         this.criarFormulario();
-
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 
@@ -67,11 +66,7 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
                 salaAtiva: [this.selSala.salaAtiva],
                 salaDtCadastro: [this.selSala.salaDtCadastro]
             });
-            console.log('criar form 1')
-            console.log(this.selUnidade)
-            this.selUnidade = new FormControl(this.selSala.salaUnidade)
-            console.log('criar form 2')
-            console.log(this.selUnidade)
+            this.selUnidade = new FormControl(this.selSala.salaUnidade.uniId)
         } else {
             this.formAddSala = this.formBuilder.group({
                 salaId: [0],
@@ -80,6 +75,7 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
                 salaAtiva: [true],
                 salaDtCadastro: [new Date()]
             });
+            this.selUnidade = new FormControl(this.sessionService.getSessionUser().pessoa.pesUnidade.uniId);
         }
     }
 
@@ -92,6 +88,16 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
             salaPesCadastro = this.sessionService.getSessionUser().pessoa.pesId
         }
 
+        const unidade: Unidade = {
+            uniId: this.selUnidade.value,
+            uniNome: null,
+            uniAtiva: null,
+            uniPesCadastro: null,
+            uniDtCadastro: null,
+            uniPesAtualizacao: null,
+            uniDtAtualizacao: null
+        }
+
         const sala: Sala = {
             salaId: this.formAddSala.value.salaId,
             salaNome: this.formAddSala.value.salaNome,
@@ -99,15 +105,13 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
             salaAtiva: this.formAddSala.value.salaAtiva,
             salaPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             salaDtAtualizacao: new Date(),
-            salaUnidade: this.selUnidade.value,
+            salaUnidade: unidade,
             salaPesCadastro: salaPesCadastro,
             // NÃO É ATUALIZADO 
             salaDtCadastro: null,
         };
         console.log(sala)
         this.salaService.adicionarAtualizarSala(sala).subscribe(ret => {
-            console.log("retorno")
-            console.log(ret.data)
             if (ret.data != null) {
                 if (this.selSala != null) {
                     alert('Sala ' + ret.data.salaNome + ' Atualizada com Sucesso!');
@@ -122,11 +126,5 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
 
     excluir() {
 
-    }
-
-    log(sala) {
-        console.log(sala)
-        console.log("----")
-        console.log(this.selUnidade)
     }
 }
