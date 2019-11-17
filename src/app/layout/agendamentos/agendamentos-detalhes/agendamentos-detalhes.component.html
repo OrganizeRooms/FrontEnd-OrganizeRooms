@@ -9,10 +9,26 @@
                         <span>Código</span>
                         <input type="text" class="form-control text-center" formControlName="ageId" disabled>
                     </div>
-                    <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-4">
+                    <div class="col-6 col-sm-4 col-md-4 col-lg-4 col-xl-3">
                         <span>Data Cadastro</span>
-                        <span
-                            class="form-control disabled text-center">{{formAgendamento.value.ageDtCadastro | date: 'dd/MM/yyyy'}}</span>
+                        <span class="form-control disabled text-center">
+                            {{formAgendamento.value.ageDtCadastro | date: 'dd/MM/yyyy'}}
+                        </span>
+                    </div>
+                    <div *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
+                        class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+                        <span>Status</span>
+                        <mat-select class="form-control text-center" [(value)]="selAgeStatus">
+                            <mat-option value="AGENDADO">Agendado</mat-option>
+                            <mat-option value="CONCLUIDO">Concluído</mat-option>
+                            <mat-option value="EM ANDAMENTO">Em Andamento</mat-option>
+                            <mat-option value="CANCELADO">Cancelado</mat-option>
+                        </mat-select>
+                    </div>
+                    <div *ngIf="selAgendamento.ageStatus == 'CONCLUIDO' || selAgendamento.ageStatus == 'CANCELADO'"
+                        class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+                        <span>Status</span>
+                        <span class="form-control disabled text-center">{{selAgeStatus}}</span>
                     </div>
                 </div>
 
@@ -34,43 +50,42 @@
                 </div>
 
                 <div class="row ml-auto">
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-4">
+                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-5">
+                        <span>Responsável</span>
+                        <span class="form-control disabled">{{selAgendamento.agePesResponsavel.pesNome}}</span>
+                    </div>
+                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-3">
                         <span>Período</span>
                         <span class="form-control disabled text-center">
-                            <!--{{selAgendamento.ageHoraInicio | date: 'HH:mm' :'-0300'}} às
-                            {{selAgendamento.ageHoraFim | date: 'HH:mm' :'-0300'}}-->
                             {{selAgendamento.ageHoraInicio | date: 'HH:mm'}} às
                             {{selAgendamento.ageHoraFim | date: 'HH:mm'}}
                         </span>
                     </div>
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-4">
-                        <span>Status</span>
-                        <mat-select class="form-control text-center" [(value)]="selAgeStatus">
-                            <mat-option value="AGENDADO">Agendado</mat-option>
-                            <mat-option value="CONCLUIDO">Concluído</mat-option>
-                            <mat-option value="EM ANDAMENTO">Em Andamento</mat-option>
-                            <mat-option value="CANCELADO">Cancelado</mat-option>
-                        </mat-select>
-                    </div>
                 </div>
 
                 <div class="row ml-auto">
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
-                        <span>Responsável</span>
-                        <span class="form-control disabled">{{selAgendamento.agePesResponsavel.pesNome}}</span>
-                    </div>
-                </div>
-
-                <div class="row ml-auto">
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                    <div *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
+                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
                         <span>Assunto<span style="color: red;"> *</span></span>
                         <input type="text" class="form-control" required autofocus formControlName="ageAssunto">
                     </div>
+                    <div *ngIf="selAgendamento.ageStatus == 'CONCLUIDO' || selAgendamento.ageStatus == 'CANCELADO'"
+                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                        <span>Assunto</span>
+                        <input type="text" class="form-control" disabled="true" formControlName="ageAssunto">
+                    </div>
                 </div>
                 <div class="row ml-auto">
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                    <div *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
+                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
                         <span>Descrição</span>
                         <textarea class="form-control" formControlName="ageDescricao">
+                        </textarea>
+                    </div>
+                    <div *ngIf="selAgendamento.ageStatus == 'CONCLUIDO' || selAgendamento.ageStatus == 'CANCELADO'"
+                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                        <span>Descrição</span>
+                        <textarea class="form-control" disabled="true" formControlName="ageDescricao">
                         </textarea>
                     </div>
                 </div>
@@ -127,7 +142,8 @@
                                         <!-- EXCLUIR PARTICIPANTE -->
                                         <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1"
                                             aria-placeholder="Excluir Participante">
-                                            <a (click)="excluirParticipante(participante)">
+                                            <a *ngIf="pessoaLogada.pesId != participante.parPessoa.pesId && (selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO')"
+                                                (click)="excluirParticipante(participante)">
                                                 <i class="fa fa-trash-o" title="Excluir Participante"></i>
                                             </a>
                                         </div>
@@ -190,16 +206,30 @@
                 <!-- FIM - EQUIPAMENTOS -->
 
                 <br>
-                <div class="col-12 col-sm-12 col-md-10 col-lg-8 col-xl-8">
+                <div class="col-12 col-sm-12 col-md-10 col-lg-12 col-xl-8">
                     <div class="row justify-content-center">
-                        <a class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
+                        <a class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-2 btn btn-padrao"
                             [routerLink]="['/agendamentos']" [routerLinkActive]="['router-link-active']">
                             Voltar
                         </a>
-                        <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAgendamento.valid"
-                            class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 btn btn-padrao"
-                            (click)="atualizarReserva()">
+                        <button
+                            *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
+                            [disabled]="!formAgendamento.valid"
+                            class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-3 btn btn-padrao"
+                            (click)="atualizarReserva('')">
                             Confirmar
+                        </button>
+                        <button
+                            *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
+                            class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-3 btn btn-padrao"
+                            (click)="atualizarReserva('CANCELADO')">
+                            Cancelar
+                        </button>
+                        <button
+                            *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
+                            class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-3 btn btn-padrao"
+                            (click)="atualizarReserva('CONCLUIDO')">
+                            Concluir
                         </button>
                     </div>
                 </div>

@@ -1,5 +1,4 @@
 h2{
-  margin-top: 10px;
   margin-right: -50px; 
 }
 
@@ -10,11 +9,6 @@ h2{
 
 .color-blue{
   color: #007bff;
-}
-
-.card-body {
-  max-height: 180px;
-  overflow-y: scroll;
 }
 
 .card-agendamento {
@@ -43,13 +37,7 @@ h2{
 }
 
 .datepicker-home{
-  margin-top:10px;
   max-width: 180px;
-}
-
-#botoes-top{
-  margin-bottom: 5px;
-  margin-top: -10px;
 }
 
 #botoes-bottom{
@@ -59,11 +47,6 @@ h2{
 .btn-home{
   padding-top: 2px !important;
   padding-bottom: 2px !important;
-}
-
-.btn-recusar{
-  background-color: red !important;
-  border-color: red !important;
 }
 
 .btn-aceitar{
