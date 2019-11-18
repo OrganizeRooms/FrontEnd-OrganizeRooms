@@ -1,7 +1,9 @@
 export interface AgendamentoContext {
-    idUnidade: string;
-    lotacao: string;
+    idUnidade: String;
+    lotacao: String;
     dataInicial: String;
     dataFinal: String;
     dataAgendamento: String;
+    idParticipante: String;
+    idSala: String;
 }

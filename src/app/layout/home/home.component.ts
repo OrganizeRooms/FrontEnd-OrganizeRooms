@@ -3,7 +3,7 @@ import { routerTransition } from '../../router.animations';
 // Date Picker
 import { NgbDateStruct, NgbDatepickerI18n, NgbModal, NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/app/shared/utils';
-import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteService, Participante } from 'src/app/shared';
+import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteService, Participante, AgendamentoContext } from 'src/app/shared';
 
 @Component({
     selector: 'app-home',
@@ -37,7 +37,10 @@ export class HomeComponent implements OnInit {
         this.data = today;
 
         this.pessoaLogada = this.sessionService.getSessionUser().pessoa;
-        this.carregarAgendamentos();
+        this.filtro();
+
+        //this.carregarAgendamentos();
+
     }
 
     carregarAgendamentos() {
@@ -46,29 +49,40 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    /*filtro(data: FormControl) {
-        var fdata = new Date(data.value)
-        this.listAgendamentosFiltrado = [];
-        this.listAgendamentos.forEach(element => {
-            if (moment(element.ageData, 'DD/MM/YYYY').toString() == moment(fdata, 'DD/MM/YYYY').toString()) {
-                // console.log('5 - Entrou - data elemento = ' + moment(element.ageData, 'DD/MM/YYYY').toString()
-                //   + ' data escolhida= ' + moment(fdata, 'DD/MM/YYYY').toString())
-                this.listAgendamentosFiltrado.push(element);
-            }
-        });
-    }*/
+    filtro() {
 
-    verificarPessoa(agePesResponsavel){
+        var nData = this.montarStringDataEng(this.data);
+
+        var agendamentoContext: AgendamentoContext = {
+            idUnidade: null,
+            lotacao: null,
+            dataInicial: null,
+            dataFinal: null,
+            idSala: null,
+            // Filtrar por Participante somente utiliza os campos abaixo
+            dataAgendamento: nData,
+            idParticipante: this.pessoaLogada.pesId,
+        }
+        this.agendamentoService.buscarAgendamentoDoUsuarioPorDia(agendamentoContext).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                this.listAgendamentos = ret.data
+            } else {
+                this.listAgendamentos = null;
+            }
+        })
+    }
+
+    verificarPessoa(agePesResponsavel) {
         var retorno = false
-        if(this.pessoaLogada.pesId != agePesResponsavel.pesId){
+        if (this.pessoaLogada.pesId != agePesResponsavel.pesId) {
             return retorno = true
-        } 
+        }
         return retorno
     }
 
-    verificarStatus(agend){
+    verificarStatus(agend) {
         var retorno = false
-        if(agend.ageStatus == 'AGENDADO' || agend.ageStatus == 'EM ANDAMENTO'){
+        if (agend.ageStatus == 'AGENDADO' || agend.ageStatus == 'EM ANDAMENTO') {
             return retorno = true
         }
         return retorno
@@ -181,6 +195,27 @@ export class HomeComponent implements OnInit {
             ageParticipantes: null
         }
         return agendamento
+    }
+
+    montarStringDataEng(data) {
+
+        var mes;
+        var dia;
+
+        if (data.month < 10) {
+            mes = '0' + data.month
+        } else {
+            mes = data.month
+        }
+
+        if (data.day < 10) {
+            dia = '0' + data.day
+        } else {
+            dia = data.day
+        }
+
+        var stringData = data.year + '/' + mes + '/' + dia
+        return stringData
     }
 
     abrirModal(agend, modalDetalhes) {

@@ -121,7 +121,9 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
             lotacao: '0',
             dataAgendamento: this.montarStringDataEng(new Date(this.selAgendamento.ageHoraFim)),
             dataInicial: dataHoraInicio,
-            dataFinal: dataHoraFim
+            dataFinal: dataHoraFim,
+            idParticipante: null,
+            idSala: null
         }
 
         this.equipamentoService.buscarEquipamentosDisponiveis(agendamentoContext).subscribe(ret => {

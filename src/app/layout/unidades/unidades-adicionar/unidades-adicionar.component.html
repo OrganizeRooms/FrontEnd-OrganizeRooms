@@ -42,15 +42,15 @@
                             [routerLinkActive]="['router-link-active']">
                             Voltar
                         </a>
-                        <a *ngIf="permissao == 'ROLE_ADMIN' && selUnidade != null"
-                            class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao" (click)="excluir()">
-                            Excluir
-                        </a>
                         <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddUnidade.valid"
                             class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao"
                             (click)="adicionarUnidade()">
                             Confirmar
                         </button>
+                        <a *ngIf="permissao == 'ROLE_ADMIN' && selUnidade != null"
+                            class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao" (click)="excluir()">
+                            Excluir
+                        </a>
                     </div>
                 </div>
                 <!--<br>

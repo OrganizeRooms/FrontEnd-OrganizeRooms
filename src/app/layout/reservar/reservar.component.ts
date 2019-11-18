@@ -128,13 +128,16 @@ export class ReservarComponent implements OnInit, OnDestroy {
                 lotacao: nLotacao,
                 dataAgendamento: this.montarStringDataEng(this.data),
                 dataInicial: dataHoraInicio,
-                dataFinal: dataHoraFim
+                dataFinal: dataHoraFim,
+                idParticipante: null,
+                idSala: null
             }
 
 
             console.log(agendamentoContext)
 
             this.salaService.buscarSalasDisponiveis(agendamentoContext).subscribe(ret => {
+                console.log(ret.data)
                 if (ret.data != null && ret.data != '') {
                     this.listSalas = ret.data;
                 } else {
@@ -162,10 +165,20 @@ export class ReservarComponent implements OnInit, OnDestroy {
         this.carregarEquipamentos();
         this.carregarPessoas();
 
+        this.buscarUnidade()
+
         // Completa o Passo
         stepper.selected.completed = true;
         // Vai para o Próximo
         stepper.next();
+    }
+
+    buscarUnidade() {
+        this.listUnidades.forEach(unidade => {
+            if (unidade.uniId == this.selUnidade) {
+                this.selUnidade = unidade
+            }
+        });
     }
 
     // Verificação dos Campos OBRIGATÓRIOS da Verificação de Disponibilidade das Salas
@@ -229,7 +242,9 @@ export class ReservarComponent implements OnInit, OnDestroy {
             lotacao: '0',
             dataAgendamento: this.montarStringDataEng(this.data),
             dataInicial: dataHoraInicio,
-            dataFinal: dataHoraFim
+            dataFinal: dataHoraFim,
+            idParticipante: null,
+            idSala: null
         }
 
         this.equipamentoService.buscarEquipamentosDisponiveis(agendamentoContext).subscribe(ret => {
