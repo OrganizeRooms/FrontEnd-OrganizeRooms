@@ -17,6 +17,10 @@ export class PessoaService {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/pessoas`, pessoa);
     }
 
+    deletarPessoa(id: String): Observable<Response> {
+        return this.http.delete<Response>(`${API_CONFIG.baseUrl}/pessoas/` + id);
+    }
+
     importarPessoas(pessoas: Array<Pessoa>): Observable<Response>{
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/pessoas/importar`, pessoas);
     }
