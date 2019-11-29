@@ -47,8 +47,16 @@ export class PessoasComponent implements OnInit {
         this.organizeRoomsService.setValue(registro);
     }
 
-    excluir(registro) {
-
+    excluir(pessoa) {
+        this.pessoaService.deletarPessoa(pessoa.pesId).subscribe(ret => {
+            if (ret.data == true) {
+                alert('Pessoa ' + pessoa.pesNome + ' Deletada com Sucesso!');
+                location.reload()
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar a Pessoa ' + pessoa.pesNome + ' !');
+            }
+        })
     }
 
     aplicarFiltro(valor: string) {

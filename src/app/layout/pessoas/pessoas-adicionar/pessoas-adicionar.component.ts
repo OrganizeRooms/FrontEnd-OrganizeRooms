@@ -143,7 +143,15 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
     }
 
     excluir() {
-
+        this.pessoaService.deletarPessoa(this.selPessoa.pesId).subscribe(ret => {
+            if (ret.data == true) {
+                alert('Pessoa ' + this.selPessoa.pesNome + ' Deletada com Sucesso!');
+                this.router.navigate(['/pessoas']);
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar a Pessoa ' + this.selPessoa.pesNome + ' !');
+            }
+        })
     }
 
     resetarSenha() {
