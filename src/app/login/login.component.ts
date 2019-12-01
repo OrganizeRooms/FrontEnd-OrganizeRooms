@@ -91,7 +91,6 @@ export class LoginComponent implements OnInit {
                     this.novaSenha.pesNovaSenha = this.modalNovaSenhaForm.value.novaPesSenha
 
                     this.authenticationService.novaSenha(this.novaSenha).subscribe(ret =>{
-                        console.log(ret.data)
                         if(ret.data != false){
                             alert("Senha alterada com sucesso! \n Realize o Login novamente com sua Nova senha");
                             this.modalService.dismissAll()
@@ -110,7 +109,6 @@ export class LoginComponent implements OnInit {
         this.loading = true;
         this.authenticationService.authenticate(this.creds).subscribe(response => {
             const aux = JSON.parse(response.body);
-            console.log(aux)
             this.authenticationService.successfulLogin(aux);
         }, error => {
             this.authenticationService.noSuccessfulLogin();

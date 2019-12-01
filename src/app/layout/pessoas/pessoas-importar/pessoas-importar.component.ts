@@ -74,9 +74,7 @@ export class PessoasImportarComponent implements OnInit, OnDestroy {
     }
 
     importarPessoas() {
-        console.log(this.csvRecords)
         this.pessoaService.importarPessoas(this.csvRecords).subscribe(ret => {
-            console.log(ret.data)
             if (ret.data != null || ret.data != '') {
                 this.inconsistencias = ret.data
             } else {

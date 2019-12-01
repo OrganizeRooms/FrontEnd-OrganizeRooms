@@ -50,9 +50,8 @@ export class UnidadesComponent implements OnInit {
     }
 
     excluir(registro){
-        console.log(registro)
         this.unidadeService.deletarUnidade(registro.uniId).subscribe(ret => {
-            console.log(ret.data)
+            //
         });
     }
 

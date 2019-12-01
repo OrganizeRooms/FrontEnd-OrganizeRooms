@@ -68,9 +68,8 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
                 equAtiva: [this.selEquipamento.equAtiva],
                 equDtCadastro: [this.selEquipamento.equDtCadastro]
             });
-            console.log(this.selUnidade)
             this.selUnidade = new FormControl(this.selEquipamento.equUnidade.uniId)
-            console.log(this.selUnidade)
+            
         } else {
             this.formAddEquipamento = this.formBuilder.group({
                 equId: [0],

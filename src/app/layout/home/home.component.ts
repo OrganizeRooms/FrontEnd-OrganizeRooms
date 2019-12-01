@@ -153,7 +153,6 @@ export class HomeComponent implements OnInit {
             agePesCadastro: null,
             ageParticipantes: null
         }
-        console.log(agendamento)
 
         this.agendamentoService.atualizarAgendamento(agendamento).subscribe(ret => {
             if (ret.data != null) {

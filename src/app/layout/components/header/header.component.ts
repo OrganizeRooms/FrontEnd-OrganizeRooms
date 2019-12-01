@@ -79,7 +79,6 @@ export class HeaderComponent implements OnInit {
         }
 
         this.notificacaoService.atualizarNotificacao(notificacao).subscribe(ret => {
-            console.log(ret.data)
             //
         });
 
