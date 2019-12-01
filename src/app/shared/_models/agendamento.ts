@@ -1,7 +1,7 @@
 import { Pessoa } from './pessoa';
 import { Sala } from './sala';
-import { Equipamento } from './equipamento';
 import { Participante } from './participante';
+import { ReservaEquipamento } from './reservaEquipamento';
 
 export interface Agendamento {
     ageId: number;
@@ -17,6 +17,6 @@ export interface Agendamento {
     agePesAtualizacao: Pessoa;
     ageDtCadastro: Date;
     ageDtAtualizacao: Date;
-    ageEquipamentos: Array<Equipamento>;
+    ageEquipamentos: Array<ReservaEquipamento>;
     ageParticipantes: Array<Participante>
 }

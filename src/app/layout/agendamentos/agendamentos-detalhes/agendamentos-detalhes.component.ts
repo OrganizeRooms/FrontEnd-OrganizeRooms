@@ -11,6 +11,8 @@ import {
 import {
     Agendamento, Pessoa, Equipamento, Participante, AgendamentoContext, Notificacao, EnviaEmail
 } from 'src/app/shared/_models';
+import { ReservaEquipamento } from 'src/app/shared/_models/reservaEquipamento';
+import { ReservaEquipamentoService } from 'src/app/shared/_services/reservaEquipamento.service';
 
 @Component({
     selector: 'app-agendamentos-detalhes',
@@ -55,6 +57,7 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         private equipamentoService: EquipamentoService,
         private agendamentoService: AgendamentoService,
         private participanteService: ParticipanteService,
+        private reservaEquipamentoService: ReservaEquipamentoService,
         private notificacaoService: NotificacaoService
     ) { }
 
@@ -76,6 +79,10 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         this.organizeRoomsService.setValue(null)
     }
 
+    abrirModal(modal) {
+        this.modal.open(modal)
+    }
+
     criarFormulario() {
         if (this.selAgendamento != null) {
             this.formAgendamento = this.formBuilder.group({
@@ -93,10 +100,6 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     carregarListas() {
         this.ageParticipantes = this.selAgendamento.ageParticipantes;
         this.ageEquipamentos = this.selAgendamento.ageEquipamentos;
-    }
-
-    abrirModal(modal) {
-        this.modal.open(modal)
     }
 
     // temporario
@@ -138,7 +141,6 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         if (this.selAgendamento.selAgeStatus == 'EM ANDAMENTO' || this.selAgendamento.selAgeStatus == 'AGENDADO') {
             retorno = false
         }
-        console.log(retorno)
         return retorno
     }
 
@@ -159,7 +161,6 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
             ageStatus: nAgeStatus,
             agePesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             ageDtAtualizacao: new Date(),
-            ageEquipamentos: this.ageEquipamentos,
             // Atributos que não são alterados e possuem trava no BackEnd
             ageDtCadastro: null,
             ageSala: null,
@@ -168,17 +169,15 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
             ageHoraInicio: null,
             ageHoraFim: null,
             agePesCadastro: null,
+            ageEquipamentos: null,
             ageParticipantes: null
         }
-        console.log(agendamento)
 
-        var error = false;
         this.agendamentoService.atualizarAgendamento(agendamento).subscribe(ret => {
             if (ret.data != null) {
                 alert('Agendamento Alterado com Sucesso!');
             } else {
                 alert('Não foi possível Atualizar o Agendamento! Tente novamente.');
-                error = true;
             }
         });
 
@@ -186,6 +185,12 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         if (this.pessoasSelecionadas.hasValue()) {
             participantes = this.montaArrayParticipantes()
             this.inserirNovosParticipantes(participantes)
+        }
+
+        var equipamentos;
+        if (this.equipamentosSelecionados.hasValue()) {
+            equipamentos = this.montaArrayReservaEquipamento()
+            this.inserirNovasReservasEquipamento(equipamentos)
         }
     }
 
@@ -245,7 +250,51 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
                 this.notificarParticipantes(participantes)
 
             } else {
-                alert('Participante(s) NÃO adicionados! Tente Novamente!')
+                alert('Participante(s) NÃO adicionado(s)! Tente Novamente!')
+            }
+        });
+    }
+
+    montaArrayReservaEquipamento(): Array<ReservaEquipamento> {
+
+        var reservas = new Array<ReservaEquipamento>()
+
+        var agendamento: Agendamento = {
+            ageId: this.selAgendamento.ageId,
+            ageAssunto: null,
+            ageDescricao: null,
+            ageSala: null,
+            agePesResponsavel: null,
+            ageStatus: null,
+            ageData: null,
+            ageHoraInicio: null,
+            ageHoraFim: null,
+            agePesCadastro: null,
+            agePesAtualizacao: null,
+            ageDtCadastro: null,
+            ageDtAtualizacao: null,
+            ageEquipamentos: null,
+            ageParticipantes: null
+        }
+        this.equipamentosSelecionados.selected.forEach(equip => {
+
+            var reserva: ReservaEquipamento = {
+                resId: null,
+                equipamento: equip,
+                agendamento: agendamento,
+            }
+            reservas.push(reserva)
+        });
+
+        return reservas
+    }
+
+    inserirNovasReservasEquipamento(equipametos) {
+        this.reservaEquipamentoService.adicionarListaReservas(equipametos).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                //
+            } else {
+                alert('Equipamento(s) NÃO adicionado(s)! Tente Novamente!')
             }
         });
     }
@@ -308,13 +357,23 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         });
     }
 
-    excluirParticipante(registro) {
-        this.participanteService.deletarParticipante(registro.parId).subscribe(ret => {
+    excluirParticipante(participante) {
+        this.participanteService.deletarParticipante(participante.parId).subscribe(ret => {
             if (ret.data != null && ret.data != '') {
-                alert('Participante ' + registro.parPessoa.pesNome + " retirado da Reunião com Sucesso!\nRecarregue a página. ")
-                this.notificarPartExcluido(registro);
+                alert('Participante ' + participante.parPessoa.pesNome + " retirado da Reunião com Sucesso!\nRecarregue a página. ")
+                this.notificarPartExcluido(participante);
             } else {
-                alert('Erro ao retirar Participante ' + registro.parPessoa.pesNome)
+                alert('Erro ao retirar Participante ' + participante.parPessoa.pesNome)
+            }
+        });
+    }
+
+    excluirEquipamento(reserva) {
+        this.reservaEquipamentoService.deletarReserva(reserva.resId).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                alert('Equipamento ' + reserva.equipamento.equNome + " Removido com Sucesso!\nRecarregue a página. ")
+            } else {
+                alert('Erro ao retirar Equipamento ' + reserva.equipamento.equNome)
             }
         });
     }

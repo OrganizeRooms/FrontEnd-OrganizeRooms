@@ -16,6 +16,7 @@ import {
     Agendamento, Pessoa, Equipamento, Participante, AgendamentoContext, Notificacao, EnviaEmail
 } from 'src/app/shared/_models';
 import { Router } from '@angular/router';
+import { ReservaEquipamento } from 'src/app/shared/_models/reservaEquipamento';
 
 // Metodos
 //import { montarStringDataHora, montarStringDataEng, montarDataHora } from 'src/app/shared/utils';
@@ -133,11 +134,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
                 idSala: null
             }
 
-
-            console.log(agendamentoContext)
-
             this.salaService.buscarSalasDisponiveis(agendamentoContext).subscribe(ret => {
-                console.log(ret.data)
                 if (ret.data != null && ret.data != '') {
                     this.listSalas = ret.data;
                 } else {
@@ -238,7 +235,7 @@ export class ReservarComponent implements OnInit, OnDestroy {
         var dataHoraFim = this.montarStringDataHora(this.data, this.horaFim)
 
         var agendamentoContext: AgendamentoContext = {
-            idUnidade: this.selUnidade.uniId,
+            idUnidade: this.selUnidade,
             lotacao: '0',
             dataAgendamento: this.montarStringDataEng(this.data),
             dataInicial: dataHoraInicio,
@@ -250,7 +247,6 @@ export class ReservarComponent implements OnInit, OnDestroy {
         this.equipamentoService.buscarEquipamentosDisponiveis(agendamentoContext).subscribe(ret => {
             if (ret.data != null && ret.data != '') {
                 this.listEquipamentos.data = ret.data;
-                console.log(ret.data)
             }
         })
     }
@@ -262,10 +258,17 @@ export class ReservarComponent implements OnInit, OnDestroy {
         var dataHoraFim = new Date(this.montarStringDataHora(this.data, this.horaFim))
 
         var nAgeParticipantes: Array<Participante>;
+        var nAgeEquipamentos: Array<ReservaEquipamento>;
         if (this.pessoasSelecionadas.hasValue) {
             nAgeParticipantes = this.montaArrayParticipantes();
         } else {
             nAgeParticipantes = null;
+        }
+
+        if (this.equipamentosSelecionados.hasValue) {
+            nAgeEquipamentos = this.montaArrayReservaEquipamento();
+        } else {
+            nAgeEquipamentos = null;
         }
 
         const agendamento: Agendamento = {
@@ -282,21 +285,22 @@ export class ReservarComponent implements OnInit, OnDestroy {
             agePesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
             ageDtCadastro: new Date(),
             ageDtAtualizacao: new Date(),
-            ageEquipamentos: this.equipamentosSelecionados.selected,
+            ageEquipamentos: nAgeEquipamentos,
             //ageParticipantes: this.pessoasSelecionadas.selected
             ageParticipantes: nAgeParticipantes
         }
-        console.log(agendamento)
+
         this.agendamentoService.addAgendamento(agendamento).subscribe(ret => {
             if (ret.data != null) {
-                this.next(stepper);
+                // Completa o Passo
+                stepper.selected.completed = true;
+                // Vai para o Próximo
+                stepper.next();
                 this.agendado = true;
-                //alert('Agendamento Realizado com Sucesso!');
             } else {
                 alert('Não foi possível Finalizar o Agendamento! Tente novamente.');
             }
         });
-
 
         this.notificarParticipantes(nAgeParticipantes);
     }
@@ -334,6 +338,21 @@ export class ReservarComponent implements OnInit, OnDestroy {
         return participantes
     }
 
+    montaArrayReservaEquipamento(): Array<ReservaEquipamento> {
+
+        var reservas = new Array<ReservaEquipamento>()
+        this.equipamentosSelecionados.selected.forEach(equip => {
+
+            var reserva: ReservaEquipamento = {
+                resId: null,
+                equipamento: equip,
+                agendamento: null,
+            }
+            reservas.push(reserva)
+        });
+
+        return reservas
+    }
 
     notificarParticipantes(participantes) {
         var notificacoes = new Array<Notificacao>()

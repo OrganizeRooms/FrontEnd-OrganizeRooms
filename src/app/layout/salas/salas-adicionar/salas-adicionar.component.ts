@@ -36,12 +36,6 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.selSala = this.organizeRoomsService.getValue();
 
-        /*if (this.selSala != null && this.selSala.salaPesAtualizacao != null) {
-            this.salaPesAtualizacao = this.selSala.salaPesAtualizacao.pesNome;
-            this.salaDtAtualizacao = this.selSala.salaDtAtualizacao;
-        }*/
-
-        console.log(this.selUnidade)
         this.carregarUnidades();
         this.criarFormulario();
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
@@ -110,7 +104,7 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
             // NÃO É ATUALIZADO 
             salaDtCadastro: null,
         };
-        console.log(sala)
+
         this.salaService.adicionarAtualizarSala(sala).subscribe(ret => {
             if (ret.data != null) {
                 if (this.selSala != null) {
