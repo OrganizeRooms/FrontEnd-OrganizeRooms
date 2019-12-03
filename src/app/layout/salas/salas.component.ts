@@ -48,8 +48,16 @@ export class SalasComponent implements OnInit {
         this.organizeRoomsService.setValue(registro);
     }
 
-    excluir(registro){
-
+    excluir(sala) {
+        this.salaService.deletarSala(sala.salaId).subscribe(ret => {
+            if (ret.data == true) {
+                alert(sala.salaNome + ' Deletada com Sucesso!');
+                location.reload()
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar ' + sala.salaNome + ' !');
+            }
+        })
     }
 
     aplicarFiltro(valor: string) {

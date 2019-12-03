@@ -49,10 +49,16 @@ export class UnidadesComponent implements OnInit {
         this.organizeRoomsService.setValue(registro);
     }
 
-    excluir(registro){
-        this.unidadeService.deletarUnidade(registro.uniId).subscribe(ret => {
-            //
-        });
+    excluir(unidade) {
+        this.unidadeService.deletarUnidade(unidade.uniId).subscribe(ret => {
+            if (ret.data == true) {
+                alert('Unidade ' + unidade.uniNome + ' Deletada com Sucesso!');
+                location.reload()
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar a Unidade ' + unidade.uniNome + ' !');
+            }
+        })
     }
 
     aplicarFiltro(valor: string) {

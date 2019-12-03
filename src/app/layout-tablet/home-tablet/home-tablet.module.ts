@@ -6,6 +6,7 @@ import { HomeTabletRoutingModule } from './home-tablet-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // Components
 import { HomeTabletComponent } from './home-tablet.component';
+import { MatSelectModule } from '@angular/material';
 
 @NgModule({
     imports: [
@@ -13,7 +14,8 @@ import { HomeTabletComponent } from './home-tablet.component';
         HomeTabletRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        NgbModule
+        MatSelectModule,
+        NgbModule,
     ],
     declarations: [
         HomeTabletComponent

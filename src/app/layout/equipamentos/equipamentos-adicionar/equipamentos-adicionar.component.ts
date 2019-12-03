@@ -69,7 +69,7 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
                 equDtCadastro: [this.selEquipamento.equDtCadastro]
             });
             this.selUnidade = new FormControl(this.selEquipamento.equUnidade.uniId)
-            
+
         } else {
             this.formAddEquipamento = this.formBuilder.group({
                 equId: [0],
@@ -128,6 +128,14 @@ export class EquipamentosAdicionarComponent implements OnInit, OnDestroy {
     }
 
     excluir() {
-
+        this.equipamentoService.deletarEquipamento(this.selEquipamento.equId).subscribe(ret => {
+            if (ret.data == true) {
+                alert('Equipamento ' + this.selEquipamento.equNome + ' Deletada com Sucesso!');
+                this.router.navigate(['/equipamentos']);
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar a Equipamento ' + this.selEquipamento.equNome + ' !');
+            }
+        })
     }
 }

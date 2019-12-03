@@ -119,6 +119,14 @@ export class SalasAdicionarComponent implements OnInit, OnDestroy {
     }
 
     excluir() {
-
+        this.salaService.deletarSala(this.selSala.salaId).subscribe(ret => {
+            if (ret.data == true) {
+                alert(this.selSala.salaNome + ' Deletada com Sucesso!');
+                this.router.navigate(['/salas']);
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar ' + this.selSala.salaNome + ' !');
+            }
+        })
     }
 }

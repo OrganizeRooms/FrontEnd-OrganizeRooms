@@ -3,7 +3,7 @@ import { routerTransition } from '../../router.animations';
 // Date Picker
 import { NgbDateStruct, NgbDatepickerI18n, NgbModal, NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/app/shared/utils';
-import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteService, Participante, AgendamentoContext } from 'src/app/shared';
+import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteService, Participante, AgendamentoContext, Notificacao, EnviaEmail, NotificacaoService } from 'src/app/shared';
 
 @Component({
     selector: 'app-home',
@@ -23,13 +23,15 @@ export class HomeComponent implements OnInit {
     data: NgbDateStruct;
     selAgendamento;
     pessoaLogada;
+    participante;
 
     constructor(
         private modal: NgbModal,
         private calendar: NgbCalendar,
         private sessionService: SessionStorageService,
         private agendamentoService: AgendamentoService,
-        private participanteService: ParticipanteService
+        private participanteService: ParticipanteService,        
+        private notificacaoService: NotificacaoService
     ) { }
 
     ngOnInit() {
@@ -38,15 +40,6 @@ export class HomeComponent implements OnInit {
 
         this.pessoaLogada = this.sessionService.getSessionUser().pessoa;
         this.filtro();
-
-        //this.carregarAgendamentos();
-
-    }
-
-    carregarAgendamentos() {
-        this.agendamentoService.buscarTodosAgendamentos().subscribe(ret => {
-            this.listAgendamentos = ret.data;
-        });
     }
 
     filtro() {
@@ -72,6 +65,11 @@ export class HomeComponent implements OnInit {
         })
     }
 
+    abrirModal(agend, modalDetalhes) {
+        this.selAgendamento = agend;
+        this.modal.open(modalDetalhes)
+    }
+
     verificarPessoa(agePesResponsavel) {
         var retorno = false
         if (this.pessoaLogada.pesId != agePesResponsavel.pesId) {
@@ -94,6 +92,7 @@ export class HomeComponent implements OnInit {
         agend.ageParticipantes.forEach(part => {
             if (part.parPessoa.pesId == this.pessoaLogada.pesId) {
                 if (part.parConfirmado == null) {
+                    this.participante = part
                     return retorno = true
                 }
             }
@@ -132,6 +131,11 @@ export class HomeComponent implements OnInit {
         var msg = "Recusado"
         this.alterarParticipante(part, msg)
         location.reload();
+
+        if (this.participante.parTipo = 2) {
+            this.notificarRecusaPartObrigatorio(agend)
+        }
+
     }
 
     concluirAgendamento(agend) {
@@ -160,6 +164,46 @@ export class HomeComponent implements OnInit {
                 location.reload();
             } else {
                 alert('Não foi possível Concluir o Agendamento! Tente novamente.');
+            }
+        });
+    }
+
+    notificarRecusaPartObrigatorio(agend) {
+        var notificacoes = new Array<Notificacao>()
+
+        var nMensagem = 'O Participante obrigatório ' + this.pessoaLogada.pesNome
+            + ' recusou o convite para a Reunião marcada no dia ' + this.montarStringDataPtBr(new Date(agend.ageHoraInicio))
+            + ' no período das ' + this.montarStringHoraMinuto(new Date(agend.ageHoraInicio))
+            + ' às ' + this.montarStringHoraMinuto(new Date(agend.ageHoraFim)) + '.'
+
+        var nAssunto = 'Participante Obrigatório Recusou Convite para a Reunião'
+
+        var enviaEmail: EnviaEmail = {
+            destinatario: agend.agePesResponsavel.pesEmail,  // Email Responsável
+            assunto: nAssunto,                               // assunto do e-mail
+            mensagem: nMensagem                              // mensagem do e-mail
+        }
+
+        var notificacao: Notificacao = {
+            notId: null,
+            notDescricao: nMensagem,                     // mensagem enviada por e-mail
+            notAtiva: true,
+            notPessoa: agend.agePesResponsavel.pesEmail, // participante
+            notPesCadastro: this.sessionService.getSessionUser().pessoa.pesId,
+            notDtCadastro: new Date(),
+            notPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
+            notDtAtualizacao: new Date(),
+            notEnviado: false,
+            enviaEmail: enviaEmail
+        }
+        notificacoes.push(notificacao);
+
+        console.log(notificacoes)
+
+        this.notificacaoService.enviarEmail(notificacoes).subscribe(ret => {
+            console.log(ret.data)
+            if (ret.data != null) {
+                //
             }
         });
     }
@@ -196,6 +240,24 @@ export class HomeComponent implements OnInit {
         return agendamento
     }
 
+    montarStringDataPtBr(data: Date) {
+
+        var mes = this.validarData(data, 1);
+        var dia = this.validarData(data, 2);
+
+        var stringData = dia + '/' + mes + '/' + data.getFullYear()
+        return stringData
+    }
+
+    montarStringHoraMinuto(horaMinuto: Date) {
+
+        var hora = this.validarData(horaMinuto, 3);
+        var minuto = this.validarData(horaMinuto, 4);
+
+        var stringHoraMinuto = hora + ':' + minuto
+        return stringHoraMinuto
+    }
+
     montarStringDataEng(data) {
 
         var mes;
@@ -217,8 +279,52 @@ export class HomeComponent implements OnInit {
         return stringData
     }
 
-    abrirModal(agend, modalDetalhes) {
-        this.selAgendamento = agend;
-        this.modal.open(modalDetalhes)
+
+    validarData(valor: Date, tipoValor) {
+
+        var mes;        /// TIPO 1
+        var dia;        /// TIPO 2
+        var hora;       /// TIPO 3
+        var minuto;     /// TIPO 4
+
+        // Mes
+        if (tipoValor == 1) {
+            if (valor.getUTCMonth() + 1 < 10) {
+                mes = '0' + (valor.getUTCMonth() + 1)
+            } else {
+                mes = valor.getUTCMonth() + 1
+            }
+            return mes
+        }
+
+        // Dia
+        if (tipoValor == 2) {
+            if (valor.getDate() < 10) {
+                dia = '0' + valor.getDate()
+            } else {
+                dia = valor.getDate()
+            }
+            return dia
+        }
+
+        // Hora
+        if (tipoValor == 3) {
+            if (valor.getHours() < 10) {
+                hora = '0' + valor.getHours()
+            } else {
+                hora = valor.getHours()
+            }
+            return hora
+        }
+
+        if (tipoValor == 4) {
+            if (valor.getMinutes() < 10) {
+                minuto = '0' + valor.getMinutes()
+            } else {
+                minuto = valor.getMinutes()
+            }
+            return minuto
+        }
     }
+
 }

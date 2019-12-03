@@ -36,15 +36,8 @@ export class PessoasAdicionarComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.selPessoa = this.organizeRoomsService.getValue();
-
-        /*if (this.selPessoa != null && this.selPessoa.pesAtualizacao != null) {
-            this.pesAtualizacao = this.selPessoa.pesAtualizacao.pesNome;
-            this.pesDtAtualizacao = this.selPessoa.pesDtAtualizacao;
-        }*/
-
         this.carregarUnidades();
         this.criarFormulario();
-
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
     }
 

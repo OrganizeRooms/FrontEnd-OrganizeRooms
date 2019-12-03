@@ -48,8 +48,16 @@ export class EquipamentosComponent implements OnInit {
         this.organizeRoomsService.setValue(registro);
     }
 
-    excluir(registro){
-
+    excluir(equipamento) {
+        this.equipamentoService.deletarEquipamento(equipamento.equId).subscribe(ret => {
+            if (ret.data == true) {
+                alert('Equipamento ' + equipamento.equNome + ' Deletada com Sucesso!');
+                location.reload()
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar a Equipamento ' + equipamento.equNome + ' !');
+            }
+        })
     }
 
     aplicarFiltro(valor: string) {

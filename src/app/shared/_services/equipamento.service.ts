@@ -21,4 +21,8 @@ export class EquipamentoService {
     adicionarAtualizarEquipamento(equipamento: Equipamento): Observable<Response> {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/equipamentos`, equipamento);
     }
+
+    deletarEquipamento(id: String): Observable<Response> {
+        return this.http.delete<Response>(`${API_CONFIG.baseUrl}/equipamentos/` + id);
+    }
 }
