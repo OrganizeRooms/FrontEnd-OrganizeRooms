@@ -18,6 +18,10 @@ export class AgendamentoService {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos/participante`, agendamentoContext);
     }
 
+    buscarAgendamentoPorSalaEData(agendamentoContext: AgendamentoContext): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos/salas`, agendamentoContext);
+    }
+
     buscarTodosDaSala(idSala: String, data: String): Observable<Response> {
         return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos/sala` + idSala + data);
     }

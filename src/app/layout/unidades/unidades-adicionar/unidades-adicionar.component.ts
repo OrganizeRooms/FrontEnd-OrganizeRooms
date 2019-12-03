@@ -97,6 +97,15 @@ export class UnidadesAdicionarComponent implements OnInit, OnDestroy {
     }
 
     excluir() {
-
+        this.unidadeService.deletarUnidade(this.selUnidade.uniId).subscribe(ret => {
+            console.log(ret.data)
+            if (ret.data == true) {
+                alert('Unidade ' + this.selUnidade.uniNome + ' Deletada com Sucesso!');
+                this.router.navigate(['/unidades']);
+            }
+            if (ret.data == false) {
+                alert('Não foi possível Deletar a Unidade ' + this.selUnidade.uniNome + ' !');
+            }
+        })
     }
 }

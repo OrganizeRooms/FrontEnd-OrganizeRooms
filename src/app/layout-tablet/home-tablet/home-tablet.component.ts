@@ -3,7 +3,8 @@ import { routerTransition } from '../../router.animations';
 // Date Picker
 import { NgbDateStruct, NgbDatepickerI18n, NgbModal, NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { I18n, CustomDatepickerI18n, NgbDateCustomParserFormatter } from 'src/app/shared/utils';
-import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteService, Participante } from 'src/app/shared';
+import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteService, Participante, AgendamentoContext, SalaService } from 'src/app/shared';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'app-home-tablet',
@@ -19,16 +20,19 @@ import { Agendamento, AgendamentoService, SessionStorageService, ParticipanteSer
 export class HomeTabletComponent implements OnInit {
 
     // listAgendamentos: Agendamento;
-    listAgendamentos;
-    data: NgbDateStruct;
-    selAgendamento;
-    pessoaLogada;
+    listAgendamentos
+    data: NgbDateStruct
+    selAgendamento
+    pessoaLogada
+    listSalas: any[]
+    selSala = new FormControl();
 
     constructor(
         private modal: NgbModal,
         private calendar: NgbCalendar,
         private sessionService: SessionStorageService,
         private agendamentoService: AgendamentoService,
+        private salaService: SalaService,
     ) { }
 
     ngOnInit() {
@@ -36,26 +40,44 @@ export class HomeTabletComponent implements OnInit {
         this.data = today;
 
         this.pessoaLogada = this.sessionService.getSessionUser().pessoa;
-        this.carregarAgendamentos();
+        this.carregarTodasSalas();
+
+        this.selSala = new FormControl(1)
+        this.filtro();
     }
 
-    carregarAgendamentos() {
-        this.agendamentoService.buscarTodosAgendamentos().subscribe(ret => {
-            this.listAgendamentos = ret.data;
-        });
-    }
-
-    /*filtro(data: FormControl) {
-        var fdata = new Date(data.value)
-        this.listAgendamentosFiltrado = [];
-        this.listAgendamentos.forEach(element => {
-            if (moment(element.ageData, 'DD/MM/YYYY').toString() == moment(fdata, 'DD/MM/YYYY').toString()) {
-                // console.log('5 - Entrou - data elemento = ' + moment(element.ageData, 'DD/MM/YYYY').toString()
-                //   + ' data escolhida= ' + moment(fdata, 'DD/MM/YYYY').toString())
-                this.listAgendamentosFiltrado.push(element);
+    carregarTodasSalas() {
+        this.salaService.buscarTodasSalas().subscribe(ret => {
+            if (ret.data != null || ret.data != '') {
+                this.listSalas = ret.data;
+            } else {
+                this.listSalas = null
             }
         });
-    }*/
+    }
+
+    filtro() {
+        var nData = this.montarStringDataEng(this.data);
+
+        var agendamentoContext: AgendamentoContext = {
+            idUnidade: null,
+            lotacao: null,
+            dataInicial: null,
+            dataFinal: null,
+            idParticipante: null,
+            // Filtrar por Sala somente utiliza os campos abaixo
+            dataAgendamento: nData,
+            idSala: this.selSala.value,
+        }
+        console.log(agendamentoContext)
+        this.agendamentoService.buscarAgendamentoPorSalaEData(agendamentoContext).subscribe(ret => {
+            if (ret.data != null && ret.data != '') {
+                this.listAgendamentos = ret.data
+            } else {
+                this.listAgendamentos = null;
+            }
+        })
+    }
 
     verificarStatus(agend) {
         var retorno = false
@@ -99,5 +121,26 @@ export class HomeTabletComponent implements OnInit {
     abrirModal(agend, modalDetalhes) {
         this.selAgendamento = agend;
         this.modal.open(modalDetalhes)
+    }
+
+    montarStringDataEng(data) {
+
+        var mes;
+        var dia;
+
+        if (data.month < 10) {
+            mes = '0' + data.month
+        } else {
+            mes = data.month
+        }
+
+        if (data.day < 10) {
+            dia = '0' + data.day
+        } else {
+            dia = data.day
+        }
+
+        var stringData = data.year + '/' + mes + '/' + dia
+        return stringData
     }
 }

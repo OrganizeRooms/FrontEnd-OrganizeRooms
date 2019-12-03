@@ -26,4 +26,8 @@ export class SalaService {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/salas`, sala);
     }
 
+    deletarSala(id: String): Observable<Response> {
+        return this.http.delete<Response>(`${API_CONFIG.baseUrl}/salas/` + id);
+    }
+
 }
