@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Component Material Angular
 import {
-    MatFormFieldModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatTableModule, MatPaginatorModule, MatSortModule,
+    MatFormFieldModule, MatCheckboxModule, MatInputModule, MatSelectModule, MatTableModule, MatPaginatorModule,
 } from '@angular/material';
 
 @NgModule({
@@ -21,7 +21,6 @@ import {
         MatSelectModule,
         MatTableModule,
         MatPaginatorModule,
-        MatSortModule,
         FormsModule,
         ReactiveFormsModule
     ],

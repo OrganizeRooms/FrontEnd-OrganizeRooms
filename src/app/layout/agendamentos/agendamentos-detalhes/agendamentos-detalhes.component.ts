@@ -137,9 +137,9 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     }
 
     verificarStatus() {
-        var retorno = true
-        if (this.selAgendamento.selAgeStatus == 'EM ANDAMENTO' || this.selAgendamento.selAgeStatus == 'AGENDADO') {
-            retorno = false
+        var retorno = false
+        if (this.selAgeStatus == 'EM ANDAMENTO' || this.selAgeStatus == 'AGENDADO') {
+            retorno = true
         }
         return retorno
     }

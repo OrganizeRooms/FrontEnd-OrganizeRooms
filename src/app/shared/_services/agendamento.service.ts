@@ -26,10 +26,8 @@ export class AgendamentoService {
         return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos/sala` + idSala + data);
     }
 
-    buscarPorResponsavel(
-        idResponsavel: String, dataInicio: Date, dataFim: Date, unidade: Unidade, status: String): Observable<Response> {
-        return this.http.get<Response>(`${API_CONFIG.baseUrl}/agendamentos/responsavel`
-            + idResponsavel + dataInicio + dataFim + unidade + status);
+    buscarPorResponsavel(agendamentoContext: AgendamentoContext): Observable<Response> {
+        return this.http.post<Response>(`${API_CONFIG.baseUrl}/agendamentos/responsavel`, agendamentoContext);
     }
 
     addAgendamento(agendamento: Agendamento): Observable<Response> {
