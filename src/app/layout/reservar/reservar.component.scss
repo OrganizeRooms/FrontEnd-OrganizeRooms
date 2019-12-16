@@ -23,21 +23,17 @@
     overflow-y: scroll;
 }
 
-  h2{
+h2{
     margin-top: 10px;
     margin-right: -50px; 
   }
 
-  .page-text{
+.page-text{
     font-size: 110%;
-  }
-  
-  .card-agendamento {
-    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
-    padding: 12px; 
-    padding-left: 24px; 
-    padding-right: 20px;
-    margin-bottom: 20px;
+}
+
+.card-agendamento {
+    padding-left: 0px !important; 
 }
   
 .card-titulo{
@@ -58,3 +54,28 @@
     padding-top: 2px !important;
     padding-bottom: 2px !important;
 }
+
+/* Column Widths*/
+.mat-column-selecionar {
+    max-width: 5px;
+}
+/* Column Widths Participantes*/
+.mat-column-pesNome {
+    max-width: 40px;
+}
+.mat-column-pesUnidade {
+    max-width: 30px;
+}
+.mat-column-obrigatorio {
+    max-width: 5px;
+}
+/*End Participantes*/
+
+/* Column Widths Equipamentos*/
+.mat-column-equNome {
+    max-width: 45px;
+}
+.mat-column-equDescricao{
+    max-width: 55px;
+}
+/*End Equipamentos*/

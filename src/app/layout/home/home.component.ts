@@ -130,10 +130,12 @@ export class HomeComponent implements OnInit {
 
         var msg = "Recusado"
         this.alterarParticipante(part, msg)
-        location.reload();
+       
 
         if (this.participante.parTipo = 2) {
             this.notificarRecusaPartObrigatorio(agend)
+        } else{
+            //location.reload();
         }
 
     }
@@ -188,7 +190,7 @@ export class HomeComponent implements OnInit {
             notId: null,
             notDescricao: nMensagem,                     // mensagem enviada por e-mail
             notAtiva: true,
-            notPessoa: agend.agePesResponsavel.pesEmail, // participante
+            notPessoa: agend.agePesResponsavel, // participante
             notPesCadastro: this.sessionService.getSessionUser().pessoa.pesId,
             notDtCadastro: new Date(),
             notPesAtualizacao: this.sessionService.getSessionUser().pessoa.pesId,
@@ -212,7 +214,6 @@ export class HomeComponent implements OnInit {
         this.participanteService.alterarParticipante(participante).subscribe(ret => {
             if (ret.data != null && ret.data != '') {
                 alert("Agendamento " + msg + " com Sucesso!")
-                location.reload()
             } else {
                 alert("Agendamento não" + msg + "! Tente novamente.")
             }

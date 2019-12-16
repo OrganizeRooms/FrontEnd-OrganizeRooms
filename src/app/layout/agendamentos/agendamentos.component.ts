@@ -5,9 +5,8 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { rangeLabel } from '../../shared/utils/range-label';
 
 import { AgendamentoService, OrganizeRoomsService, SessionStorageService, UnidadeService } from '../../shared/_services';
-import { NgbDateStruct, NgbDatepickerI18n, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
-import { NgbDateCustomParserFormatter, CustomDatepickerI18n, I18n } from 'src/app/shared';
-import { FormControl } from '@angular/forms';
+import { NgbDateStruct, NgbDatepickerI18n, NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateCustomParserFormatter, CustomDatepickerI18n, I18n, AgendamentoContext } from 'src/app/shared';
 
 @Component({
     selector: 'app-agendamentos',
@@ -43,6 +42,7 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
 
     constructor(
         private agendamentoService: AgendamentoService,
+        private calendar: NgbCalendar,
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
         private sessionService: SessionStorageService
@@ -54,6 +54,13 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
         this.selAgeStatus = 'AGENDADO';
         this.selUnidade = this.sessionService.getSessionUser().pessoa.pesUnidade.uniId;
+
+        var today = this.calendar.getToday()
+
+        this.dataFinal = today
+        this.dataInicial = today
+
+        this.configurarPaginador();
     }
 
     ngOnDestroy() {
@@ -66,14 +73,7 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
     carregarUnidades() {
         this.unidadeService.buscarUnidadesAtivas().subscribe(ret => {
             this.listUnidades = ret.data;
-        });
-    }
-
-    carregarAgendamentos() {
-        this.agendamentoService.buscarTodosAgendamentos().subscribe(ret => {
-            this.tableData.data = ret.data;
             this.tableData.paginator = this.paginator;
-            this.tableData.sort = this.sort;
         });
     }
 
@@ -81,20 +81,31 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
         this.filtrarValido = this.verificarCampos();
 
         if (this.filtrarValido) {
-            this.carregarAgendamentos();
 
             var idResponsavel = this.sessionService.getSessionUser().pessoa.pesId
 
-            var nDataInicial = new Date(this.montarStringData(this.dataInicial))
-            var nDataFinal = new Date(this.montarStringData(this.dataFinal))
+            var nDataInicial = this.montarStringData(this.dataInicial)
+            var nDataFinal = this.montarStringData(this.dataFinal)
 
-            /*this.agendamentoService.buscarPorResponsavel(
-                idResponsavel, nDataInicial, nDataFinal, this.selUnidade, this.selAgeStatus
-            ).subscribe(ret => {
-                this.tableData.data = ret.data;
-                this.tableData.paginator = this.paginator;
-                this.tableData.sort = this.sort;
-            });*/
+            var agendamentoContext: AgendamentoContext = {
+                idUnidade: this.selUnidade,
+                lotacao: this.selAgeStatus,
+                dataInicial: nDataInicial,
+                dataFinal: nDataFinal,
+                idParticipante: idResponsavel,
+                // Não utiliza
+                dataAgendamento: null,
+                idSala: null
+            }
+            this.agendamentoService.buscarPorResponsavel(agendamentoContext).subscribe(ret => {
+                if (ret.data != null || ret.data != '') {
+                    this.tableData.data = ret.data;
+                    this.tableData.paginator = this.paginator;
+                    this.tableData.sort = this.sort;
+                } else {
+                    alert('Não foram encontrados registros para os filtros informados!')
+                }
+            });
             this.configurarPaginador();
         }
     }
@@ -118,11 +129,7 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
     verificarCampos(): Boolean {
 
         var mfiltrarValido = false;
-
-        /*if (!this.selUnidade) {
-            alert('Informe a Unidade!')
-
-        } else*/ if (!this.dataInicial) {
+        if (!this.dataInicial) {
             alert('Informe uma Data Inicial!')
 
         } else if (!this.dataFinal) {

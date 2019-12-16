@@ -9,9 +9,9 @@ import { Observable } from 'rxjs';
 export class ParticipanteService {
     constructor(private http: HttpClient) { }
 
-    /*buscarPorAgendamento(ageId: String): Observable<Response> {
+    buscarPorAgendamento(ageId: String): Observable<Response> {
         return this.http.get<Response>(`${API_CONFIG.baseUrl}/participantes/porAgendamento/` + ageId);
-    }*/
+    }
 
     adicionarParticipante(participante: Participante): Observable<Response> {
         return this.http.post<Response>(`${API_CONFIG.baseUrl}/participantes`, participante);

@@ -63,7 +63,7 @@
                         </a>
                         <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddSala.valid"
                             class="col-5 col-sm-5 col-md-3 col-lg-5 col-xl-3 btn btn-padrao" (click)="adicionarSala()">
-                            Confirmar
+                            Salvar
                         </button>
                         <a *ngIf="permissao == 'ROLE_ADMIN' && selSala != null"
                             class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao" (click)="excluir()">

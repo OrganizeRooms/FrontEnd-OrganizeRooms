@@ -137,11 +137,29 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
     }
 
     verificarStatus() {
-        var retorno = true
-        if (this.selAgendamento.selAgeStatus == 'EM ANDAMENTO' || this.selAgendamento.selAgeStatus == 'AGENDADO') {
-            retorno = false
+        var retorno = false
+        if (this.selAgeStatus == 'EM ANDAMENTO' || this.selAgeStatus == 'AGENDADO') {
+            retorno = true
         }
         return retorno
+    }
+
+    corStatus(status) {
+
+        var retorno
+        if (status == 'AGENDADO') {
+            retorno = 'blue'
+            return retorno
+        }
+        if (status == 'CANCELADO') {
+            retorno = 'red'
+            return retorno
+        }
+
+        if (status == 'CONCLUIDO') {
+            retorno = 'green'
+            return retorno
+        }
     }
 
     atualizarReserva(status) {

@@ -2,10 +2,10 @@
     <app-page-header [heading]="'Minhas Reservas - Detalhes da Reserva'"></app-page-header>
 
     <div class="row ml-auto justify-content-md-center">
-        <div class="col-10 col-sm-8 col-md-8 col-lg-8 col-xl-7">
+        <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-7">
             <form [formGroup]="formAgendamento">
                 <div class="row ml-auto">
-                    <div class="col-4 col-sm-4 col-md-3 col-lg-3 col-xl-2">
+                    <div class="col-5 col-sm-4 col-md-3 col-lg-3 col-xl-2">
                         <span>Código</span>
                         <input type="text" class="form-control text-center" formControlName="ageId" disabled>
                     </div>
@@ -15,35 +15,50 @@
                             {{formAgendamento.value.ageDtCadastro | date: 'dd/MM/yyyy'}}
                         </span>
                     </div>
-                    <div class="col-2 col-sm-4 col-md-4 col-lg-3 col-xl-3">
+                    <div class="col-11 col-sm-4 col-md-5 col-lg-5 col-xl-3">
                         <span>Status</span>
-                        <span class="form-control disabled text-center">{{selAgeStatus}}</span>
+                        <span class="form-control text-center bg-{{corStatus(selAgeStatus)}}">
+                            {{selAgeStatus}}
+                        </span>
                     </div>
                 </div>
-
                 <div class="row ml-auto">
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-3">
+                    <div class="col-11 col-sm-11 col-md-12 col-lg-12 col-xl-8">
+                        <span>Sala</span>
+                        <span class="form-control">
+                            {{selAgendamento.ageSala.salaNome}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row ml-auto">
+                    <div class="col-11 col-sm-6 col-md-5 col-lg-5 col-xl-3">
                         <span>Unidade</span>
-                        <span
-                            class="form-control disabled text-center">{{selAgendamento.ageSala.salaUnidade.uniNome}}</span>
+                        <span class="form-control disabled text-center">
+                            {{selAgendamento.ageSala.salaUnidade.uniNome}}
+                        </span>
                     </div>
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-2">
+                    <div class="col-4 col-sm-6 col-md-3 col-lg-3 col-xl-2">
                         <span>Lotação</span>
-                        <span class="form-control disabled text-center">{{selAgendamento.ageSala.salaLotacao}}</span>
+                        <span class="form-control disabled text-center">
+                            {{selAgendamento.ageSala.salaLotacao}}
+                        </span>
                     </div>
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-3">
+                    <div class="col-7 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                         <span>Data</span>
-                        <span
-                            class="form-control disabled text-center">{{formAgendamento.value.ageData | date: 'dd/MM/yyyy'}}</span>
+                        <span class="form-control disabled text-center">
+                            {{formAgendamento.value.ageData | date: 'dd/MM/yyyy'}}
+                        </span>
                     </div>
                 </div>
 
                 <div class="row ml-auto">
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-5">
+                    <div class="col-11 col-sm-6 col-md-7 col-lg-7 col-xl-5">
                         <span>Responsável</span>
-                        <span class="form-control disabled">{{selAgendamento.agePesResponsavel.pesNome}}</span>
+                        <span class="form-control disabled">
+                            {{selAgendamento.agePesResponsavel.pesNome}}
+                        </span>
                     </div>
-                    <div class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-3">
+                    <div class="col-11 col-sm-6 col-md-5 col-lg-5 col-xl-3">
                         <span>Período</span>
                         <span class="form-control disabled text-center">
                             {{selAgendamento.ageHoraInicio | date: 'HH:mm'}} às
@@ -54,25 +69,25 @@
 
                 <div class="row ml-auto">
                     <div *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
-                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                        class="col-11 col-sm-11 col-md-12 col-lg-12 col-xl-8">
                         <span>Assunto<span style="color: red;"> *</span></span>
                         <input type="text" class="form-control" required autofocus formControlName="ageAssunto">
                     </div>
                     <div *ngIf="selAgendamento.ageStatus == 'CONCLUIDO' || selAgendamento.ageStatus == 'CANCELADO'"
-                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                        class="col-11 col-sm-11 col-md-12 col-lg-12 col-xl-8">
                         <span>Assunto</span>
                         <input type="text" class="form-control" disabled="true" formControlName="ageAssunto">
                     </div>
                 </div>
                 <div class="row ml-auto">
                     <div *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
-                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                        class="col-11 col-sm-11 col-md-12 col-lg-12 col-xl-8">
                         <span>Descrição</span>
                         <textarea class="form-control" formControlName="ageDescricao">
                         </textarea>
                     </div>
                     <div *ngIf="selAgendamento.ageStatus == 'CONCLUIDO' || selAgendamento.ageStatus == 'CANCELADO'"
-                        class="col-2 col-sm-6 col-md-4 col-lg-5 col-xl-8">
+                        class="col-11 col-sm-6 col-md-12 col-lg-12 col-xl-8">
                         <span>Descrição</span>
                         <textarea class="form-control" disabled="true" formControlName="ageDescricao">
                         </textarea>
@@ -82,54 +97,55 @@
 
                 <!-- INICIO - PARTICIPANTES (PESSOAS) -->
                 <div class="row ml-auto">
-                    <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-5">
+                    <div class="col-7 col-sm-7 col-md-8 col-lg-8 col-xl-5">
                         <h4 class="card-title">
                             <i class="fa fa-users"></i>&nbsp;
                             Participantes
                         </h4>
                     </div>
-                    <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-1">
-                        <a class="btn btn-padrao btn-selecionar" (click)="abrirModal(modalParticipantes)">
+                    <div class="col-5 col-sm-4 col-md-4 col-lg-4 col-xl-1">
+                        <a *ngIf="verificarStatus()" class="btn btn-padrao btn-selecionar"
+                            (click)="abrirModal(modalParticipantes)">
                             Selecionar
                         </a>
                     </div>
                 </div>
                 <div class="row ml-auto">
-                    <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-8">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
                         <ul class="list-group">
                             <li class="list-group-item" *ngFor="let participante of ageParticipantes">
                                 <div class="row">
-                                    <div class="col-6 col-sm-3 col-md-3 col-lg-10 col-xl-8">
+                                    <div class="col-8 col-sm-8 col-md-9 col-lg-9 col-xl-8">
                                         {{participante.parPessoa.pesNome}}
                                     </div>
                                     <div class="row">
 
                                         <!-- APARECE SE O PARTICIPANTE FOR IMPORTANTE -->
-                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
                                             <i *ngIf="participante.parTipo == 2" class="fa fa-exclamation"
                                                 title="Obrigatório"></i>
                                         </div>
 
                                         <!--- ESPERANDO RESPOSTA -->
                                         <div *ngIf="participante.parConfirmado == null"
-                                            class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
                                             <i class="fa fa-calendar-minus-o" title="Aguardando Resposta"></i>
                                         </div>
 
                                         <!--- ACEITOU REUNIÃO -->
                                         <div *ngIf="participante.parConfirmado == true"
-                                            class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
                                             <i class="fa fa-calendar-check-o" title="Reunião Aceita"></i>
                                         </div>
 
                                         <!--- NÃO ACEITOU REUNIÃO -->
                                         <div *ngIf="participante.parConfirmado == false"
-                                            class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                            class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
                                             <i class="fa fa-calendar-times-o" title="Reunião Negada"></i>
                                         </div>
 
                                         <!-- EXCLUIR PARTICIPANTE -->
-                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1"
+                                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1"
                                             aria-placeholder="Excluir Participante">
                                             <a *ngIf="pessoaLogada.pesId != participante.parPessoa.pesId && (verificarStatus())"
                                                 (click)="excluirParticipante(participante)">
@@ -163,29 +179,30 @@
 
                 <!-- INICIO - EQUIPAMENTOS -->
                 <div class="row ml-auto">
-                    <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-5">
+                    <div class="col-7 col-sm-7 col-md-8 col-lg-8 col-xl-5">
                         <h4 class="card-title">
                             <i class="fa fa-desktop"></i>&nbsp;
                             Equipamentos
                         </h4>
                     </div>
-                    <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-1">
-                        <a class="btn btn-padrao btn-selecionar" (click)="abrirModal(modalEquipamentos)">
+                    <div class="col-4 col-sm-3 col-md-4 col-lg-4 col-xl-1">
+                        <a *ngIf="verificarStatus()" class="btn btn-padrao btn-selecionar"
+                            (click)="abrirModal(modalEquipamentos)">
                             Selecionar
                         </a>
                     </div>
                 </div>
                 <div class="row ml-auto">
-                    <div class="col-6 col-sm-3 col-md-3 col-lg-4 col-xl-8">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
                         <ul class="list-group">
                             <li class="list-group-item" *ngFor="let reserva of ageEquipamentos">
                                 <div class="row">
-                                    <div class="col-6 col-sm-3 col-md-3 col-lg-10 col-xl-8">
+                                    <div class="col-9 col-sm-9 col-md-10 col-lg-10 col-xl-8">
                                         {{reserva.equipamento.equNome}}
                                     </div>
                                     <div class="row">
                                         <!-- EXCLUIR EQUIPAMENTO -->
-                                        <div class="col-6 col-sm-3 col-md-3 col-lg-1 col-xl-1">
+                                        <div class="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1">
                                             <a *ngIf="verificarStatus()" (click)="excluirEquipamento(reserva)">
                                                 <i class="fa fa-trash-o" title="Excluir Equipamento"></i>
                                             </a>
@@ -210,26 +227,26 @@
                 <br>
                 <div class="col-12 col-sm-12 col-md-10 col-lg-12 col-xl-8">
                     <div class="row justify-content-center">
-                        <a class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-2 btn btn-padrao"
+                        <a class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-2 btn btn-padrao"
                             [routerLink]="['/agendamentos']" [routerLinkActive]="['router-link-active']">
                             Voltar
                         </a>
                         <button
                             *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
                             [disabled]="!formAgendamento.valid"
-                            class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-3 btn btn-padrao"
+                            class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-3 btn btn-padrao"
                             (click)="atualizarReserva('')">
-                            Confirmar
+                            Salvar
                         </button>
                         <button
                             *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
-                            class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-3 btn btn-padrao"
+                            class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-3 btn btn-padrao"
                             (click)="atualizarReserva('CANCELADO')">
                             Cancelar
                         </button>
                         <button
                             *ngIf="selAgendamento.ageStatus == 'EM ANDAMENTO' || selAgendamento.ageStatus == 'AGENDADO'"
-                            class="col-5 col-sm-5 col-md-5 col-lg-3 col-xl-3 btn btn-padrao"
+                            class="col-5 col-sm-5 col-md-5 col-lg-4 col-xl-3 btn btn-padrao"
                             (click)="atualizarReserva('CONCLUIDO')">
                             Concluir
                         </button>
@@ -309,6 +326,8 @@
                     <!--(click)="pessoasSelecionadas.toggle(rowPart)">-->
                 </tr>
             </table>
+            <div>
+            </div>
         </div>
         <br />
         <div class="row ml-auto">
@@ -337,7 +356,7 @@
                         placeholder="Pesquisar">
                 </div>
             </div>
-
+            <br />
             <table mat-table [dataSource]="listEquipamentos" class="mat-elevation-z8">
 
                 <!-- Checkbox -->
@@ -377,7 +396,7 @@
                 </tr>
             </table>
         </div>
-
+        <br />
         <div class="row ml-auto">
             <a class="btn btn-padrao" (click)="modal.dismiss()">Fechar</a>
         </div>
