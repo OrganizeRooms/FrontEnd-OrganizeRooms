@@ -144,6 +144,24 @@ export class AgendamentosDetalhesComponent implements OnInit, OnDestroy {
         return retorno
     }
 
+    corStatus(status) {
+
+        var retorno
+        if (status == 'AGENDADO') {
+            retorno = 'blue'
+            return retorno
+        }
+        if (status == 'CANCELADO') {
+            retorno = 'red'
+            return retorno
+        }
+
+        if (status == 'CONCLUIDO') {
+            retorno = 'green'
+            return retorno
+        }
+    }
+
     atualizarReserva(status) {
 
         var nAgeStatus;

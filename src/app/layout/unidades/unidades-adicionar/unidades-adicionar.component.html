@@ -45,7 +45,7 @@
                         <button *ngIf="permissao == 'ROLE_ADMIN'" [disabled]="!formAddUnidade.valid"
                             class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao"
                             (click)="adicionarUnidade()">
-                            Confirmar
+                            Salvar
                         </button>
                         <a *ngIf="permissao == 'ROLE_ADMIN' && selUnidade != null"
                             class="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-3 btn btn-padrao" (click)="excluir()">

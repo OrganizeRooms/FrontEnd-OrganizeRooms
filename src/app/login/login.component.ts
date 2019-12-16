@@ -93,6 +93,10 @@ export class LoginComponent implements OnInit {
                     this.authenticationService.novaSenha(this.novaSenha).subscribe(ret =>{
                         if(ret.data != false){
                             alert("Senha alterada com sucesso! \n Realize o Login novamente com sua Nova senha");
+                            this.loginForm = this.formBuilder.group({
+                                pesEmail: [this.novaSenha.pesEmail],
+                                pesSenha: [null]
+                            });
                             this.modalService.dismissAll()
                         }else{
                             alert("Não foi possível alterar a Senha!");

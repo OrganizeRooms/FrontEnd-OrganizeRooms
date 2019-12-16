@@ -5,7 +5,7 @@ import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { rangeLabel } from '../../shared/utils/range-label';
 
 import { AgendamentoService, OrganizeRoomsService, SessionStorageService, UnidadeService } from '../../shared/_services';
-import { NgbDateStruct, NgbDatepickerI18n, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbDatepickerI18n, NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDateCustomParserFormatter, CustomDatepickerI18n, I18n, AgendamentoContext } from 'src/app/shared';
 
 @Component({
@@ -42,6 +42,7 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
 
     constructor(
         private agendamentoService: AgendamentoService,
+        private calendar: NgbCalendar,
         private unidadeService: UnidadeService,
         private organizeRoomsService: OrganizeRoomsService,
         private sessionService: SessionStorageService
@@ -53,6 +54,11 @@ export class AgendamentosComponent implements OnInit, OnDestroy {
         this.permissao = this.sessionService.getSessionUser().pessoa.pesPermissao;
         this.selAgeStatus = 'AGENDADO';
         this.selUnidade = this.sessionService.getSessionUser().pessoa.pesUnidade.uniId;
+
+        var today = this.calendar.getToday()
+
+        this.dataFinal = today
+        this.dataInicial = today
 
         this.configurarPaginador();
     }

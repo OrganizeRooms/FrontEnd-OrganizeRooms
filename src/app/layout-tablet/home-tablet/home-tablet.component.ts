@@ -120,6 +120,9 @@ export class HomeTabletComponent implements OnInit {
 
     abrirModal(agend, modalDetalhes) {
         this.selAgendamento = agend;
+
+        console.log(  this.selAgendamento)
+        console.log( agend)
         this.modal.open(modalDetalhes)
     }
 
